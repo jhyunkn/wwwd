@@ -1,11 +1,11 @@
 :root {
-  --wwwd-color-bg: #f3f0ea;
-  --wwwd-color-surface: #e7e0d4;
-  --wwwd-color-surface-strong: #d9d0c3;
-  --wwwd-color-text: #0f0f0f;
-  --wwwd-color-muted: rgba(15, 15, 15, 0.54);
-  --wwwd-color-line: rgba(15, 15, 15, 0.13);
-  --wwwd-color-overlay: rgba(15, 15, 15, 0.08);
+  --wwwd-color-bg: #13110f;
+  --wwwd-color-surface: #1b1815;
+  --wwwd-color-surface-strong: #26211d;
+  --wwwd-color-text: #f1ece3;
+  --wwwd-color-muted: rgba(241, 236, 227, 0.58);
+  --wwwd-color-line: rgba(241, 236, 227, 0.12);
+  --wwwd-color-overlay: rgba(15, 15, 15, 0.32);
   --wwwd-max-width: 1540px;
   --wwwd-font-sans: 'Inter', Arial, sans-serif;
   --wwwd-font-serif: 'EB Garamond', Georgia, serif;
@@ -125,7 +125,7 @@ button {
 .wwwd-home-opening-hero-image img {
   height: calc(100vh - 150px);
   min-height: 720px;
-  filter: saturate(0.9) contrast(1.05) brightness(0.88);
+  filter: saturate(0.68) contrast(1.08) brightness(0.52);
 }
 
 .wwwd-home-opening-overlay {
@@ -136,7 +136,7 @@ button {
   gap: 24px;
   align-items: end;
   padding: 38px;
-  background: linear-gradient(to top, rgba(15, 15, 15, 0.42), rgba(15, 15, 15, 0.05) 42%, transparent 68%);
+  background: linear-gradient(to top, rgba(8, 8, 8, 0.68), rgba(8, 8, 8, 0.18) 42%, rgba(8, 8, 8, 0.02) 68%);
 }
 
 .wwwd-home-opening-intro {
@@ -220,7 +220,7 @@ button {
 .wwwd-project-detail-hero img,
 .wwwd-project-gallery-item img {
   transition: transform 1400ms ease, opacity var(--wwwd-transition-slow), filter var(--wwwd-transition-slow);
-  filter: saturate(0.9) contrast(1.04);
+  filter: saturate(0.74) contrast(1.06) brightness(0.74);
 }
 
 .wwwd-opening-image-small {
@@ -326,7 +326,7 @@ button {
 .wwwd-project-panel a:hover img,
 .wwwd-archive-table-row a:hover + .wwwd-archive-row-detail img {
   transform: scale(1.015);
-  filter: saturate(0.96) contrast(1.05);
+  filter: saturate(0.78) contrast(1.08) brightness(0.66);
 }
 
 .wwwd-project-panel-caption {
