@@ -158,6 +158,16 @@ button {
   margin: 0;
 }
 
+.wwwd-site-nav a,
+.wwwd-studio-subnav a,
+.wwwd-section-link,
+.wwwd-filter-button,
+.wwwd-archive-cell,
+.wwwd-home-index-meta,
+.wwwd-footer-meta p {
+  opacity: 0.82;
+}
+
 .wwwd-home-opening-intro h1,
 .wwwd-page-title,
 .wwwd-home-section-title,
@@ -194,8 +204,9 @@ button {
 .wwwd-project-panel-copy,
 .wwwd-archive-row-thesis {
   margin: 0;
-  font-size: 0.97rem;
+  font-size: 0.93rem;
   line-height: 1.72;
+  max-width: 34rem;
 }
 
 .wwwd-home-opening-secondary {
@@ -301,8 +312,8 @@ button {
 }
 
 .wwwd-home-index-title {
-  font-size: 1.55rem;
-  line-height: 0.98;
+  font-size: 1.7rem;
+  line-height: 0.96;
 }
 
 .wwwd-home-project-panels {
@@ -336,8 +347,8 @@ button {
 }
 
 .wwwd-project-panel-title {
-  font-size: 1.8rem;
-  line-height: 0.98;
+  font-size: 1.95rem;
+  line-height: 0.96;
 }
 
 .wwwd-home-studio-grid {
@@ -432,8 +443,8 @@ button {
 
 .wwwd-archive-cell-title {
   font-family: var(--wwwd-font-serif);
-  font-size: 1.45rem;
-  line-height: 1;
+  font-size: 1.58rem;
+  line-height: 0.98;
   color: var(--wwwd-color-text);
   text-transform: none;
   letter-spacing: -0.01em;
