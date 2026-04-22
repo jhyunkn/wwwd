@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
@@ -25,11 +25,11 @@
       </header>
 
       <main>
-        <section class="wwwd-page-intro">
+        <section class="wwwd-page-intro wwwd-page-intro-archive">
           <p class="wwwd-site-kicker">Projects</p>
           <h1 class="wwwd-page-title">Archive</h1>
           <p class="wwwd-page-summary">
-            Built work, interiors, studies, and inquiries, gathered as a working archive rather than a fixed portfolio.
+            A body of work arranged by type, status, and sequence, part record, part index, part ongoing argument about what merits being built.
           </p>
         </section>
 
@@ -57,122 +57,110 @@
               <button class="wwwd-filter-button" type="button">Research</button>
             </div>
           </div>
-          <div class="wwwd-archive-control-group wwwd-archive-control-group-compact">
-            <span class="wwwd-control-label">View</span>
+          <div class="wwwd-archive-control-group">
+            <span class="wwwd-control-label">Sort</span>
             <div class="wwwd-control-options">
-              <button class="wwwd-filter-button is-active" type="button">Grid</button>
-              <button class="wwwd-filter-button" type="button">List</button>
+              <button class="wwwd-filter-button is-active" type="button">Recent</button>
+              <button class="wwwd-filter-button" type="button">Type</button>
+              <button class="wwwd-filter-button" type="button">Status</button>
+              <button class="wwwd-filter-button" type="button">Location</button>
             </div>
           </div>
         </section>
 
-        <section class="wwwd-archive-grid" aria-label="Project archive">
-          <article class="wwwd-archive-item">
+        <section class="wwwd-archive-table" aria-label="Project archive table">
+          <div class="wwwd-archive-table-head" role="row">
+            <span>No.</span>
+            <span>Project</span>
+            <span>Location</span>
+            <span>Year</span>
+            <span>Type</span>
+            <span>Status</span>
+          </div>
+
+          <article class="wwwd-archive-table-row">
             <a href="./projects/private-residential-inquiry.html">
-              <figure class="wwwd-archive-image">
+              <span class="wwwd-archive-cell">01</span>
+              <span class="wwwd-archive-cell wwwd-archive-cell-title">Private Residential Inquiry</span>
+              <span class="wwwd-archive-cell">Seoul</span>
+              <span class="wwwd-archive-cell">2026</span>
+              <span class="wwwd-archive-cell">Residential</span>
+              <span class="wwwd-archive-cell">In Development</span>
+            </a>
+            <div class="wwwd-archive-row-detail">
+              <figure class="wwwd-archive-row-image">
                 <img src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1200&q=80" alt="Residential interior with soft light and quiet material palette" />
               </figure>
-              <div class="wwwd-archive-text">
-                <p class="wwwd-archive-title">Private Residential Inquiry</p>
-                <p class="wwwd-archive-thesis">A domestic interior composed around light, retreat, and a quieter rhythm of use.</p>
-                <ul class="wwwd-project-facts" aria-label="Project facts">
-                  <li>Seoul</li>
-                  <li>2026</li>
-                  <li>Residential</li>
-                  <li>In Development</li>
-                </ul>
-              </div>
-            </a>
+              <p class="wwwd-archive-row-thesis">A house arranged through return, threshold, and the measured distribution of light.</p>
+            </div>
           </article>
 
-          <article class="wwwd-archive-item">
+          <article class="wwwd-archive-table-row">
             <a href="./projects/private-residential-inquiry.html">
-              <figure class="wwwd-archive-image">
+              <span class="wwwd-archive-cell">02</span>
+              <span class="wwwd-archive-cell wwwd-archive-cell-title">Brand-Led Showroom Strategy</span>
+              <span class="wwwd-archive-cell">New York</span>
+              <span class="wwwd-archive-cell">2025</span>
+              <span class="wwwd-archive-cell">Retail</span>
+              <span class="wwwd-archive-cell">Concept</span>
+            </a>
+            <div class="wwwd-archive-row-detail">
+              <figure class="wwwd-archive-row-image">
                 <img src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80" alt="Minimal retail interior with pale surfaces and display rhythm" />
               </figure>
-              <div class="wwwd-archive-text">
-                <p class="wwwd-archive-title">Brand-Led Showroom Strategy</p>
-                <p class="wwwd-archive-thesis">A showroom arranged through approach, pause, and a controlled field of attention.</p>
-                <ul class="wwwd-project-facts" aria-label="Project facts">
-                  <li>New York</li>
-                  <li>2025</li>
-                  <li>Retail</li>
-                  <li>Concept</li>
-                </ul>
-              </div>
-            </a>
+              <p class="wwwd-archive-row-thesis">A showroom paced through approach, pause, and the selective staging of attention.</p>
+            </div>
           </article>
 
-          <article class="wwwd-archive-item">
+          <article class="wwwd-archive-table-row">
             <a href="./projects/private-residential-inquiry.html">
-              <figure class="wwwd-archive-image">
+              <span class="wwwd-archive-cell">03</span>
+              <span class="wwwd-archive-cell wwwd-archive-cell-title">Workplace as Institutional Signal</span>
+              <span class="wwwd-archive-cell">London</span>
+              <span class="wwwd-archive-cell">2024</span>
+              <span class="wwwd-archive-cell">Workplace</span>
+              <span class="wwwd-archive-cell">Built</span>
+            </a>
+            <div class="wwwd-archive-row-detail">
+              <figure class="wwwd-archive-row-image">
                 <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80" alt="Workplace interior with structural rhythm and daylight" />
               </figure>
-              <div class="wwwd-archive-text">
-                <p class="wwwd-archive-title">Workplace as Institutional Signal</p>
-                <p class="wwwd-archive-thesis">A workplace where order, daylight, and circulation give the institution a public face.</p>
-                <ul class="wwwd-project-facts" aria-label="Project facts">
-                  <li>London</li>
-                  <li>2024</li>
-                  <li>Workplace</li>
-                  <li>Built</li>
-                </ul>
-              </div>
-            </a>
+              <p class="wwwd-archive-row-thesis">A workplace given public character through order, daylight, and collective movement.</p>
+            </div>
           </article>
 
-          <article class="wwwd-archive-item">
+          <article class="wwwd-archive-table-row">
             <a href="./projects/private-residential-inquiry.html">
-              <figure class="wwwd-archive-image">
+              <span class="wwwd-archive-cell">04</span>
+              <span class="wwwd-archive-cell wwwd-archive-cell-title">Exhibition Room for Material Memory</span>
+              <span class="wwwd-archive-cell">Antwerp</span>
+              <span class="wwwd-archive-cell">2025</span>
+              <span class="wwwd-archive-cell">Cultural</span>
+              <span class="wwwd-archive-cell">In Development</span>
+            </a>
+            <div class="wwwd-archive-row-detail">
+              <figure class="wwwd-archive-row-image">
                 <img src="https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80" alt="Gallery-like room with white walls and calm light" />
               </figure>
-              <div class="wwwd-archive-text">
-                <p class="wwwd-archive-title">Exhibition Room for Material Memory</p>
-                <p class="wwwd-archive-thesis">A cultural room shaped by shadow, threshold, and the patience of close looking.</p>
-                <ul class="wwwd-project-facts" aria-label="Project facts">
-                  <li>Antwerp</li>
-                  <li>2025</li>
-                  <li>Cultural</li>
-                  <li>In Development</li>
-                </ul>
-              </div>
-            </a>
+              <p class="wwwd-archive-row-thesis">A cultural interior paced by shadow, threshold, and the discipline of close looking.</p>
+            </div>
           </article>
 
-          <article class="wwwd-archive-item">
+          <article class="wwwd-archive-table-row">
             <a href="./projects/private-residential-inquiry.html">
-              <figure class="wwwd-archive-image">
+              <span class="wwwd-archive-cell">05</span>
+              <span class="wwwd-archive-cell wwwd-archive-cell-title">Domestic Interior Framework</span>
+              <span class="wwwd-archive-cell">Tokyo</span>
+              <span class="wwwd-archive-cell">2023</span>
+              <span class="wwwd-archive-cell">Interior</span>
+              <span class="wwwd-archive-cell">Built</span>
+            </a>
+            <div class="wwwd-archive-row-detail">
+              <figure class="wwwd-archive-row-image">
                 <img src="https://images.unsplash.com/photo-1484154218962-a197022b5858?auto=format&fit=crop&w=1200&q=80" alt="Interior strategy concept with restrained kitchen and material emphasis" />
               </figure>
-              <div class="wwwd-archive-text">
-                <p class="wwwd-archive-title">Domestic Interior Framework</p>
-                <p class="wwwd-archive-thesis">An interior study where surface, storage, and movement settle into a durable order.</p>
-                <ul class="wwwd-project-facts" aria-label="Project facts">
-                  <li>Tokyo</li>
-                  <li>2023</li>
-                  <li>Interior</li>
-                  <li>Built</li>
-                </ul>
-              </div>
-            </a>
-          </article>
-
-          <article class="wwwd-archive-item">
-            <a href="./projects/private-residential-inquiry.html">
-              <figure class="wwwd-archive-image">
-                <img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1200&q=80" alt="Concrete space used as a strategy and research study" />
-              </figure>
-              <div class="wwwd-archive-text">
-                <p class="wwwd-archive-title">Institutional Threshold Study</p>
-                <p class="wwwd-archive-thesis">A study of arrival, edge, and the civic weight carried by first impressions.</p>
-                <ul class="wwwd-project-facts" aria-label="Project facts">
-                  <li>Berlin</li>
-                  <li>2022</li>
-                  <li>Research</li>
-                  <li>Research</li>
-                </ul>
-              </div>
-            </a>
+              <p class="wwwd-archive-row-thesis">An interior study where storage, surface, and movement settle into a durable order.</p>
+            </div>
           </article>
         </section>
       </main>

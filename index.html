@@ -11,7 +11,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Cormorant+Garamond:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=EB+Garamond:wght@400;500;600&display=swap"
       rel="stylesheet"
     />
     <link rel="stylesheet" href="./styles.css" />
@@ -22,132 +22,130 @@
         <a class="wwwd-site-brand" href="./index.html">WWWD</a>
         <nav class="wwwd-site-nav" aria-label="Primary">
           <a href="./projects.html">Projects</a>
-          <a href="#studio">Studio</a>
+          <a href="./studio.html">Studio</a>
           <a href="#contact">Contact</a>
         </nav>
       </header>
 
       <main>
-        <section class="wwwd-home-hero" aria-label="Featured still sequence">
-          <div class="wwwd-home-hero-media">
-            <figure class="wwwd-home-hero-frame wwwd-home-hero-frame-primary">
+        <section class="wwwd-home-opening" aria-label="Opening sequence">
+          <div class="wwwd-home-opening-intro">
+            <p class="wwwd-site-kicker">Architecture, interiors, spatial strategy</p>
+            <h1>What should exist here?</h1>
+            <p class="wwwd-home-opening-copy">
+              WWWD works by reading a place closely, its light, use, pressures, and quiet contradictions, then giving those conditions a form that can be inhabited with clarity.
+            </p>
+          </div>
+          <div class="wwwd-home-opening-sequence">
+            <figure class="wwwd-opening-image wwwd-opening-image-large">
               <img
                 src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=1800&q=80"
                 alt="Concrete architectural interior with framed light and a quiet material atmosphere"
               />
             </figure>
-            <figure class="wwwd-home-hero-frame wwwd-home-hero-frame-secondary">
-              <img
-                src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1200&q=80"
-                alt="Monolithic architectural volume with a precise opening and pale sky"
-              />
-            </figure>
-          </div>
-          <div class="wwwd-home-hero-text">
-            <p class="wwwd-site-kicker">Architecture, interiors, and spatial strategy</p>
-            <h1>What should exist here?</h1>
-            <p class="wwwd-home-hero-support">
-              WWWD approaches each commission as a question of form, use, and cultural presence, considering how atmosphere,
-              material, and sequence give shape to the way life is lived.
-            </p>
+            <div class="wwwd-opening-side-column">
+              <figure class="wwwd-opening-image wwwd-opening-image-small">
+                <img
+                  src="https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1200&q=80"
+                  alt="Monolithic architectural volume with a precise opening and pale sky"
+                />
+              </figure>
+              <div class="wwwd-opening-note">
+                <p>
+                  The work begins before style, at the level of threshold, sequence, material presence, and the life a space is asked to hold.
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
-        <section class="wwwd-home-projects" aria-labelledby="wwwd-home-projects-heading">
+        <section class="wwwd-home-index" aria-labelledby="wwwd-home-index-heading">
           <div class="wwwd-section-head">
-            <p class="wwwd-site-kicker">Selected Projects</p>
-            <a class="wwwd-section-link" href="./projects.html">Open archive</a>
+            <p class="wwwd-site-kicker">Selected Index</p>
+            <a class="wwwd-section-link" href="./projects.html">Full archive</a>
           </div>
-          <h2 id="wwwd-home-projects-heading" class="wwwd-home-section-title">Selected work</h2>
-          <div class="wwwd-project-list">
-            <article class="wwwd-project-teaser wwwd-project-teaser-featured">
-              <a href="./projects/private-residential-inquiry.html" class="wwwd-project-teaser-link">
-                <figure class="wwwd-project-teaser-image">
-                  <img
-                    src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80"
-                    alt="Quiet residential room with soft daylight and carefully framed openings"
-                  />
-                </figure>
-                <div class="wwwd-project-teaser-meta">
-                  <div>
-                    <p class="wwwd-project-teaser-title">Private Residential Inquiry</p>
-                    <p class="wwwd-project-teaser-thesis">
-                      A house composed through light, pause, and the slower rituals of return.
-                    </p>
-                  </div>
-                  <ul class="wwwd-project-facts" aria-label="Project facts">
-                    <li>Seoul</li>
-                    <li>2026</li>
-                    <li>Residential</li>
-                    <li>In Development</li>
-                  </ul>
-                </div>
+          <h2 id="wwwd-home-index-heading" class="wwwd-home-section-title">Selected work</h2>
+          <div class="wwwd-home-index-list" role="list">
+            <article class="wwwd-home-index-item" role="listitem">
+              <a href="./projects/private-residential-inquiry.html">
+                <span class="wwwd-home-index-number">01</span>
+                <span class="wwwd-home-index-title">Private Residential Inquiry</span>
+                <span class="wwwd-home-index-thesis">A house organized through return, light, and the slower habits of living.</span>
+                <span class="wwwd-home-index-meta">Seoul / 2026 / Residential / In Development</span>
               </a>
             </article>
-
-            <article class="wwwd-project-teaser">
-              <a href="./projects/private-residential-inquiry.html" class="wwwd-project-teaser-link">
-                <figure class="wwwd-project-teaser-image">
-                  <img
-                    src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80"
-                    alt="Minimal interior with controlled daylight and long horizontal lines"
-                  />
-                </figure>
-                <div class="wwwd-project-teaser-meta">
-                  <p class="wwwd-project-teaser-title">Brand-Led Showroom Strategy</p>
-                  <p class="wwwd-project-teaser-thesis">A display environment organized through approach, tempo, and controlled sightlines.</p>
-                  <ul class="wwwd-project-facts" aria-label="Project facts">
-                    <li>New York</li>
-                    <li>2025</li>
-                    <li>Retail</li>
-                    <li>Concept</li>
-                  </ul>
-                </div>
+            <article class="wwwd-home-index-item" role="listitem">
+              <a href="./projects/private-residential-inquiry.html">
+                <span class="wwwd-home-index-number">02</span>
+                <span class="wwwd-home-index-title">Brand-Led Showroom Strategy</span>
+                <span class="wwwd-home-index-thesis">A display environment shaped by approach, pause, and controlled attention.</span>
+                <span class="wwwd-home-index-meta">New York / 2025 / Retail / Concept</span>
               </a>
             </article>
-
-            <article class="wwwd-project-teaser">
-              <a href="./projects/private-residential-inquiry.html" class="wwwd-project-teaser-link">
-                <figure class="wwwd-project-teaser-image">
-                  <img
-                    src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=1200&q=80"
-                    alt="Workplace environment with structural rhythm and measured material palette"
-                  />
-                </figure>
-                <div class="wwwd-project-teaser-meta">
-                  <p class="wwwd-project-teaser-title">Workplace as Institutional Signal</p>
-                  <p class="wwwd-project-teaser-thesis">A workplace calibrated as shared discipline, daylight, and public character.</p>
-                  <ul class="wwwd-project-facts" aria-label="Project facts">
-                    <li>London</li>
-                    <li>2024</li>
-                    <li>Workplace</li>
-                    <li>Built</li>
-                  </ul>
-                </div>
+            <article class="wwwd-home-index-item" role="listitem">
+              <a href="./projects/private-residential-inquiry.html">
+                <span class="wwwd-home-index-number">03</span>
+                <span class="wwwd-home-index-title">Workplace as Institutional Signal</span>
+                <span class="wwwd-home-index-thesis">A workplace given public character through order, daylight, and movement.</span>
+                <span class="wwwd-home-index-meta">London / 2024 / Workplace / Built</span>
               </a>
             </article>
-
-            <article class="wwwd-project-teaser">
-              <a href="./projects/private-residential-inquiry.html" class="wwwd-project-teaser-link">
-                <figure class="wwwd-project-teaser-image">
-                  <img
-                    src="https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80"
-                    alt="Gallery-like interior with pale walls and precise openings"
-                  />
-                </figure>
-                <div class="wwwd-project-teaser-meta">
-                  <p class="wwwd-project-teaser-title">Exhibition Room for Material Memory</p>
-                  <p class="wwwd-project-teaser-thesis">An interior shaped by threshold, shadow, and the dignity of close looking.</p>
-                  <ul class="wwwd-project-facts" aria-label="Project facts">
-                    <li>Antwerp</li>
-                    <li>2025</li>
-                    <li>Cultural</li>
-                    <li>In Development</li>
-                  </ul>
-                </div>
+            <article class="wwwd-home-index-item" role="listitem">
+              <a href="./projects/private-residential-inquiry.html">
+                <span class="wwwd-home-index-number">04</span>
+                <span class="wwwd-home-index-title">Exhibition Room for Material Memory</span>
+                <span class="wwwd-home-index-thesis">A cultural interior paced by threshold, shadow, and the act of looking closely.</span>
+                <span class="wwwd-home-index-meta">Antwerp / 2025 / Cultural / In Development</span>
               </a>
             </article>
           </div>
+        </section>
+
+        <section class="wwwd-home-project-panels" aria-label="Selected image panels">
+          <article class="wwwd-project-panel wwwd-project-panel-large">
+            <a href="./projects/private-residential-inquiry.html">
+              <figure class="wwwd-project-panel-image">
+                <img
+                  src="https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?auto=format&fit=crop&w=1600&q=80"
+                  alt="Quiet residential room with soft daylight and carefully framed openings"
+                />
+              </figure>
+              <div class="wwwd-project-panel-caption">
+                <p class="wwwd-project-panel-title">Private Residential Inquiry</p>
+                <p class="wwwd-project-panel-copy">A domestic interior composed around threshold, retreat, and a quieter distribution of light.</p>
+              </div>
+            </a>
+          </article>
+
+          <article class="wwwd-project-panel">
+            <a href="./projects/private-residential-inquiry.html">
+              <figure class="wwwd-project-panel-image">
+                <img
+                  src="https://images.unsplash.com/photo-1494526585095-c41746248156?auto=format&fit=crop&w=1200&q=80"
+                  alt="Minimal interior with controlled daylight and long horizontal lines"
+                />
+              </figure>
+              <div class="wwwd-project-panel-caption">
+                <p class="wwwd-project-panel-title">Brand-Led Showroom Strategy</p>
+                <p class="wwwd-project-panel-copy">Display considered as sequence, approach, and the measured staging of attention.</p>
+              </div>
+            </a>
+          </article>
+
+          <article class="wwwd-project-panel">
+            <a href="./projects/private-residential-inquiry.html">
+              <figure class="wwwd-project-panel-image">
+                <img
+                  src="https://images.unsplash.com/photo-1460317442991-0ec209397118?auto=format&fit=crop&w=1200&q=80"
+                  alt="Gallery-like interior with pale walls and precise openings"
+                />
+              </figure>
+              <div class="wwwd-project-panel-caption">
+                <p class="wwwd-project-panel-title">Exhibition Room for Material Memory</p>
+                <p class="wwwd-project-panel-copy">An interior where atmosphere accumulates through shadow, surface, and distance.</p>
+              </div>
+            </a>
+          </article>
         </section>
 
         <section class="wwwd-home-studio" id="studio">
@@ -165,8 +163,7 @@
               WWWD pays attention to how a place is entered, occupied, and remembered.
             </p>
             <p class="wwwd-home-studio-note">
-              The work is grounded in research and judgment, but it is carried by quieter things too, proportion, texture, rhythm,
-              and the particular ways people move through a room and return to it over time.
+              The studio is interested in the relation between form and life, how material, atmosphere, and behavior settle into a shared order, and how architecture can hold cultural weight without becoming rhetorical.
             </p>
           </div>
         </section>
