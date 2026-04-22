@@ -184,7 +184,7 @@ button {
 .wwwd-home-opening-intro h1,
 .wwwd-home-opening-copy,
 .wwwd-opening-note p {
-  color: #f5f1ea;
+  color: rgba(245, 241, 234, 0.94);
 }
 
 .wwwd-home-opening-intro h1 {
@@ -318,7 +318,7 @@ button {
 
 .wwwd-home-project-panels {
   display: grid;
-  grid-template-columns: 1.22fr 0.78fr;
+  grid-template-columns: 1.3fr 0.7fr;
   gap: 20px;
 }
 
@@ -333,11 +333,11 @@ button {
 }
 
 .wwwd-project-panel-image {
-  aspect-ratio: 0.96 / 1.08;
+  aspect-ratio: 0.9 / 1.08;
 }
 
 .wwwd-project-panel-large .wwwd-project-panel-image {
-  aspect-ratio: 1.14 / 1.08;
+  aspect-ratio: 1.32 / 1.08;
 }
 
 .wwwd-project-panel a:hover img,
@@ -458,10 +458,18 @@ button {
 
 .wwwd-archive-row-detail {
   display: grid;
-  grid-template-columns: 360px minmax(0, 1fr);
-  gap: 22px;
+  grid-template-columns: 420px minmax(0, 1fr);
+  gap: 24px;
   padding-top: 16px;
   margin-left: 82px;
+}
+
+.wwwd-archive-row-code {
+  margin: 6px 0 0;
+  font-size: 0.7rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--wwwd-color-muted);
 }
 
 .wwwd-archive-row-image {
