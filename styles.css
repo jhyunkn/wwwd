@@ -318,8 +318,14 @@ button {
 
 .wwwd-home-project-panels {
   display: grid;
-  grid-template-columns: 1.2fr 0.9fr 0.9fr;
+  grid-template-columns: 1.22fr 0.78fr;
   gap: 20px;
+}
+
+.wwwd-project-panel-stack {
+  display: grid;
+  gap: 28px;
+  align-content: start;
 }
 
 .wwwd-project-panel {
@@ -427,7 +433,7 @@ button {
 .wwwd-archive-table-head,
 .wwwd-archive-table-row > a {
   display: grid;
-  grid-template-columns: 64px minmax(0, 1.4fr) 0.8fr 0.45fr 0.75fr 0.85fr;
+  grid-template-columns: 64px minmax(0, 1.5fr) 0.78fr 0.42fr 0.72fr 0.88fr;
   gap: 18px;
   align-items: baseline;
 }
@@ -438,7 +444,7 @@ button {
 
 .wwwd-archive-table-row {
   border-top: 1px solid var(--wwwd-color-line);
-  padding: 12px 0 18px;
+  padding: 14px 0 22px;
 }
 
 .wwwd-archive-cell-title {
@@ -452,9 +458,9 @@ button {
 
 .wwwd-archive-row-detail {
   display: grid;
-  grid-template-columns: 320px minmax(0, 1fr);
-  gap: 20px;
-  padding-top: 14px;
+  grid-template-columns: 360px minmax(0, 1fr);
+  gap: 22px;
+  padding-top: 16px;
   margin-left: 82px;
 }
 
@@ -520,6 +526,10 @@ button {
   .wwwd-archive-row-detail,
   .wwwd-project-gallery {
     grid-template-columns: 1fr;
+  }
+
+  .wwwd-project-panel-stack {
+    gap: 20px;
   }
 
   .wwwd-home-opening-hero-image,
