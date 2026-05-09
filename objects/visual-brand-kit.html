@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>WWWD Objects — Visual Brand Kit</title>
+  <style>
+    :root {
+      --wax-ivory: #F2E8D0;
+      --warm-paper: #E7DDC8;
+      --plaster-white: #F7F5EF;
+      --stone-grey: #8D8A82;
+      --deep-umber: #3A332D;
+      --oxidized-bronze: #5A5146;
+      --charcoal: #1E1D1A;
+      --mineral-green: #6F786C;
+      --line: #D8CFBC;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--plaster-white);
+      color: var(--charcoal);
+      font-family: Arial, Helvetica, sans-serif;
+      line-height: 1.45;
+    }
+
+    .serif {
+      font-family: Georgia, 'Times New Roman', serif;
+      letter-spacing: -0.04em;
+    }
+
+    .mono {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    }
+
+    .eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.28em;
+      text-transform: uppercase;
+      color: var(--oxidized-bronze);
+    }
+
+    section {
+      padding: 64px 48px;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .hero {
+      min-height: 82vh;
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 48px;
+      align-items: end;
+    }
+
+    .hero h1 {
+      margin: 24px 0 0;
+      max-width: 980px;
+      font-size: clamp(64px, 11vw, 154px);
+      line-height: 0.86;
+      font-weight: 400;
+    }
+
+    .hero p {
+      margin: 0 0 10px;
+      max-width: 560px;
+      font-size: 21px;
+      color: var(--deep-umber);
+    }
+
+    .grid-12 {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 28px;
+    }
+
+    .span-4 { grid-column: span 4; }
+    .span-5 { grid-column: span 5; }
+    .span-7 { grid-column: span 7; }
+    .span-8 { grid-column: span 8; }
+    .span-12 { grid-column: span 12; }
+
+    h2 {
+      margin: 8px 0 18px;
+      font-size: clamp(38px, 5vw, 72px);
+      line-height: 0.94;
+      font-weight: 400;
+    }
+
+    h3 {
+      margin: 0 0 14px;
+      font-size: 26px;
+      line-height: 1;
+      font-weight: 400;
+    }
+
+    .body-copy {
+      max-width: 680px;
+      color: var(--deep-umber);
+      font-size: 15px;
+      line-height: 1.75;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .card {
+      background: rgba(242,232,208,0.45);
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      padding: 26px;
+      min-height: 190px;
+    }
+
+    .card p {
+      margin: 0;
+      color: var(--deep-umber);
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    .palette {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .swatch {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: rgba(255,255,255,0.35);
+    }
+
+    .swatch-color { height: 142px; }
+    .swatch-meta { padding: 18px; }
+    .swatch-name { font-family: Georgia, 'Times New Roman', serif; font-size: 22px; letter-spacing: -0.03em; }
+    .swatch-hex { margin-top: 4px; color: var(--oxidized-bronze); font-size: 12px; }
+    .swatch-note { margin-top: 14px; color: var(--deep-umber); font-size: 12px; line-height: 1.5; }
+
+    .type-row {
+      padding: 28px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    .type-row:last-child { border-bottom: 0; }
+    .type-sample-large { font-size: clamp(52px, 8vw, 96px); line-height: 0.9; }
+    .type-sample-sans { font-size: 14px; letter-spacing: 0.28em; text-transform: uppercase; }
+    .type-sample-mono { font-size: 15px; letter-spacing: 0.08em; }
+
+    .process-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .process-step {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      border: 1px solid var(--line);
+      background: var(--plaster-white);
+      border-radius: 20px;
+      padding: 18px;
+    }
+
+    .process-step span:first-child {
+      width: 42px;
+      color: var(--oxidized-bronze);
+      font-size: 12px;
+    }
+
+    .process-step span:last-child {
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      font-size: 12px;
+    }
+
+    .lockups {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .lockup {
+      min-height: 280px;
+      border-radius: 24px;
+      border: 1px solid var(--line);
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .lockup.primary { background: rgba(242,232,208,0.55); }
+    .lockup.secondary { background: var(--plaster-white); }
+    .lockup.dark { background: var(--deep-umber); color: var(--plaster-white); border-color: var(--oxidized-bronze); }
+
+    .lockup .logo { font-size: 54px; line-height: 0.92; }
+    .lockup .collection { font-size: 42px; line-height: 1; }
+    .lockup .object { font-size: 40px; line-height: 1; }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 18px;
+    }
+
+    .product-card {
+      overflow: hidden;
+      border: 1px solid var(--line);
+      border-radius: 24px;
+      background: rgba(255,255,255,0.35);
+    }
+
+    .product-image {
+      height: 210px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, var(--wax-ivory), var(--warm-paper), var(--stone-grey));
+    }
+
+    .wax-object {
+      width: 82px;
+      height: 126px;
+      border-radius: 46% 54% 42% 58%;
+      background: rgba(247,245,239,0.82);
+      border: 1px solid var(--line);
+      box-shadow: inset 10px 12px 26px rgba(58,51,45,0.10), 0 18px 35px rgba(30,29,26,0.12);
+    }
+
+    .product-meta { padding: 22px; }
+    .product-title { font-size: 27px; line-height: 1; }
+    .product-subtitle { margin-top: 8px; font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--oxidized-bronze); }
+    .product-data { margin-top: 24px; font-size: 12px; line-height: 1.8; }
+    .product-data span { color: var(--oxidized-bronze); }
+
+    .inverse {
+      background: var(--charcoal);
+      color: var(--plaster-white);
+    }
+
+    .inverse .eyebrow,
+    .inverse .body-copy { color: var(--warm-paper); }
+
+    .package-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 22px;
+    }
+
+    .package {
+      min-height: 380px;
+      border-radius: 24px;
+      padding: 34px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      border: 1px solid var(--oxidized-bronze);
+    }
+
+    .package.front {
+      background: var(--warm-paper);
+      color: var(--charcoal);
+    }
+
+    .package.back {
+      background: var(--plaster-white);
+      color: var(--charcoal);
+    }
+
+    .package-title { font-size: 58px; line-height: 0.9; }
+    .package-object { font-size: 44px; line-height: 1; }
+    .spec-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      font-size: 12px;
+      line-height: 1.45;
+    }
+
+    ul.rules {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--deep-umber);
+      font-size: 14px;
+      line-height: 1.75;
+    }
+
+    .inverse ul.rules { color: var(--warm-paper); }
+
+    .caption {
+      color: var(--oxidized-bronze);
+      font-size: 12px;
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    @media (max-width: 900px) {
+      section { padding: 42px 22px; }
+      .hero, .grid-12 { grid-template-columns: 1fr; }
+      .span-4, .span-5, .span-7, .span-8, .span-12 { grid-column: span 1; }
+      .cards, .palette, .process-grid, .lockups, .product-grid, .package-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: 66px; }
+    }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div>
+      <div class="eyebrow">WWWD Objects / Visual Brand Kit</div>
+      <h1 class="serif">Scanned from elsewhere. Cast into ritual.</h1>
+    </div>
+    <p>A visual identity system for an R&D-driven object platform translating travel fragments, AI-assisted form-making, and material casting into wax, light, and domestic ritual.</p>
+  </section>
+
+  <section>
+    <div class="grid-12">
+      <div class="span-4">
+        <div class="eyebrow">Core identity</div>
+        <h2 class="serif">Quiet archival luxury, with visible fabrication intelligence.</h2>
+        <p class="body-copy">The identity should avoid both generic luxury fragrance codes and maker-market craft language. It should feel archival, architectural, material, technological, and quiet.</p>
+      </div>
+      <div class="span-8 cards">
+        <div class="card"><h3 class="serif">Quiet intelligence</h3><p>The brand should look researched, not decorated. The visual system should feel like a field note, object archive, and architectural lab at once.</p></div>
+        <div class="card"><h3 class="serif">Technology below the surface</h3><p>AI, scanning, and fabrication should appear through process diagrams, archive numbers, and transformation records — not neon cyber aesthetics.</p></div>
+        <div class="card"><h3 class="serif">Material before lifestyle</h3><p>Photograph wax, surface, flame, mold, and hand-scale tactility. Avoid generic lifestyle scenes that make the work feel like ordinary home decor.</p></div>
+        <div class="card"><h3 class="serif">Atmosphere, not perfume</h3><p>Scent is secondary. Visual language should prioritize form, wax, light, shadow, origin, and ritual before fragrance cues.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Color system</div>
+    <h2 class="serif">Material palette</h2>
+    <p class="body-copy">The palette should come from wax, paper, stone, plaster, bronze, and shadow — not lifestyle color trends.</p>
+    <div class="palette" style="margin-top: 34px;">
+      <div class="swatch"><div class="swatch-color" style="background:#F2E8D0"></div><div class="swatch-meta"><div class="swatch-name">Wax Ivory</div><div class="swatch-hex mono">#F2E8D0</div><div class="swatch-note">primary material field</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#E7DDC8"></div><div class="swatch-meta"><div class="swatch-name">Warm Paper</div><div class="swatch-hex mono">#E7DDC8</div><div class="swatch-note">packaging / background</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#F7F5EF"></div><div class="swatch-meta"><div class="swatch-name">Plaster White</div><div class="swatch-hex mono">#F7F5EF</div><div class="swatch-note">website ground</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#8D8A82"></div><div class="swatch-meta"><div class="swatch-name">Stone Grey</div><div class="swatch-hex mono">#8D8A82</div><div class="swatch-note">secondary neutral</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#3A332D"></div><div class="swatch-meta"><div class="swatch-name">Deep Umber</div><div class="swatch-hex mono">#3A332D</div><div class="swatch-note">text / shadow</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#5A5146"></div><div class="swatch-meta"><div class="swatch-name">Oxidized Bronze</div><div class="swatch-hex mono">#5A5146</div><div class="swatch-note">hardware / accent</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#1E1D1A"></div><div class="swatch-meta"><div class="swatch-name">Charcoal</div><div class="swatch-hex mono">#1E1D1A</div><div class="swatch-note">primary type</div></div></div>
+      <div class="swatch"><div class="swatch-color" style="background:#6F786C"></div><div class="swatch-meta"><div class="swatch-name">Mineral Green</div><div class="swatch-hex mono">#6F786C</div><div class="swatch-note">site-specific accent</div></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="grid-12">
+      <div class="span-4">
+        <div class="eyebrow">Typography</div>
+        <h2 class="serif">Type hierarchy</h2>
+      </div>
+      <div class="span-8">
+        <div class="type-row"><h3 class="serif">Editorial Serif</h3><p class="body-copy">Collection titles / manifesto statements</p><div class="serif type-sample-large">Wax Archive I</div></div>
+        <div class="type-row"><h3 class="serif">Architectural Sans</h3><p class="body-copy">Navigation / product data / captions</p><div class="type-sample-sans">Fragment No. 01 — Vals Study</div></div>
+        <div class="type-row"><h3 class="serif">Technical Mono</h3><p class="body-copy">Object IDs / edition codes / batch records</p><div class="mono type-sample-mono">WWWD-WA01-F03-BW-2026</div></div>
+      </div>
+    </div>
+  </section>
+
+  <section style="background: rgba(231,221,200,0.45);">
+    <div class="grid-12">
+      <div class="span-5">
+        <div class="eyebrow">Process language</div>
+        <h2 class="serif">The visible technology stack</h2>
+        <p class="body-copy">The visual kit should make process legible. Not as a gimmick, but as provenance: the customer should know the object moved through capture, intelligence, fabrication, testing, and archive.</p>
+      </div>
+      <div class="span-7 process-grid">
+        <div class="process-step"><span class="mono">01</span><span>3D scan</span></div>
+        <div class="process-step"><span class="mono">02</span><span>AI transformation</span></div>
+        <div class="process-step"><span class="mono">03</span><span>digital mesh</span></div>
+        <div class="process-step"><span class="mono">04</span><span>printed master</span></div>
+        <div class="process-step"><span class="mono">05</span><span>silicone mold</span></div>
+        <div class="process-step"><span class="mono">06</span><span>wax cast</span></div>
+        <div class="process-step"><span class="mono">07</span><span>burn test</span></div>
+        <div class="process-step"><span class="mono">08</span><span>archive record</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="eyebrow">Logo / lockup direction</div>
+    <h2 class="serif">Use words as architecture</h2>
+    <p class="body-copy">Start without an ornate symbol. Let the name, archive codes, and object numbering become the identity system.</p>
+    <div class="lockups" style="margin-top: 34px;">
+      <div class="lockup primary"><div class="serif logo">WWWD<br>Objects</div><div class="caption">Primary lockup</div></div>
+      <div class="lockup secondary"><div><div class="serif collection">Wax Archive I</div><div class="mono" style="margin-top:16px;color:var(--oxidized-bronze);font-size:13px;">WA01 / FRAGMENT STUDIES</div></div><div class="caption">Collection lockup</div></div>
+      <div class="lockup dark"><div><div class="mono" style="font-size:12px;letter-spacing:0.24em;color:var(--warm-paper);margin-bottom:38px;">WWWD-WA01-F03</div><div class="serif object">Fragment No. 03</div></div><div class="caption" style="color:var(--warm-paper);">Object label</div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="grid-12">
+      <div class="span-4">
+        <div class="eyebrow">Product system</div>
+        <h2 class="serif">Object cards</h2>
+        <p class="body-copy">Each product should read like an archive record: object name, origin study, material, edition, and use. The structure itself creates value.</p>
+      </div>
+      <div class="span-8 product-grid">
+        <div class="product-card"><div class="product-image"><div class="wax-object"></div></div><div class="product-meta"><div class="serif product-title">Fragment No. 01</div><div class="product-subtitle">Vals Study</div><div class="product-data"><div><span>Type:</span> Burnable wax artifact</div><div><span>Material:</span> Beeswax / cotton wick</div><div><span>Edition:</span> Edition of 50</div></div></div></div>
+        <div class="product-card"><div class="product-image"><div class="wax-object"></div></div><div class="product-meta"><div class="serif product-title">Surface No. 02</div><div class="product-subtitle">Kyoto Study</div><div class="product-data"><div><span>Type:</span> Non-burning wax object</div><div><span>Material:</span> Filtered beeswax</div><div><span>Edition:</span> Edition of 25</div></div></div></div>
+        <div class="product-card"><div class="product-image"><div class="wax-object"></div></div><div class="product-meta"><div class="serif product-title">Vessel No. 03</div><div class="product-subtitle">Taichung Study</div><div class="product-data"><div><span>Type:</span> Refillable ritual vessel</div><div><span>Material:</span> Ceramic / wax insert</div><div><span>Edition:</span> Open study</div></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="inverse">
+    <div class="grid-12">
+      <div class="span-5">
+        <div class="eyebrow">Packaging direction</div>
+        <h2 class="serif">Archival, not decorative</h2>
+        <p class="body-copy">Packaging should behave like an archive sleeve: restrained, numbered, tactile, and specific. It should make the object feel collected, not merely purchased.</p>
+      </div>
+      <div class="span-7 package-grid">
+        <div class="package front"><div><div class="eyebrow">WWWD Objects</div><div class="serif package-title" style="margin-top:70px;">Wax<br>Archive I</div></div><div class="mono" style="font-size:12px;">SCANNED / TRANSLATED / CAST</div></div>
+        <div class="package back"><div><div class="mono" style="font-size:12px;margin-bottom:54px;">WWWD-WA01-F01-BW</div><div class="serif package-object">Fragment No. 01</div><div class="eyebrow" style="margin-top:10px;">Vals Study</div></div><div class="spec-grid"><div>Material<br><span style="color:var(--oxidized-bronze);">Beeswax</span></div><div>Process<br><span style="color:var(--oxidized-bronze);">3D scan / AI / mold</span></div><div>Use<br><span style="color:var(--oxidized-bronze);">Burn within sight</span></div><div>Edition<br><span style="color:var(--oxidized-bronze);">01 / 50</span></div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="grid-12">
+      <div class="span-4">
+        <div class="eyebrow">Art direction</div>
+        <h2 class="serif">Photography rules</h2>
+      </div>
+      <div class="span-8 cards">
+        <div class="card"><h3 class="serif">Shoot</h3><ul class="rules"><li>Natural sidelight, soft shadows, no dramatic fragrance advertising.</li><li>Wax surface, mold seams, scan texture, flame behavior, and object scale.</li><li>Stone, plaster, paper, wood, bronze, and neutral architectural backdrops.</li><li>Process images: scanning, mesh, print, mold, pour, test burn, archive card.</li></ul></div>
+        <div class="card"><h3 class="serif">Avoid</h3><ul class="rules"><li>Generic spa imagery, florals, lifestyle clutter, and cozy-candle clichés.</li><li>Overly glossy luxury styling that hides fabrication intelligence.</li><li>Cyber-AI aesthetics, neon gradients, and tech startup visual noise.</li><li>Direct souvenir framing or literal replica storytelling.</li></ul></div>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
