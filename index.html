@@ -167,6 +167,21 @@ a:focus-visible {
 .nav-wrap { padding: 0; border-bottom: 1px solid var(--blue-soft); background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
 
 /* ── Hero: arrives on load, dissolves into work on scroll ── */
+.home-hero { position: relative; }
+
+/* Ghost drawing — an architectural section, nearly invisible, in the white field above WWWD */
+.home-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: url('/assets/portfolio/chankillo/section.webp') no-repeat center 32%;
+  background-size: 62%;
+  opacity: .065;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+}
+.theme-dark .home-hero::before { display: none; }
+
 @keyframes wwwd-arrive {
   from { opacity: 0; transform: translateY(22px); }
   to   { opacity: 1; transform: translateY(0); }
