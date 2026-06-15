@@ -1,0 +1,62 @@
+[
+  {
+    "project": "royal-crescent",
+    "file": "/assets/portfolio/royal-crescent/thumb.webp",
+    "page": 1,
+    "caption": "Royal Crescent precedent study connecting housing, landscape, and urban edge."
+  },
+  {
+    "project": "glass-pavilion",
+    "file": "/assets/portfolio/glass-pavilion/thumb.webp",
+    "page": 27,
+    "caption": "Glass pavilion study of transparency, tectonics, and public light."
+  },
+  {
+    "project": "glass-pavilion",
+    "file": "/assets/portfolio/glass-pavilion/detail.webp",
+    "page": 29,
+    "caption": "Glass tectonic detail and structural assembly."
+  },
+  {
+    "project": "east-river-sdc",
+    "file": "/assets/portfolio/east-river-sdc/thumb.webp",
+    "page": 34,
+    "caption": "East River SDC urban system and disciplinary infrastructure."
+  },
+  {
+    "project": "east-river-sdc",
+    "file": "/assets/portfolio/east-river-sdc/diagram.webp",
+    "page": 36,
+    "caption": "Housing island and social disciplinary system diagram."
+  },
+  {
+    "project": "aaron-davis-facade",
+    "file": "/assets/portfolio/aaron-davis-facade/thumb.webp",
+    "page": 40,
+    "caption": "Aaron Davis facade as programmatic stage."
+  },
+  {
+    "project": "aaron-davis-facade",
+    "file": "/assets/portfolio/aaron-davis-facade/detail.webp",
+    "page": 41,
+    "caption": "Facade transition detail and elevation logic."
+  },
+  {
+    "project": "brownsville-dwelling",
+    "file": "/assets/portfolio/brownsville-dwelling/thumb.webp",
+    "page": 43,
+    "caption": "Brownsville dwelling and social urbanism framework."
+  },
+  {
+    "project": "brownsville-dwelling",
+    "file": "/assets/portfolio/brownsville-dwelling/diagram.webp",
+    "page": 44,
+    "caption": "Micro-collective housing and community infrastructure."
+  },
+  {
+    "project": "groundswell-mural",
+    "file": "/assets/portfolio/groundswell-mural/thumb.webp",
+    "page": 45,
+    "caption": "Groundswell mural identity and community facade study."
+  }
+]
