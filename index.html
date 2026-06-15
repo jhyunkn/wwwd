@@ -141,12 +141,51 @@ a:focus-visible {
 /* ── Selection ── */
 ::selection { background: var(--blue); color: #fff; }
 
+/* ── A: Atmosphere — Klein Blue light field, not decoration ── */
+.atmosphere {
+  display: block !important;
+  background: radial-gradient(ellipse 160% 55% at 50% -4%, rgba(0,0,255,.045) 0%, transparent 58%);
+  pointer-events: none;
+  z-index: 0;
+  position: fixed;
+  inset: 0;
+}
+.theme-dark .atmosphere {
+  background: radial-gradient(ellipse 160% 55% at 50% -4%, rgba(36,80,255,.09) 0%, transparent 58%);
+}
+
+/* ── D: Cooler text — luminous white reads warmer with cool black ── */
+.theme-light {
+  --text: #0d0d0d;
+  --muted: rgba(13,13,13,.58);
+  --faint: rgba(13,13,13,.34);
+  --line: rgba(13,13,13,.13);
+}
+
 /* ── Nav: clean flush bar, no float ── */
 .nav-shell { border-radius: 0; border-top: none; border-left: none; border-right: none; box-shadow: none; }
 .nav-wrap { padding: 0; border-bottom: 1px solid var(--blue-soft); background: var(--glass); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); }
 
 /* ── Hero: the name stands alone ── */
 .home-hero h1 { line-height: .82; }
+
+/* ── E: Breathing — sections as distinct moments ── */
+.featured-flow { padding: 100px 0 96px; }
+.deep-list { margin-top: 140px; }
+
+/* ── F: Work index — title + image only, descriptions on project page ── */
+.deep-list em { display: none; }
+.deep-list small { display: none; }
+.deep-list button { padding: 22px 0; }
+.deep-list button.primary { padding: 34px 0; }
+
+/* ── B: Research index — text only, no thumbnails ── */
+.research-field img { display: none; }
+.research-field button { padding-top: 22px !important; padding-bottom: 30px !important; }
+.research-field em { font-size: 15px; line-height: 1.65; margin-top: 10px; }
+
+/* ── C: Image ratio → 3:2 everywhere in work index ── */
+.deep-list img { aspect-ratio: 1.5; }
 
 /* ── Feature section: tighter ── */
 .feature-image img { border-radius: 0; }
@@ -155,10 +194,6 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
 
 /* ── Project images: no radius, clean edges ── */
 .project-narrative img, .article-hero img, .visual-pair img, .visual-wide img, .visual-details img { border-radius: 0; }
-
-/* ── Deep list: tighter row padding ── */
-.deep-list button { padding: 28px 0; }
-.deep-list button.primary { padding: 40px 0; }
 
 /* ── Footer: leaner ── */
 .footer-index button { padding: 0 18px 36px; }
@@ -171,8 +206,8 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
 /* ── Article tags: tighter ── */
 .article-tags span { padding: 5px 9px; font-size: 11px; letter-spacing: .06em; text-transform: uppercase; }
 
-/* ── Research field: remove gap between label and title ── */
-.research-field span { margin-bottom: 16px; }
+/* ── Research field: label spacing ── */
+.research-field span { margin-bottom: 12px; }
 
 /* ── Command palette: less aggressive backdrop ── */
 .command-backdrop { background: rgba(20,20,20,.18); }
