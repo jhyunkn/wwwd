@@ -249,6 +249,28 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
 
 /* ── Command palette: less aggressive backdrop ── */
 .command-backdrop { background: rgba(20,20,20,.18); }
+
+/* ── Hero: one left edge, one rhythm, less dead void ── */
+.home-hero {
+  min-height: 70svh !important;
+  padding: 64px 0 72px !important;
+}
+.home-hero p {
+  margin: 28px 0 0 !important;
+}
+.home-hero .site-search {
+  margin: 44px 0 0 0 !important;
+  max-width: 460px !important;
+}
+
+/* ── Nav: share the same left edge as .frame content, not a fixed 20px ── */
+.nav-shell {
+  width: min(100% - 32px, 1240px) !important;
+  max-width: 1240px !important;
+  margin: 0 auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+}
 </style>
 </head>
   <body>
