@@ -316,75 +316,179 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
   padding-right: 0 !important;
 }
 
-/* ── WWWD MORPH — Active: Iter 1 of 20 (swap by data-iter on body)
-   Research base:
-   · clip-path is GPU-composited, zero layout cost (Emil Kowalski)
-   · cubic-bezier(.77,0,.175,1) = quart ease-in-out: slow-start/slow-end
-     with a fast middle — the NYT / editorial print signature
-   · 560ms: long enough to feel like paper, fast enough to not stall
-   · 32ms stagger: sequential but near-simultaneous (reading pace)
-   ── */
+/* ── WWWD MORPH — 20 iterations ─────────────────────────────────────
+   Research references:
+   · NYT R&D / editorial print: cubic-bezier(.77,0,.175,1) quart ease-in-out
+   · Apple HIG spring: cubic-bezier(.34,1.56,.64,1) — 1.56 overshoot ratio
+   · Motion.dev / Emil Kowalski expo: cubic-bezier(.19,1,.22,1)
+   · Google Material You sine: cubic-bezier(.4,0,.2,1)
+   · Haptic / tactile bounce: cubic-bezier(.34,1.9,.64,1)
+   · Architecture: sizer (max-width) owns space; rest (opacity/transform)
+     owns visual. These two axes never conflict.
+   Navigate: ?iter=N URL param, or ‹ › keys / arrow keys in overlay.
+   ─────────────────────────────────────────────────────────────────── */
+
+/* Base defaults = Iter 1 */
 .home-hero h1.wwwd-morph {
+  --d: .56s; --e: cubic-bezier(.77,0,.175,1); --s: 32ms; --rd: .42s;
   display: flex;
   align-items: baseline;
   cursor: pointer;
 }
 .wwwd-unit {
-  display: inline-flex;
-  align-items: baseline;
-  font-size: 1em;
-  letter-spacing: inherit;
-  margin-right: 0;
-  transition: margin-right .56s cubic-bezier(.77,0,.175,1),
-              font-size    .56s cubic-bezier(.77,0,.175,1);
+  display: inline-flex; align-items: baseline;
+  font-size: 1em; letter-spacing: inherit; margin-right: 0;
+  transition: margin-right var(--d) var(--e), font-size var(--d) var(--e);
 }
-.wwwd-morph .wwwd-unit:nth-child(2) { transition-delay: 32ms; }
-.wwwd-morph .wwwd-unit:nth-child(3) { transition-delay: 64ms; }
-.wwwd-morph .wwwd-unit:nth-child(4) { transition-delay: 96ms; }
+.wwwd-morph .wwwd-unit:nth-child(2) { transition-delay: var(--s); }
+.wwwd-morph .wwwd-unit:nth-child(3) { transition-delay: calc(2 * var(--s)); }
+.wwwd-morph .wwwd-unit:nth-child(4) { transition-delay: calc(3 * var(--s)); }
 .wwwd-morph.is-revealed .wwwd-unit  { font-size: .4em; margin-right: .28em; }
 .wwwd-morph.is-revealed .wwwd-unit:last-child { margin-right: 0; }
 .wwwd-big { font-size: 1em; font-weight: inherit; }
 
 .wwwd-rest-sizer {
-  display: inline-block;
-  overflow: hidden;
-  max-width: 0;
-  vertical-align: baseline;
-  line-height: inherit;
-  transition: max-width .56s cubic-bezier(.77,0,.175,1);
+  display: inline-block; overflow: hidden;
+  max-width: 0; vertical-align: baseline; line-height: inherit;
+  transition: max-width var(--d) var(--e);
 }
 .wwwd-morph .wwwd-unit:nth-child(1) .wwwd-rest-sizer { transition-delay: 0ms; }
-.wwwd-morph .wwwd-unit:nth-child(2) .wwwd-rest-sizer { transition-delay: 32ms; }
-.wwwd-morph .wwwd-unit:nth-child(3) .wwwd-rest-sizer { transition-delay: 64ms; }
-.wwwd-morph .wwwd-unit:nth-child(4) .wwwd-rest-sizer { transition-delay: 96ms; }
+.wwwd-morph .wwwd-unit:nth-child(2) .wwwd-rest-sizer { transition-delay: var(--s); }
+.wwwd-morph .wwwd-unit:nth-child(3) .wwwd-rest-sizer { transition-delay: calc(2 * var(--s)); }
+.wwwd-morph .wwwd-unit:nth-child(4) .wwwd-rest-sizer { transition-delay: calc(3 * var(--s)); }
 .wwwd-morph.is-revealed .wwwd-rest-sizer { max-width: 5em; }
 
-/* Rest text fades in as sizer expands — opacity-only, no clip conflict */
 .wwwd-rest {
-  font-family: inherit;
-  font-style: normal;
-  font-weight: 400;
-  font-size: 1em;
-  color: var(--muted);
-  line-height: .82;
-  white-space: nowrap;
-  display: inline-block;
-  vertical-align: baseline;
-  margin-left: .07em;
+  font-family: inherit; font-style: normal; font-weight: 400;
+  font-size: 1em; color: var(--muted); line-height: .82;
+  white-space: nowrap; display: inline-block;
+  vertical-align: baseline; margin-left: .07em;
   opacity: 0;
-  will-change: opacity;
-  transition: opacity .42s cubic-bezier(.77,0,.175,1);
+  will-change: opacity, transform, filter;
+  transition: opacity var(--rd) var(--e), transform var(--rd) var(--e), filter var(--rd) var(--e);
 }
 .wwwd-morph .wwwd-unit:nth-child(1) .wwwd-rest { transition-delay: 0ms; }
-.wwwd-morph .wwwd-unit:nth-child(2) .wwwd-rest { transition-delay: 32ms; }
-.wwwd-morph .wwwd-unit:nth-child(3) .wwwd-rest { transition-delay: 64ms; }
-.wwwd-morph .wwwd-unit:nth-child(4) .wwwd-rest { transition-delay: 96ms; }
-.wwwd-morph.is-revealed .wwwd-rest {
-  opacity: 1;
+.wwwd-morph .wwwd-unit:nth-child(2) .wwwd-rest { transition-delay: var(--s); }
+.wwwd-morph .wwwd-unit:nth-child(3) .wwwd-rest { transition-delay: calc(2 * var(--s)); }
+.wwwd-morph .wwwd-unit:nth-child(4) .wwwd-rest { transition-delay: calc(3 * var(--s)); }
+.wwwd-morph.is-revealed .wwwd-rest { opacity: 1; }
+
+/* ── Iteration overrides — only what changes from the base ── */
+
+/* 2: Apple Spring · spring overshoot · rest slides from left */
+.wwwd-morph[data-iter="2"] { --d:.4s; --e:cubic-bezier(.34,1.56,.64,1); --s:24ms; --rd:.36s; }
+.wwwd-morph[data-iter="2"] .wwwd-rest { transform: translateX(-6px); }
+.wwwd-morph[data-iter="2"].is-revealed .wwwd-rest { opacity:1; transform:none; }
+
+/* 3: Expo Long · fast start, long tail */
+.wwwd-morph[data-iter="3"] { --d:.52s; --e:cubic-bezier(.19,1,.22,1); --s:28ms; --rd:.48s; }
+
+/* 4: Snap · decisive quint, minimum time */
+.wwwd-morph[data-iter="4"] { --d:.24s; --e:cubic-bezier(.23,1,.32,1); --s:14ms; --rd:.20s; }
+
+/* 5: Ceremony · slow, architectural */
+.wwwd-morph[data-iter="5"] { --d:.9s; --e:cubic-bezier(.16,1,.3,1); --s:64ms; --rd:.8s; }
+
+/* 6: Haptic · extreme spring bounce */
+.wwwd-morph[data-iter="6"] { --d:.48s; --e:cubic-bezier(.34,1.9,.64,1); --s:20ms; --rd:.38s; }
+
+/* 7: Blur Focus · rest defocuses in while space opens */
+.wwwd-morph[data-iter="7"] { --s:40ms; --rd:.48s; }
+.wwwd-morph[data-iter="7"] .wwwd-rest { filter: blur(6px); }
+.wwwd-morph[data-iter="7"].is-revealed .wwwd-rest { opacity:1; filter:blur(0); }
+
+/* 8: Curtain Lift · rest rises from below sizer clip boundary */
+.wwwd-morph[data-iter="8"] { --d:.52s; --e:cubic-bezier(.23,1,.32,1); --s:32ms; --rd:.48s; }
+.wwwd-morph[data-iter="8"] .wwwd-rest { transform: translateY(100%); }
+.wwwd-morph[data-iter="8"].is-revealed .wwwd-rest { opacity:1; transform:none; }
+
+/* 9: Scale Wide · rest expands from compressed left origin */
+.wwwd-morph[data-iter="9"] { --d:.44s; --e:cubic-bezier(.34,1.56,.64,1); --s:24ms; --rd:.4s; }
+.wwwd-morph[data-iter="9"] .wwwd-rest { transform: scaleX(.25); transform-origin: left center; }
+.wwwd-morph[data-iter="9"].is-revealed .wwwd-rest { opacity:1; transform:scaleX(1); }
+
+/* 10: Material Sine · Google M3 standard ease */
+.wwwd-morph[data-iter="10"] { --d:.72s; --e:cubic-bezier(.4,0,.2,1); --s:56ms; --rd:.64s; }
+
+/* 11: Sync · all words arrive simultaneously */
+.wwwd-morph[data-iter="11"] { --s:0ms; }
+
+/* 12: Typewriter · long stagger, each word lands separately */
+.wwwd-morph[data-iter="12"] { --d:.22s; --e:cubic-bezier(.77,0,.175,1); --s:200ms; --rd:.18s; }
+
+/* 13: Unit Skew · initial letters tilt in together */
+.wwwd-morph[data-iter="13"] .wwwd-unit {
+  transform: skewX(-6deg);
+  transition: margin-right var(--d) var(--e), font-size var(--d) var(--e), transform var(--d) var(--e);
 }
+.wwwd-morph[data-iter="13"].is-revealed .wwwd-unit { transform: none; }
+
+/* 14: Unit Float · letters fall from above into position */
+.wwwd-morph[data-iter="14"] { --d:.56s; --e:cubic-bezier(.19,1,.22,1); --s:36ms; --rd:.48s; }
+.wwwd-morph[data-iter="14"] .wwwd-unit {
+  transform: translateY(-14px);
+  transition: margin-right var(--d) var(--e), font-size var(--d) var(--e), transform var(--d) var(--e);
+}
+.wwwd-morph[data-iter="14"].is-revealed .wwwd-unit { transform: none; }
+
+/* 15: Unit Scale · letters arrive from fractionally smaller */
+.wwwd-morph[data-iter="15"] { --d:.6s; --e:cubic-bezier(.34,1.56,.64,1); --s:36ms; --rd:.52s; }
+.wwwd-morph[data-iter="15"] .wwwd-unit {
+  transform: scale(.92);
+  transition: margin-right var(--d) var(--e), font-size var(--d) var(--e), transform var(--d) var(--e);
+}
+.wwwd-morph[data-iter="15"].is-revealed .wwwd-unit { transform: none; }
+
+/* 16: Monumental · very slow, each word a distinct event */
+.wwwd-morph[data-iter="16"] { --d:1.2s; --e:cubic-bezier(.77,0,.175,1); --s:96ms; --rd:1.1s; }
+
+/* 17: Slide Left · rest arrives from further left */
+.wwwd-morph[data-iter="17"] .wwwd-rest { transform: translateX(-14px); }
+.wwwd-morph[data-iter="17"].is-revealed .wwwd-rest { opacity:1; transform:none; }
+
+/* 18: 3D Tilt · letters rotate in from Y axis */
+.wwwd-morph[data-iter="18"] { --d:.6s; --e:cubic-bezier(.34,1.56,.64,1); --s:36ms; --rd:.52s; }
+.wwwd-morph[data-iter="18"] .wwwd-unit {
+  transform: perspective(600px) rotateY(-10deg);
+  transition: margin-right var(--d) var(--e), font-size var(--d) var(--e), transform var(--d) var(--e);
+}
+.wwwd-morph[data-iter="18"].is-revealed .wwwd-unit { transform: perspective(600px) rotateY(0deg); }
+
+/* 19: Compound · blur + slide + opacity all layered */
+.wwwd-morph[data-iter="19"] { --d:.48s; --e:cubic-bezier(.34,1.56,.64,1); --s:28ms; --rd:.44s; }
+.wwwd-morph[data-iter="19"] .wwwd-rest { transform: translateX(-5px); filter: blur(3px); }
+.wwwd-morph[data-iter="19"].is-revealed .wwwd-rest { opacity:1; transform:none; filter:blur(0); }
+
+/* 20: Cascade · each word its own ease — expo, spring, quart, bounce */
+.wwwd-morph[data-iter="20"] .wwwd-unit:nth-child(1) {
+  transition: margin-right .4s cubic-bezier(.19,1,.22,1), font-size .4s cubic-bezier(.19,1,.22,1);
+  transition-delay: 0ms;
+}
+.wwwd-morph[data-iter="20"] .wwwd-unit:nth-child(2) {
+  transition: margin-right .48s cubic-bezier(.34,1.56,.64,1), font-size .48s cubic-bezier(.34,1.56,.64,1);
+  transition-delay: 40ms;
+}
+.wwwd-morph[data-iter="20"] .wwwd-unit:nth-child(3) {
+  transition: margin-right .56s cubic-bezier(.77,0,.175,1), font-size .56s cubic-bezier(.77,0,.175,1);
+  transition-delay: 80ms;
+}
+.wwwd-morph[data-iter="20"] .wwwd-unit:nth-child(4) {
+  transition: margin-right .52s cubic-bezier(.34,1.9,.64,1), font-size .52s cubic-bezier(.34,1.9,.64,1);
+  transition-delay: 120ms;
+}
+.wwwd-morph[data-iter="20"] .wwwd-unit:nth-child(1) .wwwd-rest-sizer { transition: max-width .4s cubic-bezier(.19,1,.22,1); transition-delay: 0ms; }
+.wwwd-morph[data-iter="20"] .wwwd-unit:nth-child(2) .wwwd-rest-sizer { transition: max-width .48s cubic-bezier(.34,1.56,.64,1); transition-delay: 40ms; }
+.wwwd-morph[data-iter="20"] .wwwd-unit:nth-child(3) .wwwd-rest-sizer { transition: max-width .56s cubic-bezier(.77,0,.175,1); transition-delay: 80ms; }
+.wwwd-morph[data-iter="20"] .wwwd-unit:nth-child(4) .wwwd-rest-sizer { transition: max-width .52s cubic-bezier(.34,1.9,.64,1); transition-delay: 120ms; }
+.wwwd-morph[data-iter="20"] .wwwd-unit:nth-child(1) .wwwd-rest { transition: opacity .36s cubic-bezier(.19,1,.22,1), transform .36s cubic-bezier(.19,1,.22,1), filter .36s; transition-delay: 0ms; }
+.wwwd-morph[data-iter="20"] .wwwd-unit:nth-child(2) .wwwd-rest { transition: opacity .44s cubic-bezier(.34,1.56,.64,1), transform .44s cubic-bezier(.34,1.56,.64,1), filter .44s; transition-delay: 40ms; }
+.wwwd-morph[data-iter="20"] .wwwd-unit:nth-child(3) .wwwd-rest { transition: opacity .52s cubic-bezier(.77,0,.175,1), transform .52s cubic-bezier(.77,0,.175,1), filter .52s; transition-delay: 80ms; }
+.wwwd-morph[data-iter="20"] .wwwd-unit:nth-child(4) .wwwd-rest { transition: opacity .52s cubic-bezier(.34,1.9,.64,1), transform .52s cubic-bezier(.34,1.9,.64,1), filter .52s; transition-delay: 120ms; }
+
 @media (prefers-reduced-motion: reduce) {
   .wwwd-unit, .wwwd-rest-sizer, .wwwd-rest { transition: none !important; }
-  .wwwd-rest { opacity: 1 !important; }
+  .wwwd-rest { opacity:1 !important; filter:none !important; transform:none !important; }
+  .wwwd-unit { transform: none !important; }
   .wwwd-rest-sizer { max-width: 5em !important; }
 }
 
@@ -420,6 +524,53 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
         { big: 'W', rest: 'e'    },
         { big: 'D', rest: 'o'    }
       ];
+      var ITER_NAMES = [null,
+        'NYT Editorial','Apple Spring','Expo Long','Snap','Ceremony',
+        'Haptic Bounce','Blur Focus','Curtain Lift','Scale Wide','Material Sine',
+        'Sync','Typewriter','Unit Skew','Unit Float','Unit Scale',
+        'Monumental','Slide Left','3D Tilt','Compound','Cascade'
+      ];
+      var currentIter = 1;
+      var morphEl = null;
+
+      function setIter(n) {
+        n = Math.max(1, Math.min(20, n));
+        currentIter = n;
+        if (morphEl) {
+          morphEl.setAttribute('data-iter', String(n));
+          morphEl.classList.remove('is-revealed');
+          setTimeout(function() {
+            if (window.scrollY > 60) morphEl.classList.add('is-revealed');
+          }, 60);
+        }
+        var lbl = document.getElementById('wwwd-iter-label');
+        var nm  = document.getElementById('wwwd-iter-name');
+        if (lbl) lbl.textContent = (n < 10 ? '0' : '') + n + ' / 20';
+        if (nm)  nm.textContent  = ITER_NAMES[n] || '';
+        try {
+          var u = new URL(location.href);
+          u.searchParams.set('iter', n);
+          history.replaceState(null, '', u.toString());
+        } catch(e) {}
+      }
+
+      function buildSwitcher() {
+        var sw = document.createElement('div');
+        sw.id = 'wwwd-iter-sw';
+        sw.style.cssText = 'position:fixed;bottom:20px;right:20px;display:flex;align-items:center;gap:10px;background:rgba(10,10,10,.84);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);color:#e0ddd8;font-family:ui-monospace,monospace;font-size:11px;letter-spacing:.04em;padding:7px 12px 7px 10px;border-radius:3px;z-index:9999;user-select:none;';
+        sw.innerHTML =
+          '<button id="wwwd-iter-prev" style="background:none;border:none;color:inherit;cursor:pointer;font-size:15px;line-height:1;padding:0 2px;opacity:.7;">&#8249;</button>' +
+          '<span id="wwwd-iter-label" style="min-width:3.8em;text-align:center;">01 / 20</span>' +
+          '<span id="wwwd-iter-name" style="min-width:8em;opacity:.6;">NYT Editorial</span>' +
+          '<button id="wwwd-iter-next" style="background:none;border:none;color:inherit;cursor:pointer;font-size:15px;line-height:1;padding:0 2px;opacity:.7;">&#8250;</button>';
+        document.body.appendChild(sw);
+        document.getElementById('wwwd-iter-prev').addEventListener('click', function() { setIter(currentIter - 1); });
+        document.getElementById('wwwd-iter-next').addEventListener('click', function() { setIter(currentIter + 1); });
+        document.addEventListener('keydown', function(e) {
+          if (e.key === 'ArrowRight' || e.key === ']') { e.preventDefault(); setIter(currentIter + 1); }
+          if (e.key === 'ArrowLeft'  || e.key === '[') { e.preventDefault(); setIter(currentIter - 1); }
+        });
+      }
 
       function setupHero() {
         var hero = document.querySelector('.home-hero');
@@ -437,12 +588,11 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
           hero.appendChild(col);
         }
 
-        /* 2. Concrete offer — override default React text */
         var kicker   = col.querySelector('.home-kicker');
         var heroP    = col.querySelector('p');
         var tertiary = col.querySelector('.hero-tertiary');
-        if (kicker)   kicker.textContent   = 'Architecture · Spatial Research · New York';
-        if (heroP)    heroP.textContent    = 'A thinking practice that builds.';
+        if (kicker)   kicker.textContent  = 'Architecture · Spatial Research · New York';
+        if (heroP)    heroP.textContent   = 'A thinking practice that builds.';
         if (tertiary) tertiary.style.display = 'none';
 
         /* 3. Build WWWD morph structure
@@ -454,15 +604,17 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
           h1.className = 'wwwd-morph';
           h1.innerHTML = '';
           WORDS.forEach(function(w) {
-            var unit  = document.createElement('span'); unit.className  = 'wwwd-unit';
-            var big   = document.createElement('span'); big.className   = 'wwwd-big';   big.textContent  = w.big;
+            var unit  = document.createElement('span'); unit.className = 'wwwd-unit';
+            var big   = document.createElement('span'); big.className  = 'wwwd-big';  big.textContent  = w.big;
             var sizer = document.createElement('span'); sizer.className = 'wwwd-rest-sizer';
-            var rest  = document.createElement('span'); rest.className  = 'wwwd-rest';  rest.textContent = w.rest;
-            sizer.appendChild(rest);
-            unit.appendChild(big);
-            unit.appendChild(sizer);
+            var rest  = document.createElement('span'); rest.className  = 'wwwd-rest'; rest.textContent = w.rest;
+            sizer.appendChild(rest); unit.appendChild(big); unit.appendChild(sizer);
             h1.appendChild(unit);
           });
+          morphEl = h1;
+          /* Apply iter from URL before first paint */
+          var urlIter = parseInt(new URLSearchParams(location.search).get('iter')) || 1;
+          setIter(Math.max(1, Math.min(20, urlIter)));
           bindMorph(h1);
         }
 
@@ -494,6 +646,7 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
         el.addEventListener('click', function() { el.classList.toggle('is-revealed'); });
       }
 
+      buildSwitcher();
       if (document.querySelector('.home-hero')) { setupHero(); }
       var obs = new MutationObserver(function() {
         setupHero();
