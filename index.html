@@ -328,7 +328,7 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
    Navigate: ?iter=N URL param, or ‹ › keys / arrow keys in overlay.
    ─────────────────────────────────────────────────────────────────── */
 
-/* Base defaults = Iter 1 */
+/* Base defaults = Iter 1 (explicit, no var() in shorthand for compatibility) */
 .home-hero h1.wwwd-morph {
   --d: .56s; --e: cubic-bezier(.77,0,.175,1); --s: 32ms; --rd: .42s;
   display: flex;
@@ -338,7 +338,9 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
 .wwwd-unit {
   display: inline-flex; align-items: baseline;
   font-size: 1em; letter-spacing: inherit; margin-right: 0;
-  transition: margin-right var(--d) var(--e), font-size var(--d) var(--e);
+  transition-property: margin-right, font-size;
+  transition-duration: var(--d);
+  transition-timing-function: var(--e);
 }
 .wwwd-morph .wwwd-unit:nth-child(2) { transition-delay: var(--s); }
 .wwwd-morph .wwwd-unit:nth-child(3) { transition-delay: calc(2 * var(--s)); }
@@ -350,7 +352,9 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
 .wwwd-rest-sizer {
   display: inline-block; overflow: hidden;
   max-width: 0; vertical-align: baseline; line-height: inherit;
-  transition: max-width var(--d) var(--e);
+  transition-property: max-width;
+  transition-duration: var(--d);
+  transition-timing-function: var(--e);
 }
 .wwwd-morph .wwwd-unit:nth-child(1) .wwwd-rest-sizer { transition-delay: 0ms; }
 .wwwd-morph .wwwd-unit:nth-child(2) .wwwd-rest-sizer { transition-delay: var(--s); }
@@ -365,7 +369,9 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
   vertical-align: baseline; margin-left: .07em;
   opacity: 0;
   will-change: opacity, transform, filter;
-  transition: opacity var(--rd) var(--e), transform var(--rd) var(--e), filter var(--rd) var(--e);
+  transition-property: opacity, transform, filter;
+  transition-duration: var(--rd);
+  transition-timing-function: var(--e);
 }
 .wwwd-morph .wwwd-unit:nth-child(1) .wwwd-rest { transition-delay: 0ms; }
 .wwwd-morph .wwwd-unit:nth-child(2) .wwwd-rest { transition-delay: var(--s); }
@@ -419,7 +425,7 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
 /* 13: Unit Skew · initial letters tilt in together */
 .wwwd-morph[data-iter="13"] .wwwd-unit {
   transform: skewX(-6deg);
-  transition: margin-right var(--d) var(--e), font-size var(--d) var(--e), transform var(--d) var(--e);
+  transition-property: margin-right, font-size, transform;
 }
 .wwwd-morph[data-iter="13"].is-revealed .wwwd-unit { transform: none; }
 
@@ -427,7 +433,7 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
 .wwwd-morph[data-iter="14"] { --d:.56s; --e:cubic-bezier(.19,1,.22,1); --s:36ms; --rd:.48s; }
 .wwwd-morph[data-iter="14"] .wwwd-unit {
   transform: translateY(-14px);
-  transition: margin-right var(--d) var(--e), font-size var(--d) var(--e), transform var(--d) var(--e);
+  transition-property: margin-right, font-size, transform;
 }
 .wwwd-morph[data-iter="14"].is-revealed .wwwd-unit { transform: none; }
 
@@ -435,7 +441,7 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
 .wwwd-morph[data-iter="15"] { --d:.6s; --e:cubic-bezier(.34,1.56,.64,1); --s:36ms; --rd:.52s; }
 .wwwd-morph[data-iter="15"] .wwwd-unit {
   transform: scale(.92);
-  transition: margin-right var(--d) var(--e), font-size var(--d) var(--e), transform var(--d) var(--e);
+  transition-property: margin-right, font-size, transform;
 }
 .wwwd-morph[data-iter="15"].is-revealed .wwwd-unit { transform: none; }
 
@@ -450,7 +456,7 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
 .wwwd-morph[data-iter="18"] { --d:.6s; --e:cubic-bezier(.34,1.56,.64,1); --s:36ms; --rd:.52s; }
 .wwwd-morph[data-iter="18"] .wwwd-unit {
   transform: perspective(600px) rotateY(-10deg);
-  transition: margin-right var(--d) var(--e), font-size var(--d) var(--e), transform var(--d) var(--e);
+  transition-property: margin-right, font-size, transform;
 }
 .wwwd-morph[data-iter="18"].is-revealed .wwwd-unit { transform: perspective(600px) rotateY(0deg); }
 
@@ -644,6 +650,8 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
         el.addEventListener('mouseenter', function() { if (!reduced) reveal(); });
         el.addEventListener('mouseleave', function() { if (!reduced && window.scrollY <= THRESHOLD) collapse(); });
         el.addEventListener('click', function() { el.classList.toggle('is-revealed'); });
+        /* Auto-play once on load so the animation is immediately visible */
+        if (!reduced) { setTimeout(function() { reveal(); }, 900); }
       }
 
       buildSwitcher();
