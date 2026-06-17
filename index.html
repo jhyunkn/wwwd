@@ -311,54 +311,51 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
   padding-right: 0 !important;
 }
 
-/* ── Hero: WWWD reveals "What Would We Do" ── */
+/* ── WWWD MORPH — Active: Iter 1 of 20 (swap by data-iter on body)
+   Research base:
+   · clip-path is GPU-composited, zero layout cost (Emil Kowalski)
+   · cubic-bezier(.77,0,.175,1) = quart ease-in-out: slow-start/slow-end
+     with a fast middle — the NYT / editorial print signature
+   · 560ms: long enough to feel like paper, fast enough to not stall
+   · 32ms stagger: sequential but near-simultaneous (reading pace)
+   ── */
 .home-hero h1.wwwd-morph {
   display: flex;
   align-items: baseline;
   cursor: pointer;
-  contain: layout paint;   /* isolate reflow — changes inside don't re-layout the page */
+  contain: layout paint;
 }
-
-/* Letter unit: font-size + margin are layout ops, but contained above */
 .wwwd-unit {
   display: inline-flex;
   align-items: baseline;
   font-size: 1em;
   letter-spacing: inherit;
   margin-right: 0;
-  transition: margin-right .32s cubic-bezier(.16,1,.3,1),
-              font-size    .32s cubic-bezier(.16,1,.3,1),
-              letter-spacing .32s cubic-bezier(.16,1,.3,1);
+  transition: margin-right .56s cubic-bezier(.77,0,.175,1),
+              font-size    .56s cubic-bezier(.77,0,.175,1);
 }
-.wwwd-morph .wwwd-unit:nth-child(2) { transition-delay: 35ms; }
-.wwwd-morph .wwwd-unit:nth-child(3) { transition-delay: 70ms; }
-.wwwd-morph .wwwd-unit:nth-child(4) { transition-delay: 105ms; }
-.wwwd-morph.is-revealed .wwwd-unit {
-  font-size: .4em;
-  letter-spacing: -.01em;
-  margin-right: .28em;
-}
+.wwwd-morph .wwwd-unit:nth-child(2) { transition-delay: 32ms; }
+.wwwd-morph .wwwd-unit:nth-child(3) { transition-delay: 64ms; }
+.wwwd-morph .wwwd-unit:nth-child(4) { transition-delay: 96ms; }
+.wwwd-morph.is-revealed .wwwd-unit  { font-size: .4em; margin-right: .28em; }
 .wwwd-morph.is-revealed .wwwd-unit:last-child { margin-right: 0; }
-
 .wwwd-big { font-size: 1em; font-weight: inherit; }
 
-/* Sizer: owns the layout space. max-width causes reflow, but the
-   paint is isolated — users see only the inner content moving. */
 .wwwd-rest-sizer {
   display: inline-block;
   overflow: hidden;
   max-width: 0;
   vertical-align: baseline;
   line-height: inherit;
-  transition: max-width .36s cubic-bezier(.16,1,.3,1);
+  transition: max-width .56s cubic-bezier(.77,0,.175,1);
 }
 .wwwd-morph .wwwd-unit:nth-child(1) .wwwd-rest-sizer { transition-delay: 0ms; }
-.wwwd-morph .wwwd-unit:nth-child(2) .wwwd-rest-sizer { transition-delay: 35ms; }
-.wwwd-morph .wwwd-unit:nth-child(3) .wwwd-rest-sizer { transition-delay: 70ms; }
-.wwwd-morph .wwwd-unit:nth-child(4) .wwwd-rest-sizer { transition-delay: 105ms; }
+.wwwd-morph .wwwd-unit:nth-child(2) .wwwd-rest-sizer { transition-delay: 32ms; }
+.wwwd-morph .wwwd-unit:nth-child(3) .wwwd-rest-sizer { transition-delay: 64ms; }
+.wwwd-morph .wwwd-unit:nth-child(4) .wwwd-rest-sizer { transition-delay: 96ms; }
 .wwwd-morph.is-revealed .wwwd-rest-sizer { max-width: 5em; }
 
-/* Content: transform + opacity only — runs on GPU, never reflows */
+/* Curtain lifts upward: clip-path reveals from bottom edge */
 .wwwd-rest {
   font-family: inherit;
   font-style: normal;
@@ -370,22 +367,23 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
   display: inline-block;
   vertical-align: baseline;
   margin-left: .07em;
-  opacity: 0;
-  transform: translateX(-6px);
-  will-change: transform, opacity;
-  transition: opacity .24s ease-out, transform .32s cubic-bezier(.16,1,.3,1);
+  clip-path: inset(0 0 100% 0);
+  transform: translateY(8px);
+  will-change: clip-path, transform;
+  transition: clip-path .56s cubic-bezier(.77,0,.175,1),
+              transform  .56s cubic-bezier(.77,0,.175,1);
 }
 .wwwd-morph .wwwd-unit:nth-child(1) .wwwd-rest { transition-delay: 0ms; }
-.wwwd-morph .wwwd-unit:nth-child(2) .wwwd-rest { transition-delay: 35ms; }
-.wwwd-morph .wwwd-unit:nth-child(3) .wwwd-rest { transition-delay: 70ms; }
-.wwwd-morph .wwwd-unit:nth-child(4) .wwwd-rest { transition-delay: 105ms; }
+.wwwd-morph .wwwd-unit:nth-child(2) .wwwd-rest { transition-delay: 32ms; }
+.wwwd-morph .wwwd-unit:nth-child(3) .wwwd-rest { transition-delay: 64ms; }
+.wwwd-morph .wwwd-unit:nth-child(4) .wwwd-rest { transition-delay: 96ms; }
 .wwwd-morph.is-revealed .wwwd-rest {
-  opacity: 1;
-  transform: translateX(0);
+  clip-path: inset(0 0 0% 0);
+  transform: translateY(0);
 }
-
 @media (prefers-reduced-motion: reduce) {
   .wwwd-unit, .wwwd-rest-sizer, .wwwd-rest { transition: none !important; }
+  .wwwd-rest { clip-path: none !important; transform: none !important; opacity: 1 !important; }
 }
 
 /* ── Atmosphere: push the gradient's peak below the nav so the glass
@@ -410,95 +408,87 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
   <body>
     <div id="root"></div>
     <script>
+    /* WWWD hero setup — single consolidated script
+       React renders <h1>WWWD</h1> (no spans). We build the morph
+       structure here so all 20 animation iterations can work. */
     (function(){
-      function bind(el){
-        if (el.dataset.morphBound) return;
-        el.dataset.morphBound = '1';
+      var WORDS = [
+        { big: 'W', rest: 'hat'  },
+        { big: 'W', rest: 'ould' },
+        { big: 'W', rest: 'e'    },
+        { big: 'D', rest: 'o'    }
+      ];
 
-        // Wrap each .wwwd-rest in a sizer shell so the visible text
-        // animates on the GPU (transform/opacity) while the sizer
-        // owns the layout-changing max-width in isolation.
-        el.querySelectorAll('.wwwd-unit').forEach(function(unit){
-          var rest = unit.querySelector('.wwwd-rest');
-          if (rest && !unit.querySelector('.wwwd-rest-sizer')) {
-            var sizer = document.createElement('span');
-            sizer.className = 'wwwd-rest-sizer';
-            rest.parentNode.insertBefore(sizer, rest);
-            sizer.appendChild(rest);
-          }
-        });
-
-        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-        function reveal(){ el.classList.add('is-revealed'); }
-        function collapse(){ el.classList.remove('is-revealed'); }
-
-        // Scroll is the primary trigger — the user's gesture earns the reveal.
-        // Threshold: 60px gives immediate response without firing on accidental load bounce.
-        var THRESHOLD = 60;
-        function onScroll(){
-          if (window.scrollY > THRESHOLD) { reveal(); } else { collapse(); }
-        }
-        if (!reduced) {
-          window.addEventListener('scroll', onScroll, { passive: true });
-        }
-
-        // Hover previews the full name when at the top (before scrolling).
-        el.addEventListener('mouseenter', function(){
-          if (!reduced) reveal();
-        });
-        el.addEventListener('mouseleave', function(){
-          // Only re-collapse on mouseleave if scroll hasn't already triggered it.
-          if (!reduced && window.scrollY <= THRESHOLD) collapse();
-        });
-        el.addEventListener('click', function(){ el.classList.toggle('is-revealed'); });
-      }
-      var existing = document.getElementById('wwwd-morph');
-      if (existing) bind(existing);
-      new MutationObserver(function(){
-        var el = document.getElementById('wwwd-morph');
-        if (el) bind(el);
-      }).observe(document.body, {childList:true, subtree:true});
-    })();
-    </script>
-    <script>
-    (function(){
-      function initHero() {
+      function setupHero() {
         var hero = document.querySelector('.home-hero');
         if (!hero || hero.dataset.heroInit) return;
         hero.dataset.heroInit = '1';
 
-        // Wrap all existing hero children in a flex text column
-        // so the CSS grid can place the image in the right column.
+        /* 1. Wrap hero children in flex text column (left grid cell) */
         var col = document.createElement('div');
         col.className = 'hero-text-col';
         while (hero.firstChild) { col.appendChild(hero.firstChild); }
         hero.appendChild(col);
 
-        // Surface concrete offer — override React content
-        var kicker = col.querySelector('.home-kicker');
-        var p = col.querySelector('p');
+        /* 2. Concrete offer — override default React text */
+        var kicker   = col.querySelector('.home-kicker');
+        var heroP    = col.querySelector('p');
         var tertiary = col.querySelector('.hero-tertiary');
-        if (kicker) kicker.textContent = 'Architecture · Spatial Research · New York';
-        if (p) p.textContent = 'A thinking practice that builds.';
+        if (kicker)   kicker.textContent   = 'Architecture · Spatial Research · New York';
+        if (heroP)    heroP.textContent    = 'A thinking practice that builds.';
         if (tertiary) tertiary.style.display = 'none';
 
-        // Inject project image as the right-column anchor
+        /* 3. Build WWWD morph structure
+           React renders <h1>WWWD</h1>. We split it into .wwwd-unit
+           spans so any of the 20 animation CSS blocks can target them. */
+        var h1 = col.querySelector('h1');
+        if (h1 && h1.textContent.trim() === 'WWWD') {
+          h1.id        = 'wwwd-morph';
+          h1.className = 'wwwd-morph';
+          h1.innerHTML = '';
+          WORDS.forEach(function(w) {
+            var unit  = document.createElement('span'); unit.className  = 'wwwd-unit';
+            var big   = document.createElement('span'); big.className   = 'wwwd-big';   big.textContent  = w.big;
+            var sizer = document.createElement('span'); sizer.className = 'wwwd-rest-sizer';
+            var rest  = document.createElement('span'); rest.className  = 'wwwd-rest';  rest.textContent = w.rest;
+            sizer.appendChild(rest);
+            unit.appendChild(big);
+            unit.appendChild(sizer);
+            h1.appendChild(unit);
+          });
+          bindMorph(h1);
+        }
+
+        /* 4. Project image — right grid cell */
         var fig = document.createElement('figure');
         fig.className = 'hero-image-anchor';
         var img = document.createElement('img');
-        img.src = 'assets/portfolio/chankillo/hero.webp';
-        img.alt = 'Chankillo model installation';
+        img.src     = 'assets/portfolio/chankillo/hero.webp';
+        img.alt     = 'Chankillo model installation';
         img.loading = 'eager';
         fig.appendChild(img);
         hero.appendChild(fig);
       }
 
-      if (document.querySelector('.home-hero .home-kicker')) { initHero(); }
-      var heroObs = new MutationObserver(function(){
-        if (document.querySelector('.home-hero .home-kicker')) { initHero(); heroObs.disconnect(); }
+      function bindMorph(el) {
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        function reveal()   { el.classList.add('is-revealed');    }
+        function collapse() { el.classList.remove('is-revealed'); }
+        var THRESHOLD = 60;
+        function onScroll() {
+          if (window.scrollY > THRESHOLD) { reveal(); } else { collapse(); }
+        }
+        if (!reduced) { window.addEventListener('scroll', onScroll, { passive: true }); }
+        el.addEventListener('mouseenter', function() { if (!reduced) reveal(); });
+        el.addEventListener('mouseleave', function() { if (!reduced && window.scrollY <= THRESHOLD) collapse(); });
+        el.addEventListener('click', function() { el.classList.toggle('is-revealed'); });
+      }
+
+      if (document.querySelector('.home-hero .home-kicker')) { setupHero(); }
+      var obs = new MutationObserver(function() {
+        if (document.querySelector('.home-hero .home-kicker')) { setupHero(); obs.disconnect(); }
       });
-      heroObs.observe(document.body, { childList: true, subtree: true });
+      obs.observe(document.body, { childList: true, subtree: true });
     })();
     </script>
   </body>
