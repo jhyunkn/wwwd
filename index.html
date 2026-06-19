@@ -409,8 +409,8 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
     <div id="root"></div>
     <script>
     /* WWWD hero setup — single consolidated script
-       React renders <h1>WWWD</h1> (no spans). We build the morph
-       structure here so all 20 animation iterations can work. */
+       React can render a plain or partially split wordmark; normalize it so
+       the morph animation always has stable targets. */
     (function(){
       var WORDS = [
         { big: 'W', rest: 'hat'  },
@@ -421,14 +421,19 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
 
       function setupHero() {
         var hero = document.querySelector('.home-hero');
-        if (!hero || hero.dataset.heroInit) return;
+        if (!hero || hero.dataset.heroInit) return false;
+        var existingH1 = hero.querySelector('h1');
+        if (!existingH1) return false;
         hero.dataset.heroInit = '1';
 
         /* 1. Wrap hero children in flex text column (left grid cell) */
-        var col = document.createElement('div');
-        col.className = 'hero-text-col';
-        while (hero.firstChild) { col.appendChild(hero.firstChild); }
-        hero.appendChild(col);
+        var col = hero.querySelector('.hero-text-col');
+        if (!col) {
+          col = document.createElement('div');
+          col.className = 'hero-text-col';
+          while (hero.firstChild) { col.appendChild(hero.firstChild); }
+          hero.appendChild(col);
+        }
 
         /* 2. Concrete offer — override default React text */
         var kicker   = col.querySelector('.home-kicker');
@@ -439,10 +444,10 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
         if (tertiary) tertiary.style.display = 'none';
 
         /* 3. Build WWWD morph structure
-           React renders <h1>WWWD</h1>. We split it into .wwwd-unit
-           spans so any of the 20 animation CSS blocks can target them. */
+           Split it into .wwwd-unit and .wwwd-rest-sizer spans so the
+           animation can reveal the tails without layout surprises. */
         var h1 = col.querySelector('h1');
-        if (h1 && h1.textContent.trim() === 'WWWD') {
+        if (h1 && !h1.querySelector('.wwwd-rest-sizer')) {
           h1.id        = 'wwwd-morph';
           h1.className = 'wwwd-morph';
           h1.innerHTML = '';
@@ -460,14 +465,17 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
         }
 
         /* 4. Project image — right grid cell */
-        var fig = document.createElement('figure');
-        fig.className = 'hero-image-anchor';
-        var img = document.createElement('img');
-        img.src     = 'assets/portfolio/chankillo/hero.webp';
-        img.alt     = 'Chankillo model installation';
-        img.loading = 'eager';
-        fig.appendChild(img);
-        hero.appendChild(fig);
+        if (!hero.querySelector('.hero-image-anchor')) {
+          var fig = document.createElement('figure');
+          fig.className = 'hero-image-anchor';
+          var img = document.createElement('img');
+          img.src     = 'assets/portfolio/chankillo/hero.webp';
+          img.alt     = 'Chankillo model installation';
+          img.loading = 'eager';
+          fig.appendChild(img);
+          hero.appendChild(fig);
+        }
+        return true;
       }
 
       function bindMorph(el) {
@@ -484,9 +492,9 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
         el.addEventListener('click', function() { el.classList.toggle('is-revealed'); });
       }
 
-      if (document.querySelector('.home-hero .home-kicker')) { setupHero(); }
+      if (document.querySelector('.home-hero')) { setupHero(); }
       var obs = new MutationObserver(function() {
-        if (document.querySelector('.home-hero .home-kicker')) { setupHero(); obs.disconnect(); }
+        setupHero();
       });
       obs.observe(document.body, { childList: true, subtree: true });
     })();
