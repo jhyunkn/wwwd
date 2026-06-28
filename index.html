@@ -174,7 +174,7 @@ a:focus-visible {
 }
 .brand.is-expanded {
   min-width: 10.8em !important;
-  gap: 0.38em !important;
+  gap: 0.26em !important;
 }
 /* Reset .brand span blue-circle styles for injected word elements */
 .brand .brand-word,
@@ -1726,24 +1726,28 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
 	        window.setTimeout(function() {
 	          brand.classList.add('is-expanded');
 
-	          // Start typing while spacing is still settling
+	          // Wait for spacing to settle, then type left to right word by word
 	          window.setTimeout(function() {
-	            var step = 80;
-	            var maxLen = tailEls.reduce(function(m, t) { return Math.max(m, t.text.length); }, 0);
-	            var index = 0;
+	            var step = 75;
+	            var wordIdx = 0;
+	            var charIdx = 0;
 	            var last = 0;
 	            function frame(now) {
 	              if (!last) last = now;
 	              if (now - last >= step) {
-	                index += 1;
-	                tailEls.forEach(function(t) { t.el.textContent = t.text.slice(0, index); });
+	                charIdx += 1;
+	                tailEls[wordIdx].el.textContent = tailEls[wordIdx].text.slice(0, charIdx);
 	                last = now;
+	                if (charIdx >= tailEls[wordIdx].text.length) {
+	                  wordIdx += 1;
+	                  charIdx = 0;
+	                }
 	              }
-	              if (index < maxLen) { window.requestAnimationFrame(frame); }
+	              if (wordIdx < tailEls.length) { window.requestAnimationFrame(frame); }
 	              else { animateBrowserTitle(); }
 	            }
 	            window.requestAnimationFrame(frame);
-	          }, 540);
+	          }, 760);
 	        }, 650);
 	      }
 
