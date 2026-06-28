@@ -175,20 +175,35 @@ a:focus-visible {
   min-width: 10.8em !important;
 }
 /* Brand morph: WWWD ⟶ what would we do? */
+/* Reset .brand span blue-circle rule for injected morph spans */
 .brand { position: relative; }
-.brand-abbr { transition: opacity 0.28s ease; }
+.brand .brand-abbr,
+.brand .brand-full {
+  background: transparent !important;
+  width: auto !important;
+  height: auto !important;
+  color: inherit !important;
+  border-radius: 0 !important;
+  font-weight: inherit !important;
+  place-items: unset !important;
+}
+.brand .brand-abbr {
+  display: inline !important;
+  transition: opacity 0.28s ease;
+}
 .brand.is-expanded .brand-abbr { opacity: 0; }
-.brand-full {
-  position: absolute;
+.brand .brand-full {
+  position: absolute !important;
+  display: flex !important;
   left: 0; top: 0; bottom: 0;
-  display: flex; align-items: center;
+  align-items: center;
   white-space: nowrap;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.65s cubic-bezier(0.16, 1, 0.3, 1) 0.14s;
 }
 .brand.is-expanded .brand-full {
-  opacity: 1;
+  opacity: 1 !important;
   pointer-events: auto;
 }
 .nav-shell nav button {
