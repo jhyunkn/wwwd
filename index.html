@@ -168,13 +168,11 @@ a:focus-visible {
 .brand { font-size: 18px !important; letter-spacing: -0.04em !important; }
 .brand {
   min-width: 4.2em !important;
-  gap: 0 !important;
   text-align: left !important;
-  transition: min-width 0.7s cubic-bezier(0.16, 1, 0.3, 1), gap 0.72s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s ease !important;
+  transition: min-width 0.7s cubic-bezier(0.16, 1, 0.3, 1), color 0.25s ease !important;
 }
 .brand.is-expanded {
   min-width: 10.8em !important;
-  gap: 0.26em !important;
 }
 /* Reset .brand span blue-circle styles for injected word elements */
 .brand .brand-word,
@@ -1702,11 +1700,11 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
 	          return;
 	        }
 
-	        // Each letter of WWWD becomes an anchor; tails type in after spacing
+	        // Each letter of WWWD stays put; tails type left→right, spaces push anchors right
 	        var parts = [
-	          { anchor: 'w', tail: 'hat' },
-	          { anchor: 'w', tail: 'ould' },
-	          { anchor: 'w', tail: 'e' },
+	          { anchor: 'w', tail: 'hat ' },
+	          { anchor: 'w', tail: 'ould ' },
+	          { anchor: 'w', tail: 'e ' },
 	          { anchor: 'd', tail: 'o?' }
 	        ];
 
@@ -1725,29 +1723,25 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
 
 	        window.setTimeout(function() {
 	          brand.classList.add('is-expanded');
-
-	          // Wait for spacing to settle, then type left to right word by word
-	          window.setTimeout(function() {
-	            var step = 75;
-	            var wordIdx = 0;
-	            var charIdx = 0;
-	            var last = 0;
-	            function frame(now) {
-	              if (!last) last = now;
-	              if (now - last >= step) {
-	                charIdx += 1;
-	                tailEls[wordIdx].el.textContent = tailEls[wordIdx].text.slice(0, charIdx);
-	                last = now;
-	                if (charIdx >= tailEls[wordIdx].text.length) {
-	                  wordIdx += 1;
-	                  charIdx = 0;
-	                }
+	          var step = 75;
+	          var wordIdx = 0;
+	          var charIdx = 0;
+	          var last = 0;
+	          function frame(now) {
+	            if (!last) last = now;
+	            if (now - last >= step) {
+	              charIdx += 1;
+	              tailEls[wordIdx].el.textContent = tailEls[wordIdx].text.slice(0, charIdx);
+	              last = now;
+	              if (charIdx >= tailEls[wordIdx].text.length) {
+	                wordIdx += 1;
+	                charIdx = 0;
 	              }
-	              if (wordIdx < tailEls.length) { window.requestAnimationFrame(frame); }
-	              else { animateBrowserTitle(); }
 	            }
-	            window.requestAnimationFrame(frame);
-	          }, 760);
+	            if (wordIdx < tailEls.length) { window.requestAnimationFrame(frame); }
+	            else { animateBrowserTitle(); }
+	          }
+	          window.requestAnimationFrame(frame);
 	        }, 650);
 	      }
 
