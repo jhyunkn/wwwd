@@ -174,16 +174,6 @@ a:focus-visible {
 .brand.is-expanded {
   min-width: 10.8em !important;
 }
-/* Reset .brand span blue-circle styles for injected word elements */
-.brand .brand-word,
-.brand .brand-tail {
-  background: transparent !important;
-  width: auto !important; height: auto !important;
-  color: inherit !important; border-radius: 0 !important;
-  font-weight: inherit !important; place-items: unset !important;
-}
-.brand .brand-word { display: inline-block !important; white-space: nowrap; }
-.brand .brand-tail { display: inline !important; }
 .nav-shell nav button {
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
   font-size: 13px !important;
@@ -1700,45 +1690,39 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
 	          return;
 	        }
 
-	        // Each letter of WWWD stays put; tails type left→right, spaces push anchors right
-	        var parts = [
-	          { anchor: 'w', tail: 'hat ' },
-	          { anchor: 'w', tail: 'ould ' },
-	          { anchor: 'w', tail: 'e ' },
-	          { anchor: 'd', tail: 'o?' }
+	        // Each frame inserts the next character into position — no spans, pure text
+	        var frames = [
+	          "wwwd",
+	          "whwwd",
+	          "whawwd",
+	          "whatwwd",
+	          "what wwd",
+	          "what wowd",
+	          "what wouwd",
+	          "what woulwd",
+	          "what wouldwd",
+	          "what would wd",
+	          "what would wed",
+	          "what would we d",
+	          "what would we do",
+	          "what would we do?"
 	        ];
 
-	        brand.textContent = '';
-	        var tailEls = [];
-	        parts.forEach(function(p) {
-	          var wordEl = document.createElement('span');
-	          wordEl.className = 'brand-word';
-	          wordEl.textContent = p.anchor;
-	          var tailEl = document.createElement('span');
-	          tailEl.className = 'brand-tail';
-	          wordEl.appendChild(tailEl);
-	          brand.appendChild(wordEl);
-	          tailEls.push({ el: tailEl, text: p.tail });
-	        });
+	        brand.textContent = frames[0];
 
 	        window.setTimeout(function() {
-	          brand.classList.add('is-expanded');
-	          var step = 75;
-	          var wordIdx = 0;
-	          var charIdx = 0;
+	          brand.classList.add("is-expanded");
+	          var idx = 1;
 	          var last = 0;
+	          var step = 75;
 	          function frame(now) {
 	            if (!last) last = now;
 	            if (now - last >= step) {
-	              charIdx += 1;
-	              tailEls[wordIdx].el.textContent = tailEls[wordIdx].text.slice(0, charIdx);
+	              brand.textContent = frames[idx];
+	              idx += 1;
 	              last = now;
-	              if (charIdx >= tailEls[wordIdx].text.length) {
-	                wordIdx += 1;
-	                charIdx = 0;
-	              }
 	            }
-	            if (wordIdx < tailEls.length) { window.requestAnimationFrame(frame); }
+	            if (idx < frames.length) { window.requestAnimationFrame(frame); }
 	            else { animateBrowserTitle(); }
 	          }
 	          window.requestAnimationFrame(frame);
