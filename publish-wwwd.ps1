@@ -6,9 +6,6 @@ $ErrorActionPreference = "Stop"
 
 Set-Location -Path $PSScriptRoot
 
-npm.cmd run build
-npm.cmd run verify
-
 git add .
 
 $pending = git status --porcelain

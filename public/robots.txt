@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://wwwd-theta.vercel.app/sitemap.xml

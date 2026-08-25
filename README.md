@@ -1,55 +1,34 @@
-# WWWD
+# WWWD Website Prototype
 
-Static Astro site for WWWD.
+Initial static prototype for the WWWD website.
 
-## Current Structure
+## Project naming conventions
 
-- `src/pages/index.astro` - crawler-visible homepage.
-- `src/pages/investigations/` - investigation index and detail routes.
-- `src/content/entries/` - Markdown entries validated by the publish gate.
-- `src/content.config.ts` - content schema requiring the Claim -> Investigation -> Artifact -> Consequence chain. Entries marked `Investigation` must also define `externalConsequence`.
-- `src/styles/wwwd.css` - site styles for the Astro build.
-- `public/assets/portfolio/` - project imagery copied into the static build.
-- `public/robots.txt` and `src/pages/sitemap.xml.ts` - crawler discovery.
+This project uses a `wwwd-` prefix for major CSS classes and design tokens to avoid confusion with other website projects and make future maintenance easier.
 
-## Local Development
+Examples:
+- `wwwd-site-header`
+- `wwwd-hero-section`
+- `--wwwd-color-bg`
 
-```bash
-npm install
-npm run dev
-```
+## Files
 
-Default local URL: `http://127.0.0.1:8844/`.
+- `index.html` — homepage prototype
+- `styles.css` — project-specific styles
 
-## Build
+## Local preview
 
-```bash
-npm run build
-```
+Open `index.html` in a browser.
 
-The build runs `astro check` and `astro build`. The output should include:
-
-- `/`
-- `/investigations/`
-- `/investigations/chankillo-in-between-scapes/`
-- `/notes/`
-
-## Verify
-
-```bash
-npm run verify
-```
-
-The verification script checks the generated static HTML for crawler-visible homepage, Investigation, and Notes content.
-
-## Deploy Flow
+## Deploy flow
 
 1. Commit changes to GitHub.
-2. Vercel detects Astro from `package.json`.
-3. Vercel runs `npm run build`.
-4. Vercel serves the generated `dist/` output.
+2. Connect the GitHub repo to Vercel.
+3. Vercel deploys the current state of `main`.
 
-## Next Recommended Steps
+## Next recommended steps
 
-- Convert the next strongest project only after it clears the external-consequence rule.
-- Replace the Vercel project URL in `SITE_URL` when a custom production domain is ready.
+- Add project detail pages
+- Add real imagery or drawings
+- Add a stronger inquiry/contact flow
+- Decide whether to remain static or move to a component-based framework later
