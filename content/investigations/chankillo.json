@@ -1,0 +1,21 @@
+{
+  "slug": "chankillo",
+  "title": "Chankillo",
+  "status": "draft",
+  "claim": "A 2,300-year-old solar observatory, rebuilt at model scale to test how a landscape teaches a body to read time.",
+  "claimDraft": true,
+  "heroImage": "/assets/portfolio/chankillo/hero.webp",
+  "heroCaption": "Model installation studying movement, scale, and site perception.",
+  "context": "Chankillo, on the Peruvian coast, is among the oldest known solar observatories — thirteen towers along a ridge that calendar the year by where the sun rises and sets between them. The investigation treats the site less as a ruin than as an instrument: a piece of built landscape that organizes perception, threshold, and territorial observation.",
+  "method": "Physical model-making across topography, paired with redrawn observatory plans and sections, and time studies of light and occupation in the common space between the towers.",
+  "artifact": "A model installation — lookout and tower models framing territorial observation, built at a scale that lets a viewer move around the site and read it in sequence.",
+  "consequence": "‹DRAFT — needs Jun's real fact. What did this leave outside the studio? e.g. exhibited (where/when), reviewed/graded in a specific program, published, or built. Until this is a true external outcome, the page stays a Note, not an approved Investigation.›",
+  "consequenceDraft": true,
+  "notes": {
+    "Type": "Model installation / spatial research",
+    "Location": "New York — site studied: Chankillo, Peru",
+    "Dates": "‹needs confirmation›",
+    "Collaborators": "‹if any›",
+    "Status": "Draft — pending claim + consequence"
+  }
+}

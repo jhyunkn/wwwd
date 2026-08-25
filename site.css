@@ -1,0 +1,137 @@
+/* WWWD — design system
+   Derived from .research-notes.md north star: Experimental Jetset / Office KGDVS.
+   Text-forward, zero decoration. Klein Blue as signal only. Zero border-radius. */
+
+:root {
+  --wwwd-paper: #ffffff;
+  --wwwd-ink: #111217;
+  --wwwd-muted: #6b6b70;
+  --wwwd-faint: #9a9aa0;
+  --wwwd-line: rgba(17, 18, 23, 0.14);
+  --wwwd-klein: #002fa7;
+
+  --wwwd-sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+  --wwwd-serif: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+
+  --wwwd-measure: 68ch;
+  --wwwd-gutter: clamp(1.25rem, 4vw, 3.5rem);
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--wwwd-paper);
+  color: var(--wwwd-ink);
+  font-family: var(--wwwd-sans);
+  font-size: 17px;
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Zero border-radius, everywhere. */
+a, button, img, input, section, div, nav, header, footer { border-radius: 0; }
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: inherit; text-decoration: none; }
+a:hover { color: var(--wwwd-klein); }
+
+.wwwd-wrap { width: 100%; max-width: 1180px; margin: 0 auto; padding: 0 var(--wwwd-gutter); }
+.wwwd-measure { max-width: var(--wwwd-measure); }
+
+/* Nav: flat full-width bar, border-bottom only, text brand, no badge. */
+.wwwd-site-header {
+  position: sticky; top: 0; z-index: 10;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--wwwd-line);
+}
+.wwwd-nav {
+  display: flex; align-items: baseline; justify-content: space-between;
+  height: 58px;
+}
+.wwwd-brand {
+  font-weight: 700; letter-spacing: -0.03em; font-size: 1.05rem;
+}
+.wwwd-nav-links { display: flex; gap: 1.6rem; }
+.wwwd-nav-links a {
+  font-size: 0.82rem; color: var(--wwwd-muted);
+  text-transform: lowercase; letter-spacing: 0.01em;
+}
+.wwwd-nav-links a:hover { color: var(--wwwd-klein); }
+
+/* Editorial labels. */
+.wwwd-label {
+  font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.16em;
+  color: var(--wwwd-faint); font-weight: 600;
+}
+
+/* Hero / thesis. */
+.wwwd-hero { padding: clamp(4rem, 12vh, 9rem) 0 clamp(3rem, 8vh, 6rem); }
+.wwwd-hero h1 {
+  font-family: var(--wwwd-serif);
+  font-weight: 400;
+  font-size: clamp(1.9rem, 4.6vw, 3.4rem);
+  line-height: 1.12; letter-spacing: -0.02em;
+  margin: 0; max-width: 20ch;
+}
+.wwwd-hero .wwwd-sub { margin-top: 1.5rem; color: var(--wwwd-muted); max-width: 46ch; }
+
+/* Section rhythm. */
+.wwwd-section { padding: clamp(2.5rem, 7vh, 5rem) 0; border-top: 1px solid var(--wwwd-line); }
+.wwwd-section h2 {
+  font-size: clamp(1.4rem, 3vw, 2rem); letter-spacing: -0.04em; font-weight: 650;
+  margin: 0 0 1.5rem;
+}
+
+/* Investigation index (text-first project list). */
+.wwwd-invlist { display: flex; flex-direction: column; }
+.wwwd-invrow { display: block; padding: 1.6rem 0; border-top: 1px solid var(--wwwd-line); }
+.wwwd-invrow:first-child { border-top: 0; }
+.wwwd-invrow .wwwd-invtitle {
+  font-size: clamp(1.5rem, 3.4vw, 2.3rem); letter-spacing: -0.045em; font-weight: 650;
+  line-height: 1.05;
+}
+.wwwd-invrow:hover .wwwd-invtitle { color: var(--wwwd-klein); }
+.wwwd-invrow .wwwd-invclaim { color: var(--wwwd-muted); margin-top: 0.5rem; max-width: 60ch; }
+
+/* Investigation page. */
+.wwwd-claim {
+  font-family: var(--wwwd-serif); font-weight: 400;
+  font-size: clamp(1.7rem, 4vw, 2.9rem); line-height: 1.15; letter-spacing: -0.02em;
+  margin: 0; max-width: 24ch;
+}
+.wwwd-lead { margin: clamp(2rem, 5vh, 3.5rem) 0; }
+.wwwd-lead figcaption, .wwwd-fig figcaption {
+  margin-top: 0.7rem; font-size: 0.85rem; color: var(--wwwd-muted);
+}
+.wwwd-block { margin: 0 0 2.5rem; }
+.wwwd-block p { margin: 0.6rem 0 0; }
+.wwwd-fig { margin: 2.5rem 0; }
+
+/* Indexable notes (metadata). */
+.wwwd-notes { border-top: 1px solid var(--wwwd-line); padding-top: 1.5rem; margin-top: 3rem; }
+.wwwd-notes dl { display: grid; grid-template-columns: max-content 1fr; gap: 0.4rem 1.5rem; margin: 0; }
+.wwwd-notes dt { color: var(--wwwd-faint); text-transform: uppercase; font-size: 0.72rem; letter-spacing: 0.14em; padding-top: 0.15rem; }
+.wwwd-notes dd { margin: 0; }
+
+/* Proof index strip (metadata, not credentials). */
+.wwwd-proof { display: flex; flex-wrap: wrap; gap: 0.5rem 2rem; color: var(--wwwd-muted); font-size: 0.9rem; }
+
+/* Draft banner — nothing unverified passes silently. */
+.wwwd-draft {
+  border: 1px solid var(--wwwd-klein); color: var(--wwwd-klein);
+  padding: 0.6rem 0.9rem; font-size: 0.8rem; letter-spacing: 0.02em;
+  margin: 1.5rem 0; text-transform: none;
+}
+
+/* Footer: text links only. */
+.wwwd-footer { border-top: 1px solid var(--wwwd-line); padding: 3rem 0 4rem; color: var(--wwwd-muted); font-size: 0.88rem; }
+.wwwd-footer .wwwd-footlinks { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+
+.wwwd-backlink { display: inline-block; margin: 2rem 0 0; font-size: 0.85rem; color: var(--wwwd-muted); }
+.wwwd-backlink:hover { color: var(--wwwd-klein); }
