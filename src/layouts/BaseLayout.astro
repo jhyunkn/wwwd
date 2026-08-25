@@ -1,0 +1,59 @@
+---
+import '../styles/wwwd.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+  image?: string;
+  bodyClass?: string;
+}
+
+const {
+  title = 'WWWD',
+  description = 'WWWD is an office for spatial investigations that turn claims into artifacts with external consequence.',
+  image = '/assets/portfolio/chankillo/hero.webp',
+  bodyClass = '',
+} = Astro.props;
+
+const canonical = new URL(Astro.url.pathname, Astro.site ?? 'https://wwwd-theta.vercel.app');
+const pageTitle = title === 'WWWD' ? title : `${title} | WWWD`;
+const imageUrl = new URL(image, Astro.site ?? 'https://wwwd-theta.vercel.app');
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical.href} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={imageUrl.href} />
+    <meta property="og:site_name" content="WWWD" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={imageUrl.href} />
+    <meta name="theme-color" content="#f7f5ef" />
+  </head>
+  <body class={bodyClass}>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header" aria-label="Site">
+      <a class="brand" href="/" aria-label="WWWD home"><span>W</span>WWWD</a>
+      <nav>
+        <a href="/investigations/">Investigations</a>
+        <a href="/notes/">Notes</a>
+        <a href="/#office">Office</a>
+        <a href="/#gate">Publish Gate</a>
+        <a href="mailto:jun.hn.nam@gmail.com">Contact</a>
+      </nav>
+    </header>
+    <main id="content">
+      <slot />
+    </main>
+  </body>
+</html>

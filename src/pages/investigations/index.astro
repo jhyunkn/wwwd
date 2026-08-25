@@ -1,0 +1,27 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+
+const entries = await getCollection(
+  'entries',
+  ({ data }) => data.contentType === 'Investigation' && data.status === 'published',
+);
+---
+
+<BaseLayout title="Investigations" description="WWWD investigations and notes organized by claim, artifact, and consequence.">
+  <section class="page-hero frame">
+    <p class="eyebrow">Investigations</p>
+    <h1>Work only enters as an Investigation when it proves consequence.</h1>
+    <p>Notes can hold promising material. Investigations carry the full publish gate.</p>
+  </section>
+
+  <section class="entry-list frame" aria-label="Entries">
+    {entries.map((entry) => (
+      <a class="entry-row" href={`/investigations/${entry.id}/`}>
+        <span>{entry.data.contentType} / {entry.data.discipline}</span>
+        <strong>{entry.data.title}</strong>
+        <em>{entry.data.description}</em>
+      </a>
+    ))}
+  </section>
+</BaseLayout>
