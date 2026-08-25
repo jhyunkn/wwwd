@@ -6,6 +6,7 @@
   --wwwd-color-muted: rgba(241, 236, 227, 0.58);
   --wwwd-color-line: rgba(241, 236, 227, 0.12);
   --wwwd-color-overlay: rgba(15, 15, 15, 0.32);
+  --wwwd-color-accent: #002fa7;
   --wwwd-max-width: 1540px;
   --wwwd-font-sans: 'Inter', Arial, sans-serif;
   --wwwd-font-serif: 'EB Garamond', Georgia, serif;
@@ -14,6 +15,7 @@
 
 * {
   box-sizing: border-box;
+  border-radius: 0;
 }
 
 html {
@@ -44,6 +46,12 @@ a {
 
 a:hover {
   opacity: 0.78;
+}
+
+a:focus-visible,
+button:focus-visible {
+  outline: 1px solid var(--wwwd-color-accent);
+  outline-offset: 4px;
 }
 
 button {
@@ -99,6 +107,7 @@ button {
 
 .wwwd-site-brand {
   font-weight: 600;
+  background: transparent;
 }
 
 .wwwd-site-nav,
