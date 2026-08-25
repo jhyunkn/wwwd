@@ -964,11 +964,57 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
 	        tick();
 	      }
 
+	      function injectHeroCaretStyle() {
+        if (document.getElementById("hero-typewriter-style")) return;
+        var s = document.createElement("style");
+        s.id = "hero-typewriter-style";
+        s.textContent =
+          ".home-hero h1 .hero-sentence-inner{animation:none !important;transform:none !important;min-height:1.05em}"
+          + ".home-hero h1 .hero-sentence{overflow:visible !important}"
+          + ".home-hero h1 .hero-sentence-inner.is-caret::after{content:'';display:inline-block;width:0.055em;height:0.86em;background:var(--blue);margin-left:0.05em;vertical-align:-0.05em;animation:heroCaretBlink 0.9s steps(1) infinite}"
+          + "@keyframes heroCaretBlink{0%,50%{opacity:1}50.01%,100%{opacity:0}}";
+        document.head.appendChild(s);
+      }
+
+      function startHeroTyping(hero) {
+        var h1 = hero.querySelector("h1.wwwd-display") || hero.querySelector("h1");
+        if (!h1 || h1.dataset.heroTyped) return;
+        var inners = Array.prototype.slice.call(h1.querySelectorAll(".hero-sentence-inner"));
+        if (!inners.length) return;
+        h1.dataset.heroTyped = "1";
+        var fulls = inners.map(function(el) { return el.dataset.full || el.textContent || ""; });
+        if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+          inners.forEach(function(el, i) { el.textContent = fulls[i]; });
+          return;
+        }
+        injectHeroCaretStyle();
+        inners.forEach(function(el) { el.textContent = ""; });
+        var si = 0, ci = 0, last = 0, step = 20;
+        h1.classList.add("is-typing");
+        inners[0].classList.add("is-caret");
+        function frame(now) {
+          if (!last) last = now;
+          if (now - last >= step) {
+            last = now;
+            inners[si].textContent = fulls[si].slice(0, ++ci);
+            if (ci >= fulls[si].length) {
+              inners[si].classList.remove("is-caret");
+              si += 1; ci = 0;
+              if (si < inners.length) { inners[si].classList.add("is-caret"); last = now + 240; }
+              else { h1.classList.remove("is-typing"); return; }
+            }
+          }
+          window.requestAnimationFrame(frame);
+        }
+        window.setTimeout(function() { window.requestAnimationFrame(frame); }, 300);
+      }
+
 	      function setupHero() {
         var hero = document.querySelector(".home-hero")
                 || document.querySelector("section[class*='hero']");
         if (!hero || hero.dataset.heroInit) return;
         hero.dataset.heroInit = "1";
+        window.setTimeout(function() { try { startHeroTyping(hero); } catch (e) { console.error("[wwwd] hero typing:", e); } }, 60);
 
         var h1 = hero.querySelector("h1");
         if (h1) {
