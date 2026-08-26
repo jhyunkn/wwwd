@@ -1001,12 +1001,163 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
               inners[si].classList.remove("is-caret");
               si += 1; ci = 0;
               if (si < inners.length) { inners[si].classList.add("is-caret"); last = now + 240; }
-              else { h1.classList.remove("is-typing"); return; }
+              else { h1.classList.remove("is-typing"); window.setTimeout(function() { try { startHeroMorph(h1); } catch (e) { console.error("[wwwd] hero morph:", e); } }, 1600); return; }
             }
           }
           window.requestAnimationFrame(frame);
         }
         window.setTimeout(function() { window.requestAnimationFrame(frame); }, 300);
+      }
+
+      function injectHeroMorphStyle() {
+        if (document.getElementById("hero-morph-style")) return;
+        var s = document.createElement("style");
+        s.id = "hero-morph-style";
+        s.textContent =
+          ".home-hero h1 .hero-word{display:inline;opacity:1;transition:opacity .5s cubic-bezier(.4,0,.2,1)}";
+        document.head.appendChild(s);
+      }
+
+      function heroRenderWords(inner, text) {
+        inner.textContent = "";
+        text.trim().split(/\s+/).forEach(function(w) {
+          var span = document.createElement("span");
+          span.className = "hero-word";
+          span.textContent = w + " ";
+          inner.appendChild(span);
+        });
+      }
+
+      function heroMorphLine(inner, targetText) {
+        var words = targetText.trim().split(/\s+/);
+        var spans = Array.prototype.slice.call(inner.querySelectorAll(".hero-word"));
+        var max = Math.max(spans.length, words.length);
+        for (var i = 0; i < max; i++) {
+          (function(i) {
+            window.setTimeout(function() {
+              var span = spans[i];
+              var word = words[i];
+              if (!span) {
+                span = document.createElement("span");
+                span.className = "hero-word";
+                span.style.opacity = "0";
+                span.textContent = word + " ";
+                inner.appendChild(span);
+                window.requestAnimationFrame(function() { span.style.opacity = "1"; });
+                return;
+              }
+              if (word == null) {
+                span.style.opacity = "0";
+                window.setTimeout(function() { if (span.parentNode) span.parentNode.removeChild(span); }, 520);
+                return;
+              }
+              if (span.textContent.trim() === word) return;
+              span.style.opacity = "0";
+              window.setTimeout(function() { span.textContent = word + " "; span.style.opacity = "1"; }, 260);
+            }, i * 55);
+          })(i);
+        }
+      }
+
+      function startHeroMorph(h1) {
+        if (!h1 || h1.dataset.heroMorph) return;
+        if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        var inners = Array.prototype.slice.call(h1.querySelectorAll(".hero-sentence-inner"));
+        if (inners.length < 3) return;
+        h1.dataset.heroMorph = "1";
+        injectHeroMorphStyle();
+        var stanzas = [
+          [
+            "wwwd — a way of reading what spaces make possible.",
+            "wwwd works through architecture, objects, systems, and cultural environment by tracing behaviors, memory, construction, atmosphere, and care.",
+            "a place where the invisible becomes visible."
+          ],
+          [
+            "wwwd — a way of reading what buildings quietly remember.",
+            "wwwd listens through architecture, objects, rituals, and everyday environment by tracing movement, memory, material, atmosphere, and care.",
+            "a practice where the overlooked becomes essential."
+          ],
+          [
+            "wwwd — a way of making what places could still become.",
+            "wwwd builds through structures, objects, systems, and shared environment by translating behavior, memory, matter, light, and care.",
+            "a place where the imagined becomes something inhabitable."
+          ]
+        ];
+        inners.forEach(function(inner, i) {
+          heroRenderWords(inner, inner.textContent || stanzas[0][i]);
+        });
+        var idx = 0;
+        function cycle() {
+          idx = (idx + 1) % stanzas.length;
+          inners.forEach(function(inner, k) { heroMorphLine(inner, stanzas[idx][k]); });
+          window.setTimeout(cycle, 6200);
+        }
+        window.setTimeout(cycle, 4200);
+      }
+
+      function injectScrollRevealStyle() {
+        if (document.getElementById("wwwd-scroll-style")) return;
+        var s = document.createElement("style");
+        s.id = "wwwd-scroll-style";
+        s.textContent =
+          ".wwwd-reveal{opacity:0;transform:translateY(26px);transition:opacity .9s cubic-bezier(.16,1,.3,1),transform .9s cubic-bezier(.16,1,.3,1)}"
+          + ".wwwd-reveal.is-visible{opacity:1;transform:none}";
+        document.head.appendChild(s);
+      }
+
+      function setupScrollReveals() {
+        if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+        if (!("IntersectionObserver" in window)) return;
+        injectScrollRevealStyle();
+        if (!window.__wwwdRevealObs) {
+          window.__wwwdRevealObs = new IntersectionObserver(function(entries) {
+            entries.forEach(function(en) {
+              if (en.isIntersecting) {
+                en.target.classList.add("is-visible");
+                window.__wwwdRevealObs.unobserve(en.target);
+              }
+            });
+          }, { threshold: 0.12, rootMargin: "0px 0px -8% 0px" });
+        }
+        var sels = [".wwwd-single-section", ".wwwd-all-work", ".research-drift", ".wwwd-work-item"];
+        document.querySelectorAll(sels.join(",")).forEach(function(el) {
+          if (el.dataset.wwwdReveal) return;
+          el.dataset.wwwdReveal = "1";
+          el.classList.add("wwwd-reveal");
+          window.__wwwdRevealObs.observe(el);
+        });
+      }
+
+      function setupSmoothScroll() {
+        if (window.__wwwdSmooth) return;
+        try { document.documentElement.style.scrollBehavior = "smooth"; } catch (e) {}
+        if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) { window.__wwwdSmooth = 1; return; }
+        var fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+        if (!fine || ("ontouchstart" in window)) { window.__wwwdSmooth = 1; return; }
+        window.__wwwdSmooth = 1;
+        var target = window.scrollY || window.pageYOffset || 0;
+        var current = target;
+        var running = false;
+        function maxScroll() {
+          var d = document.documentElement, b = document.body;
+          return Math.max(b.scrollHeight, d.scrollHeight) - window.innerHeight;
+        }
+        function loop() {
+          current += (target - current) * 0.14;
+          if (Math.abs(target - current) < 0.4) { current = target; running = false; window.scrollTo(0, current); return; }
+          window.scrollTo(0, current);
+          window.requestAnimationFrame(loop);
+        }
+        window.addEventListener("wheel", function(e) {
+          if (e.ctrlKey) return;
+          var delta = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
+          e.preventDefault();
+          target = Math.max(0, Math.min(maxScroll(), target + delta));
+          if (!running) { running = true; current = window.scrollY || window.pageYOffset || 0; window.requestAnimationFrame(loop); }
+        }, { passive: false });
+        window.addEventListener("scroll", function() {
+          if (!running) { target = current = window.scrollY || window.pageYOffset || 0; }
+        }, { passive: true });
       }
 
 	      function setupHero() {
@@ -1341,6 +1492,8 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
           document.body.classList.remove("is-home");
         }
 	        try { setupNavOverrides(); } catch(e) {}
+	        try { setupSmoothScroll(); } catch(e) {}
+	        try { setupScrollReveals(); } catch(e) {}
 	      }
 
       /* Watch for React SPA route changes */
