@@ -1129,35 +1129,8 @@ figcaption { letter-spacing: .12em; text-transform: uppercase; font-size: 10px; 
       }
 
       function setupSmoothScroll() {
-        if (window.__wwwdSmooth) return;
-        try { document.documentElement.style.scrollBehavior = "smooth"; } catch (e) {}
-        if (window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches) { window.__wwwdSmooth = 1; return; }
-        var fine = window.matchMedia && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
-        if (!fine || ("ontouchstart" in window)) { window.__wwwdSmooth = 1; return; }
-        window.__wwwdSmooth = 1;
-        var target = window.scrollY || window.pageYOffset || 0;
-        var current = target;
-        var running = false;
-        function maxScroll() {
-          var d = document.documentElement, b = document.body;
-          return Math.max(b.scrollHeight, d.scrollHeight) - window.innerHeight;
-        }
-        function loop() {
-          current += (target - current) * 0.14;
-          if (Math.abs(target - current) < 0.4) { current = target; running = false; window.scrollTo(0, current); return; }
-          window.scrollTo(0, current);
-          window.requestAnimationFrame(loop);
-        }
-        window.addEventListener("wheel", function(e) {
-          if (e.ctrlKey) return;
-          var delta = e.deltaMode === 1 ? e.deltaY * 16 : e.deltaY;
-          e.preventDefault();
-          target = Math.max(0, Math.min(maxScroll(), target + delta));
-          if (!running) { running = true; current = window.scrollY || window.pageYOffset || 0; window.requestAnimationFrame(loop); }
-        }, { passive: false });
-        window.addEventListener("scroll", function() {
-          if (!running) { target = current = window.scrollY || window.pageYOffset || 0; }
-        }, { passive: true });
+        /* Native scroll restored — wheel-hijack momentum removed. */
+        return;
       }
 
 	      function setupHero() {
