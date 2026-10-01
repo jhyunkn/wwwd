@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Junhyun Nam — Bio</title>
+<link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { background: #000; }
+  body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: #fff;
+    -webkit-font-smoothing: antialiased;
+  }
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    display: flex;
+    justify-content: space-between;
+    padding: 20px 28px;
+    z-index: 20;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    background: linear-gradient(to bottom, rgba(0,0,0,0.9), rgba(0,0,0,0));
+  }
+  .nav a { color: #fff; text-decoration: none; opacity: 0.75; }
+  .nav a:hover { opacity: 1; }
+  .nav .here { opacity: 0.35; pointer-events: none; }
+
+  .about {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: 6vw;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 18vh 8vw 16vh;
+  }
+  .contact { font-size: clamp(14px, 1.4vw, 17px); line-height: 2.1; }
+  .contact a { color: #fff; }
+  .contact .ph { color: #c66; }
+  .bio p {
+    font-size: clamp(15px, 1.7vw, 20px);
+    line-height: 1.65;
+    margin-bottom: 3.5vh;
+    max-width: 36em;
+  }
+  .bio a { color: #fff; text-decoration: underline; text-underline-offset: 3px; }
+  .bio .ph { color: #c66; }
+  .facts { margin-top: 7vh; }
+  .facts h2 {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.45);
+    margin-bottom: 2.5vh;
+  }
+  .facts ul { list-style: none; }
+  .facts li {
+    font-size: clamp(14px, 1.5vw, 18px);
+    line-height: 1.6;
+    padding: 1.6vh 0;
+    border-top: 1px solid rgba(255,255,255,0.14);
+    max-width: 36em;
+  }
+  .facts .ph { color: #c66; }
+  @media (max-width: 700px) {
+    .about { grid-template-columns: 1fr; gap: 5vh; }
+  }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a href="index.html">wwwd</a>
+  <a href="index.html">Index</a>
+</nav>
+
+<div class="about">
+  <div class="contact">
+    <a href="mailto:jun.hn.nam@gmail.com">jun.hn.nam@gmail.com</a><br>
+    New York<br>
+    <span class="ph">[social link]</span>
+  </div>
+  <div class="bio">
+    <p>Junhyun Nam is an architect based in New York. His work moves between building and research: small design-build renovations on one side, a graduate research seminar and lecture series on the other.</p>
+    <p>He is building a practice that starts with renovations &mdash; drawn, permitted, and built by the same hand &mdash; and grows toward developing and building his own projects, from a single house outward.</p>
+    <p>He currently leads a graduate research seminar at SSA&ndash;CCNY and is developing a lecture series on the cultures of making, beginning with the production of glass: transparency, culture, meaning, and history.</p>
+
+    <div class="facts">
+      <h2>Selected</h2>
+      <ul>
+        <li><span class="ph">[Degree, School, Year]</span></li>
+        <li><span class="ph">[Degree, School, Year]</span></li>
+        <li><span class="ph">[Studio Name, City &mdash; role, years]</span></li>
+        <li><span class="ph">[Studio Name, City &mdash; role, years]</span></li>
+        <li>Research seminar, SSA&ndash;CCNY &mdash; Fall 2026</li>
+        <li>&ldquo;Production of glass&rdquo; lecture &mdash; <span class="ph">[venue, date]</span></li>
+        <li><span class="ph">[Publication / exhibition / talk]</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>
