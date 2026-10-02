@@ -63,38 +63,50 @@
     justify-content: flex-end;
     padding: 0 28px 8vh;
   }
-  .hero-panel h1 {
+  .hero-panel h1.searchline {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 600;
     letter-spacing: -0.05em;
     margin: 0;
-    font-size: clamp(72px, 13vw, 190px);
-    line-height: 0.9;
+    font-size: clamp(56px, 11vw, 148px);
+    line-height: 1;
+    display: flex;
+    align-items: baseline;
   }
-  .hero-panel h1 .w { display: inline-block; transition: opacity 0.32s ease; }
-  .hero-panel h1.words .w + .w { margin-left: 0.24em; }
-  .hero-panel h1.typing::after {
-    content: "";
-    display: inline-block;
-    width: 0.055em;
-    height: 0.8em;
-    background: #fff;
-    margin-left: 0.06em;
-    vertical-align: -0.02em;
-    animation: caretBlink 1s steps(1) infinite;
+  .hero-panel h1 .wwwd { flex-shrink: 0; margin-right: 0.16em; }
+  #q {
+    background: transparent; border: 0; outline: 0; padding: 0;
+    color: #fff; font: inherit; letter-spacing: inherit;
+    width: 1ch; min-width: 1ch; max-width: 100%;
+    caret-color: #fff;
   }
+  #q::placeholder { color: rgba(255,255,255,0.28); }
+  .caretblink {
+    display: inline-block; flex-shrink: 0;
+    width: 0.085em; height: 0.68em; background: #fff;
+    margin-left: 0.1em; align-self: center;
+    animation: caretBlink 1.06s steps(1) infinite;
+  }
+  h1:focus-within .caretblink { display: none; }
   @keyframes caretBlink { 50% { opacity: 0; } }
-  .morph {
-    letter-spacing: -0.04em;
-    max-width: 680px;
-    margin: 24px 0 0 0;
-    font-family: Georgia, "Times New Roman", serif;
-    font-size: clamp(14px, 1.5vw, 17px);
-    line-height: 1.15;
-    color: rgba(255,255,255,0.82);
+  /* the panel itself lets taps fall through to the card-flip zones;
+     only the field and the result buttons are interactive */
+  .hero-panel { pointer-events: none; }
+  .hero-panel input, .hero-panel button { pointer-events: auto; }
+  #results {
+    list-style: none; margin: 3.2vh 0 0 0; padding: 0;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 13px; letter-spacing: 0.02em;
+    max-width: 600px;
   }
-  .morph .line { display: block; margin-bottom: 0.35em; }
-  .morph .line .hw { display: inline; opacity: 1; transition: opacity 0.5s cubic-bezier(0.4,0,0.2,1); }
+  #results button {
+    background: none; border: 0; padding: 5px 0; cursor: pointer;
+    font: inherit; color: rgba(255,255,255,0.55); text-align: left;
+    display: block; width: 100%;
+  }
+  #results button:hover, #results button:focus-visible { color: #fff; outline: none; }
+  #results .rn { opacity: 0.35; margin-right: 14px; }
+  #results .none { color: rgba(255,255,255,0.35); padding: 5px 0; }
 
   /* the calling-card face: one viewport, everything lives here */
   .face {
@@ -195,15 +207,13 @@
 </nav>
 
 <div class="stage" id="stage" aria-label="project viewer">
-  <!-- card 0: the hero opens the deck; the deck never returns here on its own -->
+  <!-- card 0: the hero is the index — wwwd with a live search over the ten projects -->
   <div class="slide hero-card active">
     <div class="hero-panel">
-      <h1 id="heroTitle" class="typing"><span class="w">w</span><span class="w">w</span><span class="w">w</span><span class="w">d</span></h1>
-      <div class="morph" id="morph">
-        <span class="line" data-l="0"></span>
-        <span class="line" data-l="1"></span>
-        <span class="line" data-l="2"></span>
-      </div>
+      <h1 class="searchline">
+        <span class="wwwd">wwwd</span><input id="q" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Search projects"><span class="caretblink" aria-hidden="true"></span>
+      </h1>
+      <ul id="results" aria-label="Project index"></ul>
     </div>
   </div>
 
@@ -381,50 +391,11 @@
 </div>
 
 <script>
-  /* ----- hero: "wwwd" unfolds into the title on load; the paragraph states once and stays ----- */
-  var statement = [
-    "A way of reading what spaces make possible.",
-    "Working through architecture, objects, and systems \u2014 tracing behavior, memory, construction, atmosphere, and care.",
-    "Where the invisible becomes visible."
-  ];
-  var lines = Array.prototype.slice.call(document.querySelectorAll("#morph .line"));
+  /* ----- hero: wwwd with a blinking caret — a live search over the ten projects ----- */
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  /* title intro: wwwd unfolds into What Would We Do (once) */
-  var heroTitle = document.getElementById("heroTitle");
-  var titleWords = ["What", "Would", "We", "Do"];
-  var titleSpans = Array.prototype.slice.call(heroTitle.querySelectorAll(".w"));
-  function titleToWords() {
-    titleSpans.forEach(function(sp, i) { sp.textContent = titleWords[i]; });
-    heroTitle.classList.remove("typing");
-    heroTitle.classList.add("words");
-  }
-  if (reduceMotion) {
-    titleToWords();
-  } else {
-    setTimeout(function() {
-      titleSpans.forEach(function(sp, i) {
-        setTimeout(function() {
-          sp.style.opacity = "0";
-          setTimeout(function() {
-            sp.textContent = titleWords[i];
-            sp.style.opacity = "1";
-            if (i === titleSpans.length - 1) {
-              heroTitle.classList.remove("typing");
-              heroTitle.classList.add("words");
-            }
-          }, 300);
-        }, i * 170);
-      });
-    }, 1500);
-  }
-
-  /* the statement: rendered once, then it stands */
-  lines.forEach(function(el, k) { el.textContent = statement[k]; });
-
-  /* ----- the deck: hero opens it; the ten projects form their own circle -----
-     once the visitor leaves the hero, the deck never returns there on its own;
-     only the wwwd link brings the hero back. */
+  /* ----- the deck: the hero is the index; the ten projects circle among
+     themselves, with card 1 reaching back to the hero ----- */
   var stage = document.getElementById("stage");
   var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
   var NPROJ = slides.length - 1; /* slides 1..NPROJ are projects */
@@ -433,7 +404,7 @@
   function step(dir) {
     if (idx === 0) return dir > 0 ? 1 : NPROJ;
     var k = idx + dir;
-    if (k < 1) return NPROJ;
+    if (k < 1) return 0; /* card 1, back: the hero */
     if (k > NPROJ) return 1;
     return k;
   }
@@ -442,6 +413,76 @@
     slides.forEach(function(s, k) { s.classList.toggle("active", k === idx); });
   }
   show(0);
+
+  /* the index: type to filter the ten projects; pick one to open its card */
+  var q = document.getElementById("q");
+  var resultsBox = document.getElementById("results");
+  var projects = [];
+  for (var pi = 1; pi <= NPROJ; pi++) {
+    var ps = slides[pi];
+    projects.push({
+      i: pi,
+      title: ps.querySelector(".card-text h3").textContent,
+      desc: ps.querySelector(".card-text p").textContent
+    });
+  }
+  function esc(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+  function goProject(i) {
+    q.blur();
+    show(i);
+  }
+  function currentMatches() {
+    var query = q.value.trim().toLowerCase();
+    if (!query) return projects.slice();
+    return projects.filter(function(p) {
+      return p.title.toLowerCase().indexOf(query) !== -1 ||
+             p.desc.toLowerCase().indexOf(query) !== -1;
+    });
+  }
+  function renderResults() {
+    var matches = currentMatches();
+    resultsBox.innerHTML = "";
+    if (!matches.length) {
+      var li = document.createElement("li");
+      li.className = "none";
+      li.textContent = "no matches";
+      resultsBox.appendChild(li);
+      return;
+    }
+    matches.forEach(function(p) {
+      var li = document.createElement("li");
+      var b = document.createElement("button");
+      b.type = "button";
+      b.innerHTML = "<span class=\"rn\">" + ("0" + p.i).slice(-2) + "</span>" + esc(p.title);
+      b.addEventListener("click", function() { goProject(p.i); });
+      li.appendChild(b);
+      resultsBox.appendChild(li);
+    });
+  }
+  function sizeInput() {
+    q.style.width = Math.max(1, q.value.length + 1) + "ch";
+  }
+  q.addEventListener("input", function() { sizeInput(); renderResults(); });
+  q.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      var m = currentMatches();
+      if (m.length) goProject(m[0].i);
+    } else if (e.key === "Escape") {
+      q.value = ""; sizeInput(); renderResults(); q.blur();
+    }
+    e.stopPropagation(); /* hero typing never reaches the card-flip keys */
+  });
+  renderResults();
+
+  /* the wwwd mark returns to the hero without reloading */
+  var logoLink = document.querySelector(".nav a");
+  if (logoLink) logoLink.addEventListener("click", function(e) {
+    e.preventDefault();
+    q.blur();
+    show(0);
+  });
 
   /* invisible click halves on each slide flip cards; thumbnails sit above them */
   slides.forEach(function(s) {
@@ -504,8 +545,9 @@
     setTimeout(function() { cool = false; }, 900);
   }, { passive: false });
 
-  /* keyboard: arrows flip cards */
+  /* keyboard: arrows flip cards (not while typing in the hero search) */
   window.addEventListener("keydown", function(e) {
+    if (e.target === q) return;
     if (e.key === "ArrowRight") show(step(1));
     else if (e.key === "ArrowLeft") show(step(-1));
   });
@@ -516,7 +558,7 @@
   function neighborIdx(o) { /* o = -1 | 1 */
     if (idx === 0) return o > 0 ? 1 : NPROJ;
     var k = idx + o;
-    if (k < 1) return NPROJ;
+    if (k < 1) return 0; /* card 1, back: the hero */
     if (k > NPROJ) return 1;
     return k;
   }
