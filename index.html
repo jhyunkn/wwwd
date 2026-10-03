@@ -62,7 +62,11 @@
     flex-direction: column;
     justify-content: flex-end;
     padding: 0 28px 8vh;
+    position: relative;
+    z-index: 6; /* the title is tappable: it sits above the card-flip zones */
+    pointer-events: none; /* empty areas fall through to the zones */
   }
+  .hero-panel h1, .hero-panel input, .hero-panel button { pointer-events: auto; }
   .hero-panel h1 {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 600;
@@ -70,18 +74,43 @@
     margin: 0;
     font-size: clamp(72px, 13vw, 190px);
     line-height: 0.9;
+    display: flex;
+    align-items: baseline;
+    cursor: text;
   }
-  .hero-panel h1.typing::after {
-    content: "";
-    display: inline-block;
-    width: 0.055em;
-    height: 0.8em;
-    background: #fff;
-    margin-left: 0.06em;
-    vertical-align: -0.02em;
+  .hero-panel h1 .wwwd { flex-shrink: 0; margin-right: 0.14em; }
+  #q {
+    background: transparent; border: 0; outline: 0; padding: 0;
+    color: #fff; font: inherit; letter-spacing: inherit; line-height: inherit;
+    width: 1ch; min-width: 1ch; max-width: 62vw;
+    caret-color: #fff;
+  }
+  .caretblink {
+    display: inline-block; flex-shrink: 0;
+    width: 0.055em; height: 0.8em; background: #fff;
+    margin-left: 0.06em; align-self: center;
     animation: caretBlink 1s steps(1) infinite;
   }
+  h1:focus-within .caretblink { display: none; }
   @keyframes caretBlink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .caretblink { animation: none; } }
+  #results {
+    display: none;
+    list-style: none; margin: 24px 0 0 0; padding: 0;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 13px; letter-spacing: 0.02em;
+    max-width: 600px;
+  }
+  .hero-panel.searching .morph { display: none; }
+  .hero-panel.searching #results { display: block; }
+  #results button {
+    background: none; border: 0; padding: 5px 0; cursor: pointer;
+    font: inherit; color: rgba(255,255,255,0.55); text-align: left;
+    display: block; width: 100%;
+  }
+  #results button:hover, #results button:focus-visible { color: #fff; outline: none; }
+  #results .rn { opacity: 0.35; margin-right: 14px; }
+  #results .none { color: rgba(255,255,255,0.35); padding: 5px 0; }
   .morph {
     letter-spacing: -0.04em;
     max-width: 680px;
@@ -192,15 +221,16 @@
 </nav>
 
 <div class="stage" id="stage" aria-label="project viewer">
-  <!-- card 0: the hero — wwwd with a blinking caret -->
+  <!-- card 0: the hero — wwwd with a blinking caret; tap the title to search the index -->
   <div class="slide hero-card active">
     <div class="hero-panel">
-      <h1 class="typing">wwwd</h1>
+      <h1 id="heroSearch"><span class="wwwd">wwwd</span><input id="q" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Search projects"><span class="caretblink" aria-hidden="true"></span></h1>
       <div class="morph" id="morph">
         <span class="line" data-l="0"></span>
         <span class="line" data-l="1"></span>
         <span class="line" data-l="2"></span>
       </div>
+      <ul id="results" aria-label="Project index"></ul>
     </div>
   </div>
 
@@ -413,6 +443,73 @@
   if (logoLink) logoLink.addEventListener("click", function(e) {
     e.preventDefault();
     show(0);
+  });
+
+  /* the caret doubles as search: tap the title to type; the statement
+     yields to a live index while searching, and returns after */
+  var heroPanel = document.querySelector(".hero-panel");
+  var heroSearch = document.getElementById("heroSearch");
+  var q = document.getElementById("q");
+  var resultsBox = document.getElementById("results");
+  var projects = [];
+  for (var pi = 1; pi <= NPROJ; pi++) {
+    var ps = slides[pi];
+    projects.push({
+      i: pi,
+      title: ps.querySelector(".card-text h3").textContent,
+      desc: ps.querySelector(".card-text p").textContent
+    });
+  }
+  function esc(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+  function setSearching(on) { heroPanel.classList.toggle("searching", on); }
+  function currentMatches() {
+    var query = q.value.trim().toLowerCase();
+    if (!query) return projects.slice();
+    return projects.filter(function(p) {
+      return p.title.toLowerCase().indexOf(query) !== -1 ||
+             p.desc.toLowerCase().indexOf(query) !== -1;
+    });
+  }
+  function renderResults() {
+    var matches = currentMatches();
+    resultsBox.innerHTML = "";
+    if (!matches.length) {
+      var li = document.createElement("li");
+      li.className = "none";
+      li.textContent = "no matches";
+      resultsBox.appendChild(li);
+      return;
+    }
+    matches.forEach(function(p) {
+      var li = document.createElement("li");
+      var b = document.createElement("button");
+      b.type = "button";
+      b.innerHTML = "<span class=\"rn\">" + ("0" + p.i).slice(-2) + "</span>" + esc(p.title);
+      b.addEventListener("click", function() { exitSearch(); show(p.i); });
+      li.appendChild(b);
+      resultsBox.appendChild(li);
+    });
+  }
+  function sizeInput() { q.style.width = Math.max(1, q.value.length + 1) + "ch"; }
+  function exitSearch() {
+    q.value = ""; sizeInput(); q.blur(); setSearching(false);
+  }
+  heroSearch.addEventListener("click", function() { q.focus(); });
+  q.addEventListener("focus", function() { setSearching(true); renderResults(); });
+  q.addEventListener("input", function() { sizeInput(); renderResults(); setSearching(true); });
+  q.addEventListener("blur", function() { if (!q.value) setSearching(false); });
+  q.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      if (q.value.trim()) {
+        var m = currentMatches();
+        if (m.length) { exitSearch(); show(m[0].i); }
+      }
+    } else if (e.key === "Escape") {
+      exitSearch(); renderResults();
+    }
+    e.stopPropagation(); /* hero typing never reaches the card-flip keys */
   });
 
   /* invisible click halves on each slide flip cards; thumbnails sit above them */
