@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="WWWD — What Would We Do. An independent research and spatial practice working through architecture, objects, and systems.">
+<meta name="theme-color" content="#000000">
+<meta property="og:title" content="wwwd">
+<meta property="og:description" content="WWWD — What Would We Do. An independent research and spatial practice.">
+<meta property="og:type" content="website">
 <title>wwwd</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -31,7 +36,7 @@
   .nav a { color: #fff; text-decoration: none; opacity: 0.75; }
   .nav a:hover { opacity: 1; }
 
-  /* ---------- one stage: hero is card 0, projects are cards 1..10 ---------- */
+  /* ---------- one stage: hero opens the deck, projects flip as cards ---------- */
   .stage {
     position: relative;
     height: 100svh;
@@ -44,19 +49,17 @@
   .slide {
     position: absolute;
     inset: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 3.2vh;
     opacity: 0;
     pointer-events: none;
-    padding: 0 4vw;
+    transition: opacity 0.45s ease, transform 0.34s cubic-bezier(0.32, 0.72, 0, 1);
+    overflow: hidden;
   }
   .slide.active { opacity: 1; pointer-events: auto; }
+  /* while dragging: cards track the finger 1:1, no easing */
+  .stage.dragging .slide { transition: none; }
+  .stage.noanim .slide { transition: none !important; }
 
   /* hero card: the text opening, bottom-aligned like the original hero */
-  .slide.hero-card { align-items: stretch; justify-content: center; padding: 0; }
   .hero-panel {
     width: 100%;
     height: 100%;
@@ -64,7 +67,11 @@
     flex-direction: column;
     justify-content: flex-end;
     padding: 0 28px 8vh;
+    position: relative;
+    z-index: 6; /* the title is tappable: it sits above the card-flip zones */
+    pointer-events: none; /* empty areas fall through to the zones */
   }
+  .hero-panel h1, .hero-panel input, .hero-panel button { pointer-events: auto; }
   .hero-panel h1 {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 600;
@@ -72,19 +79,45 @@
     margin: 0;
     font-size: clamp(72px, 13vw, 190px);
     line-height: 0.9;
+    display: flex;
+    align-items: baseline;
+    cursor: text;
   }
-  .hero-panel h1 .w { display: inline-block; transition: opacity 0.32s ease; }
-  .hero-panel h1.typing::after {
-    content: "";
-    display: inline-block;
-    width: 0.055em;
-    height: 0.8em;
-    background: #fff;
-    margin-left: 0.06em;
-    vertical-align: -0.02em;
+  .hero-panel h1 .wwwd { flex-shrink: 0; margin-right: 0.14em; }
+  #q {
+    background: transparent; border: 0; outline: 0; padding: 0;
+    color: #fff; font: inherit; letter-spacing: inherit; line-height: inherit;
+    width: 1ch; min-width: 1ch; max-width: 62vw;
+    caret-color: #fff;
+  }
+  .caretblink {
+    display: inline-block; flex-shrink: 0;
+    width: 0.055em; height: 0.8em; background: #fff;
+    margin-left: 0.06em; align-self: center;
     animation: caretBlink 1s steps(1) infinite;
   }
+  h1:focus-within .caretblink { display: none; }
   @keyframes caretBlink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .caretblink { animation: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .slide, .art img { transition: none !important; }
+  }
+  #results {
+    display: none;
+    list-style: none; margin: 24px 0 0 0; padding: 0;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 13px; letter-spacing: 0.02em;
+    max-width: 600px;
+  }
+  #results.on { display: block; }
+  #results button {
+    background: none; border: 0; padding: 5px 0; cursor: pointer;
+    font: inherit; color: rgba(255,255,255,0.55); text-align: left;
+    display: block; width: 100%;
+  }
+  #results button:hover, #results button:focus-visible { color: #fff; outline: none; }
+  #results .rn { opacity: 0.35; margin-right: 14px; }
+  #results .none { color: rgba(255,255,255,0.35); padding: 5px 0; }
   .morph {
     letter-spacing: -0.04em;
     max-width: 680px;
@@ -95,12 +128,22 @@
     color: rgba(255,255,255,0.82);
   }
   .morph .line { display: block; margin-bottom: 0.35em; }
-  .morph .line .hw { display: inline; opacity: 1; transition: opacity 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+  /* the calling-card face: one viewport, everything lives here */
+  .face {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2.6vh;
+    padding: 8vh 4vw;
+  }
 
   /* project cards: image in its own proportion, description beneath it */
   .art {
     --w: 16; --h: 10;
-    height: min(56vh, calc(92vw * var(--h) / var(--w)));
+    height: min(50vh, calc(92vw * var(--h) / var(--w)));
     aspect-ratio: var(--w) / var(--h);
     max-width: 92vw;
     display: flex;
@@ -108,21 +151,12 @@
     justify-content: center;
     flex-shrink: 0;
   }
-  .s0 .art { background: linear-gradient(135deg, #3a3733 0%, #211f1d 100%); }
-  .s1 .art { background: linear-gradient(135deg, #33383c 0%, #1d2023 100%); }
-  .s2 .art { background: linear-gradient(135deg, #3d332a 0%, #241d16 100%); }
-  .s3 .art { background: linear-gradient(135deg, #2e3a33 0%, #1a211d 100%); }
-  .s4 .art { background: linear-gradient(135deg, #38333a 0%, #201d22 100%); }
-  .s5 .art { background: linear-gradient(135deg, #3a3a2e 0%, #22221a 100%); }
-  .s6 .art { background: linear-gradient(135deg, #33302e 0%, #1e1c1a 100%); }
-  .s7 .art { background: linear-gradient(135deg, #2c3440 0%, #191e26 100%); }
-  .s8 .art { background: linear-gradient(135deg, #3c3230 0%, #231d1c 100%); }
-  .s9 .art { background: linear-gradient(135deg, #30382e 0%, #1c211b 100%); }
-  .art .n {
-    font-size: clamp(48px, 7vw, 110px);
-    font-weight: 600;
-    letter-spacing: -0.03em;
-    color: rgba(255,255,255,0.16);
+  .art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: opacity 0.22s ease;
   }
   .card-text { text-align: center; max-width: 660px; }
   .card-text h3 {
@@ -137,11 +171,53 @@
     line-height: 1.65;
     color: rgba(255,255,255,0.62);
   }
-  .card-text .ph { color: #c66; }
 
-  .zone { position: absolute; top: 0; bottom: 0; width: 50%; z-index: 5; cursor: pointer; }
+  /* supplementary images: quiet thumbnails that swap the main image in place */
+  .thumbs {
+    position: relative;
+    z-index: 6;
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+  .thumb {
+    width: 58px;
+    height: 58px;
+    padding: 0;
+    border: 0;
+    background: none;
+    cursor: pointer;
+    opacity: 0.38;
+    transition: opacity 0.3s ease;
+  }
+  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .thumb:hover { opacity: 0.8; }
+  .thumb.active { opacity: 1; outline: 1px solid rgba(255,255,255,0.85); outline-offset: 3px; }
+  .imgcap {
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    color: rgba(255,255,255,0.42);
+    min-height: 1.5em;
+    text-align: center;
+    max-width: 82vw;
+  }
+
+  .zone { position: fixed; top: 0; bottom: 0; width: 50%; z-index: 5; cursor: pointer; }
   .zone.prev { left: 0; }
   .zone.next { right: 0; }
+
+  @media (max-width: 640px) {
+    .thumb { width: 46px; height: 46px; }
+    .thumbs { gap: 8px; }
+    .art { height: min(46vh, calc(92vw * var(--h) / var(--w))); }
+    .face { gap: 2.2vh; padding: 7vh 5vw; }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .slide { transition: none; }
+    .art img { transition: none; }
+    .thumb { transition: none; }
+  }
 </style>
 </head>
 <body>
@@ -152,172 +228,479 @@
 </nav>
 
 <div class="stage" id="stage" aria-label="project viewer">
-  <!-- card 0: the hero, now inside the deck -->
+  <!-- card 0: the hero — wwwd with a blinking caret; tap the title to search the index -->
   <div class="slide hero-card active">
     <div class="hero-panel">
-      <h1 id="heroTitle" class="typing">
-        <span class="w">w</span>
-        <span class="w">w</span>
-        <span class="w">w</span>
-        <span class="w">d</span>
-      </h1>
+      <h1 id="heroSearch"><span class="wwwd">wwwd</span><input id="q" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" aria-label="Search projects"><span class="caretblink" aria-hidden="true"></span></h1>
       <div class="morph" id="morph">
         <span class="line" data-l="0"></span>
         <span class="line" data-l="1"></span>
         <span class="line" data-l="2"></span>
       </div>
+      <ul id="results" aria-label="Project index"></ul>
     </div>
   </div>
-  <!-- cards 1..10: the work, each with its own proportion and description -->
-  <div class="slide s0">
-    <div class="art" style="--w:16;--h:10"><span class="n">01</span></div>
-    <div class="card-text">
-      <h3>Research seminar, SSA&ndash;CCNY &mdash; Fall 2026</h3>
-      <p><span class="ph">[One or two sentences on what the seminar investigates.]</span></p>
+
+  <!-- card 1 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:4;--h:3"><img src="wwwd-img/chankillo.jpg" alt="Aerial site plan of the Chankillo observatory project, Peru"></div>
+      <div class="card-text">
+        <h3>In Between Scapes</h3>
+        <p>An observatory at Chankillo, Peru, investigating interstitiality &mdash; how can space commit to a singularity without excluding one or the other?</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/chankillo.jpg" data-cap="Aerial site plan of the Chankillo observatory project, Peru" aria-label="View: Aerial site plan of the Chankillo observatory project, Peru"><img src="wwwd-img/chankillo.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/chankillo-s1.jpg" data-cap="Tower lookout model &mdash; the circular opening frames the tower" aria-label="View: Tower lookout model"><img src="wwwd-img/chankillo-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/chankillo-s2.jpg" data-cap="Tower lookout model, detail" aria-label="View: Tower lookout model, detail"><img src="wwwd-img/chankillo-s2.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">Aerial site plan of the Chankillo observatory project, Peru</p>
     </div>
   </div>
-  <div class="slide s1">
-    <div class="art" style="--w:4;--h:5"><span class="n">02</span></div>
-    <div class="card-text">
-      <h3>Research seminar</h3>
-      <p><span class="ph">[Review / seminar room. What happens in the room.]</span></p>
+
+  <!-- card 2 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:1;--h:1"><img src="wwwd-img/portsmouth.jpg" alt="Atlas of event and space collage, Portsmouth Square San Francisco"></div>
+      <div class="card-text">
+        <h3>In-Side In</h3>
+        <p>A renovation bridging Portsmouth Square and the Hilton Hotel in San Francisco&rsquo;s Chinatown &mdash; expressing the multiplicity of Asian American identity, toward an architecture of hybridity.</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/portsmouth.jpg" data-cap="Atlas of event and space collage, Portsmouth Square San Francisco" aria-label="View: Atlas of event and space collage"><img src="wwwd-img/portsmouth.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/portsmouth-s1.jpg" data-cap="Building section" aria-label="View: Building section"><img src="wwwd-img/portsmouth-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/portsmouth-s2.jpg" data-cap="Model" aria-label="View: Model"><img src="wwwd-img/portsmouth-s2.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">Atlas of event and space collage, Portsmouth Square San Francisco</p>
     </div>
   </div>
-  <div class="slide s2">
-    <div class="art" style="--w:1;--h:1"><span class="n">03</span></div>
-    <div class="card-text">
-      <h3>Production of glass &mdash; lecture</h3>
-      <p><span class="ph">[Venue. What the lecture argues about transparency, culture, meaning.]</span></p>
+
+  <!-- card 3 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:3;--h:4"><img src="wwwd-img/glass.jpg" alt="CNC-etched glass study for the Glass Pavilion"></div>
+      <div class="card-text">
+        <h3>Glass Pavilion</h3>
+        <p>An investigation on material utility over performance &mdash; glass at Seagram Plaza, CNC-milled to express the tectonic values of the material.</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/glass.jpg" data-cap="CNC-etched glass study for the Glass Pavilion" aria-label="View: CNC-etched glass study"><img src="wwwd-img/glass.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/glass-s1.jpg" data-cap="Layer &mdash; etched glass producing dissipating, distorted visual cues" aria-label="View: Layer"><img src="wwwd-img/glass-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/glass-s2.jpg" data-cap="Sequence &mdash; experiential quality enhancing intimacy in the open public space" aria-label="View: Sequence"><img src="wwwd-img/glass-s2.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">CNC-etched glass study for the Glass Pavilion</p>
     </div>
   </div>
-  <div class="slide s3">
-    <div class="art" style="--w:3;--h:2"><span class="n">04</span></div>
-    <div class="card-text">
-      <h3>Production of glass</h3>
-      <p><span class="ph">[Lecture detail. A second image from the same series.]</span></p>
+
+  <!-- card 4 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:4;--h:3"><img src="wwwd-img/jookbuin.jpg" alt="The bamboo wife, Jook Bu-In, in use"></div>
+      <div class="card-text">
+        <h3>Jook Bu-In</h3>
+        <p>Deconstructing Korea&rsquo;s bamboo wife &mdash; re-orienting an indigenous weaving technique toward a tactile communication that celebrates intimacy in the public realm.</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/jookbuin.jpg" data-cap="The bamboo wife, Jook Bu-In, in use" aria-label="View: The bamboo wife in use"><img src="wwwd-img/jookbuin.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/jookbuin-s1.jpg" data-cap="Intimacy &mdash; a production of intimacy between bodies" aria-label="View: Intimacy"><img src="wwwd-img/jookbuin-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/jookbuin-s2.jpg" data-cap="Jook Bu-In &mdash; woven bamboo detail" aria-label="View: woven bamboo detail"><img src="wwwd-img/jookbuin-s2.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">The bamboo wife, Jook Bu-In, in use</p>
     </div>
   </div>
-  <div class="slide s4">
-    <div class="art" style="--w:4;--h:5"><span class="n">05</span></div>
-    <div class="card-text">
-      <h3>Design-build renovation</h3>
-      <p><span class="ph">[Project, location. What was drawn, permitted, and built by the same hand.]</span></p>
+
+  <!-- card 5 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:16;--h:9"><img src="wwwd-img/kitchen.jpg" alt="Collective cooking session, Kitchen within Boundaries research"></div>
+      <div class="card-text">
+        <h3>Kitchen within Boundaries</h3>
+        <p>Cooking as a medium of design research &mdash; after the pandemic&rsquo;s abandonment of the kitchen: can the disposition of value exist prior to architecture?</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/kitchen.jpg" data-cap="Collective cooking session, Kitchen within Boundaries research" aria-label="View: Collective cooking session"><img src="wwwd-img/kitchen.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/kitchen-s1.jpg" data-cap="Kitchen within Boundaries &mdash; collective proposal drawing" aria-label="View: collective proposal drawing"><img src="wwwd-img/kitchen-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/kitchen-s2.jpg" data-cap="Kitchen within Boundaries &mdash; cooking session" aria-label="View: cooking session"><img src="wwwd-img/kitchen-s2.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">Collective cooking session, Kitchen within Boundaries research</p>
     </div>
   </div>
-  <div class="slide s5">
-    <div class="art" style="--w:16;--h:9"><span class="n">06</span></div>
-    <div class="card-text">
-      <h3>Design-build renovation</h3>
-      <p><span class="ph">[Interior. How the rooms were remade.]</span></p>
+
+  <!-- card 6 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:3;--h:2"><img src="wwwd-img/eastriver.jpg" alt="Aerial plan of the East River Social Disciplinary Center archipelago"></div>
+      <div class="card-text">
+        <h3>East River SDC</h3>
+        <p>A social disciplinary center in the East River &mdash; overhauling the punitive system into a rehabilitative one, challenging the prison typology as a whole.</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/eastriver.jpg" data-cap="Aerial plan of the East River Social Disciplinary Center archipelago" aria-label="View: Aerial plan of the archipelago"><img src="wwwd-img/eastriver.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/eastriver-s1.jpg" data-cap="Archipelago &mdash; inmate housing scattered on the water" aria-label="View: Archipelago"><img src="wwwd-img/eastriver-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/eastriver-s2.jpg" data-cap="Space of contemplation" aria-label="View: Space of contemplation"><img src="wwwd-img/eastriver-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/eastriver-s3.jpg" data-cap="Space of redemption" aria-label="View: Space of redemption"><img src="wwwd-img/eastriver-s3.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">Aerial plan of the East River Social Disciplinary Center archipelago</p>
     </div>
   </div>
-  <div class="slide s6">
-    <div class="art" style="--w:1;--h:1"><span class="n">07</span></div>
-    <div class="card-text">
-      <h3>Design-build renovation</h3>
-      <p><span class="ph">[Detail. A close read of a joint, a material, a threshold.]</span></p>
+
+  <!-- card 7 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:16;--h:10"><img src="wwwd-img/aarondavis.jpg" alt="Model of the Aaron Davis Hall facade proposal, CCNY"></div>
+      <div class="card-text">
+        <h3>Aaron Davis Facade</h3>
+        <p>A facade as stage for Aaron Davis Hall &mdash; the curtain&rsquo;s symbolic and functional tactility, a skin that bisects interior and exterior.</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/aarondavis.jpg" data-cap="Model of the Aaron Davis Hall facade proposal, CCNY" aria-label="View: Facade proposal model"><img src="wwwd-img/aarondavis.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/aarondavis-s1.jpg" data-cap="Chainmail curtain &mdash; detail model" aria-label="View: Chainmail curtain detail"><img src="wwwd-img/aarondavis-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/aarondavis-s2.jpg" data-cap="Facade model &mdash; the curtain as stage" aria-label="View: the curtain as stage"><img src="wwwd-img/aarondavis-s2.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">Model of the Aaron Davis Hall facade proposal, CCNY</p>
     </div>
   </div>
-  <div class="slide s7">
-    <div class="art" style="--w:3;--h:4"><span class="n">08</span></div>
-    <div class="card-text">
-      <h3>Architect-to-developer research</h3>
-      <p><span class="ph">[Diagram. How a renovation becomes a development.]</span></p>
+
+  <!-- card 8 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:3;--h:2"><img src="wwwd-img/brownsville.jpg" alt="Brownsville neighborhood strategy map, Brooklyn"></div>
+      <div class="card-text">
+        <h3>Brownsville Dwelling</h3>
+        <p>A micro-collective dwelling for Brownsville, Brooklyn &mdash; home, work, and communal gathering toward self-sufficiency: not exclusive inclusion, but inclusionary exclusion.</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/brownsville.jpg" data-cap="Brownsville neighborhood strategy map, Brooklyn" aria-label="View: neighborhood strategy map"><img src="wwwd-img/brownsville.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/brownsville-s1.jpg" data-cap="Brownsville mural by XMental Paint" aria-label="View: mural by XMental Paint"><img src="wwwd-img/brownsville-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/brownsville-s2.jpg" data-cap="Mural by Eelco" aria-label="View: mural by Eelco"><img src="wwwd-img/brownsville-s2.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">Brownsville neighborhood strategy map, Brooklyn</p>
     </div>
   </div>
-  <div class="slide s8">
-    <div class="art" style="--w:16;--h:10"><span class="n">09</span></div>
-    <div class="card-text">
-      <h3>Staten Island housing study</h3>
-      <p><span class="ph">[Site. What the study looks for in a block.]</span></p>
+
+  <!-- card 9 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:16;--h:10"><img src="wwwd-img/bench.jpg" alt="Pyung Sang flat bench, bent plywood seating"></div>
+      <div class="card-text">
+        <h3>Pyung Sang</h3>
+        <p>A series of benches in varied sizes, promoting activities beyond seating &mdash; Korea&rsquo;s traditional social bench, reimagined. With Dash Marshall.</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/bench.jpg" data-cap="Pyung Sang flat bench, bent plywood seating" aria-label="View: Pyung Sang flat bench"><img src="wwwd-img/bench.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/bench-s1.jpg" data-cap="Pyung Sang &mdash; joinery detail" aria-label="View: joinery detail"><img src="wwwd-img/bench-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/bench-s2.jpg" data-cap="Pyung Sang &mdash; assembly axonometric" aria-label="View: assembly axonometric"><img src="wwwd-img/bench-s2.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">Pyung Sang flat bench, bent plywood seating</p>
     </div>
   </div>
-  <div class="slide s9">
-    <div class="art" style="--w:4;--h:5"><span class="n">10</span></div>
-    <div class="card-text">
-      <h3>Staten Island housing study</h3>
-      <p><span class="ph">[Map. Where the search is pointed and why.]</span></p>
+
+  <!-- card 10 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:3;--h:1"><img src="wwwd-img/royalcrescent.jpg" alt="Model of the Royal Crescent, Bath"></div>
+      <div class="card-text">
+        <h3>Royal Crescent</h3>
+        <p>A precedent study of John Wood the Younger&rsquo;s 1774 crescent at Bath &mdash; thirty units behind a unified facade, an early <em>rus in urbe</em>, still relevant for housing in the city.</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/royalcrescent.jpg" data-cap="Model of the Royal Crescent, Bath" aria-label="View: Royal Crescent model"><img src="wwwd-img/royalcrescent.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/royalcrescent-s1.jpg" data-cap="Royal Crescent model &mdash; detail" aria-label="View: model detail"><img src="wwwd-img/royalcrescent-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/royalcrescent-s2.jpg" data-cap="Royal Crescent model &mdash; detail" aria-label="View: model detail"><img src="wwwd-img/royalcrescent-s2.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">Model of the Royal Crescent, Bath</p>
     </div>
   </div>
-  <div class="zone prev" id="zprev"></div>
-  <div class="zone next" id="znext"></div>
+
 </div>
 
 <script>
-  /* ----- hero: "wwwd" unfolds into the title on load; the paragraph states once and stays ----- */
+  /* ----- hero: wwwd with a blinking caret; the statement stands beneath ----- */
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var statement = [
     "A way of reading what spaces make possible.",
     "Working through architecture, objects, and systems \u2014 tracing behavior, memory, construction, atmosphere, and care.",
     "Where the invisible becomes visible."
   ];
   var lines = Array.prototype.slice.call(document.querySelectorAll("#morph .line"));
-  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-
-  /* title intro: wwwd unfolds into What Would We Do (once) */
-  var heroTitle = document.getElementById("heroTitle");
-  var titleWords = ["What", "Would", "We", "Do"];
-  var titleSpans = Array.prototype.slice.call(heroTitle.querySelectorAll(".w"));
-  if (reduceMotion) {
-    titleSpans.forEach(function(sp, i) { sp.textContent = titleWords[i]; });
-    heroTitle.classList.remove("typing");
-  } else {
-    setTimeout(function() {
-      titleSpans.forEach(function(sp, i) {
-        setTimeout(function() {
-          sp.style.opacity = "0";
-          setTimeout(function() {
-            sp.textContent = titleWords[i];
-            sp.style.opacity = "1";
-            if (i === titleSpans.length - 1) heroTitle.classList.remove("typing");
-          }, 300);
-        }, i * 170);
-      });
-    }, 1500);
-  }
-
-  /* the statement: rendered once, then it stands */
   lines.forEach(function(el, k) { el.textContent = statement[k]; });
 
-  /* ----- one deck: hero card + project cards, circular ----- */
+  /* ----- the deck: the hero is the index; the ten projects circle among
+     themselves, with card 1 reaching back to the hero ----- */
+  var stage = document.getElementById("stage");
   var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
+  var NPROJ = slides.length - 1; /* slides 1..NPROJ are projects */
   var idx = 0;
+
+  function step(dir) {
+    if (idx === 0) return dir > 0 ? 1 : NPROJ;
+    var k = idx + dir;
+    if (k < 1) return 0; /* card 1, back: the hero */
+    if (k > NPROJ) return 1;
+    return k;
+  }
   function show(i) {
-    idx = (i + slides.length) % slides.length;
-    slides.forEach(function(s, k) { s.classList.toggle("active", k === idx); });
+    idx = i;
+    slides.forEach(function(s, k) {
+      s.classList.toggle("active", k === idx);
+      s.setAttribute("aria-hidden", k === idx ? "false" : "true");
+    });
+    if (i === 0 && typeof q !== "undefined" && q) focusSearch();
   }
   show(0);
 
-  var stage = document.getElementById("stage");
-  var dragged = false;
+  /* the wwwd mark returns to the hero without reloading */
+  var logoLink = document.querySelector(".nav a");
+  if (logoLink) logoLink.addEventListener("click", function(e) {
+    e.preventDefault();
+    show(0);
+  });
 
-  document.getElementById("znext").addEventListener("click", function() { if (!dragged) show(idx + 1); });
-  document.getElementById("zprev").addEventListener("click", function() { if (!dragged) show(idx - 1); });
+  /* the caret doubles as search: the field is live the moment the hero
+     shows; the index appears below the statement only while typing */
+  var heroSearch = document.getElementById("heroSearch");
+  var q = document.getElementById("q");
+  var resultsBox = document.getElementById("results");
+  var projects = [];
+  for (var pi = 1; pi <= NPROJ; pi++) {
+    var ps = slides[pi];
+    projects.push({
+      i: pi,
+      title: ps.querySelector(".card-text h3").textContent,
+      desc: ps.querySelector(".card-text p").textContent
+    });
+  }
+  function esc(s) {
+    return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+  }
+  function currentMatches() {
+    var query = q.value.trim().toLowerCase();
+    if (!query) return projects.slice();
+    return projects.filter(function(p) {
+      return p.title.toLowerCase().indexOf(query) !== -1 ||
+             p.desc.toLowerCase().indexOf(query) !== -1;
+    });
+  }
+  function renderResults() {
+    var query = q.value.trim();
+    resultsBox.classList.toggle("on", query.length > 0);
+    resultsBox.innerHTML = "";
+    if (!query.length) return;
+    var matches = currentMatches();
+    if (!matches.length) {
+      var li = document.createElement("li");
+      li.className = "none";
+      li.textContent = "no matches";
+      resultsBox.appendChild(li);
+      return;
+    }
+    matches.forEach(function(p) {
+      var li = document.createElement("li");
+      var b = document.createElement("button");
+      b.type = "button";
+      b.innerHTML = "<span class=\"rn\">" + ("0" + p.i).slice(-2) + "</span>" + esc(p.title);
+      b.addEventListener("click", function() { exitSearch(); show(p.i); });
+      li.appendChild(b);
+      resultsBox.appendChild(li);
+    });
+  }
+  function sizeInput() { q.style.width = Math.max(1, q.value.length + 1) + "ch"; }
+  function exitSearch() {
+    q.value = ""; sizeInput(); renderResults(); q.blur();
+  }
+  function focusSearch() {
+    try { q.focus({ preventScroll: true }); } catch (err) { q.focus(); }
+  }
+  heroSearch.addEventListener("click", function() { q.focus(); });
+  q.addEventListener("input", function() { sizeInput(); renderResults(); });
+  q.addEventListener("keydown", function(e) {
+    if (e.key === "Enter") {
+      if (q.value.trim()) {
+        var m = currentMatches();
+        if (m.length) { exitSearch(); show(m[0].i); }
+      }
+    } else if (e.key === "Escape") {
+      exitSearch();
+    }
+    e.stopPropagation(); /* hero typing never reaches the card-flip keys */
+  });
+  focusSearch(); /* the field is live the moment the page opens */
 
-  /* scroll over the stage flips through the deck (hero included) */
+  /* invisible click halves on each slide flip cards; thumbnails sit above them */
+  slides.forEach(function(s) {
+    ["prev", "next"].forEach(function(d) {
+      var z = document.createElement("div");
+      z.className = "zone " + d;
+      s.appendChild(z);
+    });
+  });
+
+  /* supplementary images swap the main image in place, with a quiet fade */
+  function swapImage(btn) {
+    if (btn.classList.contains("active")) return;
+    var face = btn.closest(".face");
+    var artImg = face.querySelector(".art img");
+    var cap = face.querySelector(".imgcap");
+    face.querySelectorAll(".thumb").forEach(function(t) { t.classList.remove("active"); });
+    btn.classList.add("active");
+    var apply = function() {
+      artImg.src = btn.getAttribute("data-src");
+      var c = btn.getAttribute("data-cap");
+      artImg.alt = c;
+      if (cap) cap.textContent = c;
+    };
+    if (reduceMotion) { apply(); return; }
+    artImg.style.opacity = "0";
+    setTimeout(function() {
+      apply();
+      artImg.style.opacity = "1";
+    }, 220);
+  }
+  /* warm the cache so swaps feel instant */
+  document.querySelectorAll(".thumb").forEach(function(t) {
+    var im = new Image();
+    im.src = t.getAttribute("data-src");
+  });
+
+  var dragged = false, settling = false;
+
+  /* taps are handled in pointerup (see endDrag): iOS Safari can suppress the
+     synthesized click when layout changed mid-gesture. this click handler
+     exists only for keyboard / assistive-tech activation of thumbnails
+     (Enter fires click with no pointer events); re-swapping the
+     already-active thumb is a no-op. */
+  stage.addEventListener("click", function(e) {
+    var t = e.target && e.target.closest ? e.target.closest(".thumb") : null;
+    if (t) swapImage(t);
+  });
+
+  /* wheel flips cards, one at a time */
   var cool = false;
   stage.addEventListener("wheel", function(e) {
+    if (settling) return;
+    var d = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
+    if (d === 0) return;
     e.preventDefault();
     if (cool) return;
     cool = true;
-    show(idx + (e.deltaY > 0 ? 1 : -1));
+    show(step(d > 0 ? 1 : -1));
     setTimeout(function() { cool = false; }, 900);
   }, { passive: false });
 
-  /* drag / swipe */
-  var sx = null;
-  stage.addEventListener("pointerdown", function(e) { sx = e.clientX; dragged = false; });
-  stage.addEventListener("pointermove", function(e) {
-    if (sx === null) return;
-    if (Math.abs(e.clientX - sx) > 10) dragged = true;
+  /* keyboard: arrows flip cards */
+  window.addEventListener("keydown", function(e) {
+    if (e.key === "ArrowRight") show(step(1));
+    else if (e.key === "ArrowLeft") show(step(-1));
   });
-  stage.addEventListener("pointerup", function(e) {
-    if (sx === null) return;
-    var dx = e.clientX - sx;
-    if (Math.abs(dx) > 60) show(idx + (dx < 0 ? 1 : -1));
+
+  /* drag with 1:1 tracking: the deck follows the finger, release to snap or settle */
+  var sx = null, dx0 = 0, dragging = false;
+
+  function neighborIdx(o) { /* o = -1 | 1 */
+    if (idx === 0) return o > 0 ? 1 : NPROJ;
+    var k = idx + o;
+    if (k < 1) return 0; /* card 1, back: the hero */
+    if (k > NPROJ) return 1;
+    return k;
+  }
+  function slideAt(o) {
+    if (o === 0) return slides[idx];
+    return slides[neighborIdx(o)];
+  }
+  function clearInline() {
+    slides.forEach(function(s) { s.style.transform = ""; s.style.opacity = ""; });
+  }
+  function layoutDrag(dx) {
+    var w = stage.clientWidth;
+    var cur = slideAt(0), prv = slideAt(-1), nxt = slideAt(1);
+    slides.forEach(function(s) {
+      if (s !== cur && s !== prv && s !== nxt) { s.style.transform = ""; s.style.opacity = ""; }
+    });
+    cur.style.transform = "translateX(" + dx + "px)";
+    prv.style.transform = "translateX(" + (-w + dx) + "px)";
+    prv.style.opacity = "1";
+    nxt.style.transform = "translateX(" + (w + dx) + "px)";
+    nxt.style.opacity = "1";
+  }
+  function resetDeck() {
+    stage.classList.add("noanim");
+    clearInline();
+    slides.forEach(function(s, k) {
+      s.classList.toggle("active", k === idx);
+      s.setAttribute("aria-hidden", k === idx ? "false" : "true");
+    });
+    void stage.offsetWidth;
+    stage.classList.remove("noanim");
+  }
+
+  stage.addEventListener("pointerdown", function(e) {
+    if (settling) return;
+    sx = e.clientX; dx0 = 0; dragging = true; dragged = false;
+    stage.classList.add("dragging");
+    layoutDrag(0);
+  });
+  stage.addEventListener("pointermove", function(e) {
+    if (!dragging || sx === null) return;
+    dx0 = e.clientX - sx;
+    if (Math.abs(dx0) > 10) dragged = true;
+    layoutDrag(dx0);
+  });
+  function endDrag(e) {
+    if (!dragging) return;
+    dragging = false;
+    stage.classList.remove("dragging");
+    if (Math.abs(dx0) < 10) {
+      /* a tap: iOS Safari can suppress the synthesized click when layout
+         changed mid-gesture, so act here on what's under the finger */
+      var tapEl = (e && typeof e.clientX === "number")
+        ? document.elementFromPoint(e.clientX, e.clientY) : null;
+      var th = tapEl && tapEl.closest ? tapEl.closest(".thumb") : null;
+      var z = !th && tapEl && tapEl.closest ? tapEl.closest(".zone") : null;
+      stage.classList.add("noanim");
+      clearInline();
+      void stage.offsetWidth;
+      stage.classList.remove("noanim");
+      sx = null;
+      if (th) { swapImage(th); return; }
+      if (z) show(neighborIdx(z.classList.contains("next") ? 1 : -1));
+      return;
+    }
+    settling = true;
+    var w = stage.clientWidth;
+    var thr = Math.min(120, w * 0.15);
+    void stage.offsetWidth; /* reflow so the settle animates from the dragged positions */
+    if (Math.abs(dx0) >= thr) {
+      var dir = dx0 < 0 ? 1 : -1;
+      var ni = neighborIdx(dir);
+      var cur = slideAt(0), tgt = slides[ni], other = slideAt(-dir);
+      cur.style.transform = "translateX(" + (-dir * w) + "px)";
+      tgt.style.transform = "translateX(0px)";
+      other.style.opacity = "0";
+      setTimeout(function() {
+        idx = ni;
+        resetDeck();
+        settling = false;
+      }, 360);
+    } else {
+      slideAt(0).style.transform = "translateX(0px)";
+      slideAt(-1).style.opacity = "0";
+      slideAt(1).style.opacity = "0";
+      setTimeout(function() { resetDeck(); settling = false; }, 360);
+    }
     sx = null;
     setTimeout(function() { dragged = false; }, 0);
+  }
+  stage.addEventListener("pointerup", endDrag);
+  stage.addEventListener("pointercancel", function() {
+    if (!dragging) return;
+    dragging = false;
+    stage.classList.remove("dragging");
+    stage.classList.add("noanim");
+    clearInline();
+    void stage.offsetWidth;
+    stage.classList.remove("noanim");
+    sx = null; dx0 = 0;
   });
-  stage.addEventListener("pointercancel", function() { sx = null; dragged = false; });
 </script>
 </body>
 </html>
