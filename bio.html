@@ -32,13 +32,42 @@
   .nav a:hover { opacity: 1; }
   .nav .here { opacity: 0.35; pointer-events: none; }
 
+  .masthead {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 17vh 8vw 0;
+  }
+  .masthead h1 {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    font-size: clamp(38px, 5.2vw, 80px);
+    line-height: 1.05;
+    margin: 0;
+    cursor: pointer;
+  }
+  .masthead h1.typing::after {
+    content: "";
+    display: inline-block;
+    width: 0.055em;
+    height: 0.8em;
+    background: #fff;
+    margin-left: 0.06em;
+    vertical-align: -0.02em;
+    animation: caretBlink 1s steps(1) infinite;
+  }
+  @keyframes caretBlink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .masthead h1.typing::after { animation: none; }
+  }
+
   .about {
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: 6vw;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 18vh 8vw 16vh;
+    padding: 7vh 8vw 16vh;
   }
   .contact { font-size: clamp(14px, 1.4vw, 17px); line-height: 2.1; }
   .contact a { color: #fff; }
@@ -63,6 +92,10 @@
   <a href="index.html">Index</a>
 </nav>
 
+<header class="masthead">
+  <h1 class="typing" id="typeLine">wwwd</h1>
+</header>
+
 <div class="about">
   <div class="contact">
     <a href="mailto:jun.hn.nam@gmail.com">jun.hn.nam@gmail.com</a><br>
@@ -78,5 +111,79 @@
   </div>
 </div>
 
+<script>
+  /* wwwd types itself out; then someone keeps rethinking it —
+     backspacing from the end to where the new reading diverges,
+     pausing, and typing forward again. never on a metronome. */
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var expansions = [
+    "what would we do?",
+    "what we would do?",
+    "where would we dwell?",
+    "what will we draw?",
+    "what would we discover?",
+    "what will we define?",
+    "what would we detail?",
+    "where will we drift?"
+  ];
+  var typeLine = document.getElementById("typeLine");
+  var expIdx = -1;
+  var timers = [];
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+  function commonPrefix(a, b) {
+    var n = Math.min(a.length, b.length), i = 0;
+    while (i < n && a.charAt(i) === b.charAt(i)) i++;
+    return i;
+  }
+  function typeChars(text, done) {
+    var i = 0;
+    (function tick() {
+      if (i < text.length) {
+        typeLine.textContent += text.charAt(i++);
+        later(tick, 42 + Math.random() * 36);
+      } else if (done) done();
+    })();
+  }
+  function backspaceTo(len, done) {
+    (function tick() {
+      if (typeLine.textContent.length > len) {
+        typeLine.textContent = typeLine.textContent.slice(0, -1);
+        later(tick, 34 + Math.random() * 30);
+      } else if (done) done();
+    })();
+  }
+  /* a person doesn't cycle on a metronome */
+  function hold() { return 4200 + Math.random() * 1200; }
+  function playReading(idx, fullRetype) {
+    var target = expansions[idx];
+    if (reduceMotion) { typeLine.textContent = target; return; }
+    var start = fullRetype ? 0 : commonPrefix(typeLine.textContent, target);
+    backspaceTo(start, function() {
+      later(function() {   /* the breath before retyping */
+        typeChars(target.slice(start), function() {
+          later(advance, hold());
+        });
+      }, 320 + Math.random() * 200);
+    });
+  }
+  function advance() {
+    clearTimers();
+    expIdx = (expIdx + 1) % expansions.length;
+    playReading(expIdx, false);
+  }
+  typeLine.addEventListener("click", advance);
+  if (reduceMotion) {
+    typeLine.textContent = expansions[0];
+  } else {
+    typeLine.textContent = "";
+    typeChars("wwwd", function() {
+      later(function() {
+        expIdx = 0;
+        playReading(0, true);   /* backspace all the way, retype completely */
+      }, 1000);
+    });
+  }
+</script>
 </body>
 </html>
