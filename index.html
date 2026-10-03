@@ -116,7 +116,6 @@
     display: block; width: 100%;
   }
   #results button:hover, #results button:focus-visible { color: #fff; outline: none; }
-  #results .rn { opacity: 0.35; margin-right: 14px; }
   #results .none { color: rgba(255,255,255,0.35); padding: 5px 0; }
   .morph {
     letter-spacing: -0.04em;
@@ -498,7 +497,7 @@
       var li = document.createElement("li");
       var b = document.createElement("button");
       b.type = "button";
-      b.innerHTML = "<span class=\"rn\">" + ("0" + p.i).slice(-2) + "</span>" + esc(p.title);
+      b.innerHTML = esc(p.title);
       b.addEventListener("click", function() { exitSearch(); show(p.i); });
       li.appendChild(b);
       resultsBox.appendChild(li);
