@@ -101,8 +101,7 @@
     font-size: 13px; letter-spacing: 0.02em;
     max-width: 600px;
   }
-  .hero-panel.searching .morph { display: none; }
-  .hero-panel.searching #results { display: block; }
+  #results.on { display: block; }
   #results button {
     background: none; border: 0; padding: 5px 0; cursor: pointer;
     font: inherit; color: rgba(255,255,255,0.55); text-align: left;
@@ -435,6 +434,7 @@
   function show(i) {
     idx = i;
     slides.forEach(function(s, k) { s.classList.toggle("active", k === idx); });
+    if (i === 0 && typeof q !== "undefined" && q) focusSearch();
   }
   show(0);
 
@@ -445,9 +445,8 @@
     show(0);
   });
 
-  /* the caret doubles as search: tap the title to type; the statement
-     yields to a live index while searching, and returns after */
-  var heroPanel = document.querySelector(".hero-panel");
+  /* the caret doubles as search: the field is live the moment the hero
+     shows; the index appears below the statement only while typing */
   var heroSearch = document.getElementById("heroSearch");
   var q = document.getElementById("q");
   var resultsBox = document.getElementById("results");
@@ -463,7 +462,6 @@
   function esc(s) {
     return s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
   }
-  function setSearching(on) { heroPanel.classList.toggle("searching", on); }
   function currentMatches() {
     var query = q.value.trim().toLowerCase();
     if (!query) return projects.slice();
@@ -473,8 +471,11 @@
     });
   }
   function renderResults() {
-    var matches = currentMatches();
+    var query = q.value.trim();
+    resultsBox.classList.toggle("on", query.length > 0);
     resultsBox.innerHTML = "";
+    if (!query.length) return;
+    var matches = currentMatches();
     if (!matches.length) {
       var li = document.createElement("li");
       li.className = "none";
@@ -494,12 +495,13 @@
   }
   function sizeInput() { q.style.width = Math.max(1, q.value.length + 1) + "ch"; }
   function exitSearch() {
-    q.value = ""; sizeInput(); q.blur(); setSearching(false);
+    q.value = ""; sizeInput(); renderResults(); q.blur();
+  }
+  function focusSearch() {
+    try { q.focus({ preventScroll: true }); } catch (err) { q.focus(); }
   }
   heroSearch.addEventListener("click", function() { q.focus(); });
-  q.addEventListener("focus", function() { setSearching(true); renderResults(); });
-  q.addEventListener("input", function() { sizeInput(); renderResults(); setSearching(true); });
-  q.addEventListener("blur", function() { if (!q.value) setSearching(false); });
+  q.addEventListener("input", function() { sizeInput(); renderResults(); });
   q.addEventListener("keydown", function(e) {
     if (e.key === "Enter") {
       if (q.value.trim()) {
@@ -507,10 +509,11 @@
         if (m.length) { exitSearch(); show(m[0].i); }
       }
     } else if (e.key === "Escape") {
-      exitSearch(); renderResults();
+      exitSearch();
     }
     e.stopPropagation(); /* hero typing never reaches the card-flip keys */
   });
+  focusSearch(); /* the field is live the moment the page opens */
 
   /* invisible click halves on each slide flip cards; thumbnails sit above them */
   slides.forEach(function(s) {
