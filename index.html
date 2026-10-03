@@ -425,8 +425,8 @@
   var lines = Array.prototype.slice.call(document.querySelectorAll("#morph .line"));
   lines.forEach(function(el, k) { el.textContent = statement[k]; });
 
-  /* ----- the deck: the hero is the index; the ten projects circle among
-     themselves, with card 1 reaching back to the hero ----- */
+  /* ----- the deck: the hero opens it, then stays behind — the ten
+     projects circle among themselves; only the wwwd mark returns ----- */
   var stage = document.getElementById("stage");
   var slides = Array.prototype.slice.call(document.querySelectorAll(".slide"));
   var NPROJ = slides.length - 1; /* slides 1..NPROJ are projects */
@@ -435,7 +435,7 @@
   function step(dir) {
     if (idx === 0) return dir > 0 ? 1 : NPROJ;
     var k = idx + dir;
-    if (k < 1) return 0; /* card 1, back: the hero */
+    if (k < 1) return NPROJ; /* card 1, back: the deck wraps; the hero stays behind */
     if (k > NPROJ) return 1;
     return k;
   }
@@ -599,7 +599,7 @@
   function neighborIdx(o) { /* o = -1 | 1 */
     if (idx === 0) return o > 0 ? 1 : NPROJ;
     var k = idx + o;
-    if (k < 1) return 0; /* card 1, back: the hero */
+    if (k < 1) return NPROJ; /* card 1, back: the deck wraps; the hero stays behind */
     if (k > NPROJ) return 1;
     return k;
   }
