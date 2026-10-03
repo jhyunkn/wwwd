@@ -3,6 +3,11 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="WWWD — What Would We Do. An independent research and spatial practice working through architecture, objects, and systems.">
+<meta name="theme-color" content="#000000">
+<meta property="og:title" content="wwwd">
+<meta property="og:description" content="WWWD — What Would We Do. An independent research and spatial practice.">
+<meta property="og:type" content="website">
 <title>wwwd</title>
 <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -94,6 +99,9 @@
   h1:focus-within .caretblink { display: none; }
   @keyframes caretBlink { 50% { opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { .caretblink { animation: none; } }
+  @media (prefers-reduced-motion: reduce) {
+    .slide, .art img { transition: none !important; }
+  }
   #results {
     display: none;
     list-style: none; margin: 24px 0 0 0; padding: 0;
@@ -433,7 +441,10 @@
   }
   function show(i) {
     idx = i;
-    slides.forEach(function(s, k) { s.classList.toggle("active", k === idx); });
+    slides.forEach(function(s, k) {
+      s.classList.toggle("active", k === idx);
+      s.setAttribute("aria-hidden", k === idx ? "false" : "true");
+    });
     if (i === 0 && typeof q !== "undefined" && q) focusSearch();
   }
   show(0);
@@ -614,7 +625,10 @@
   function resetDeck() {
     stage.classList.add("noanim");
     clearInline();
-    slides.forEach(function(s, k) { s.classList.toggle("active", k === idx); });
+    slides.forEach(function(s, k) {
+      s.classList.toggle("active", k === idx);
+      s.setAttribute("aria-hidden", k === idx ? "false" : "true");
+    });
     void stage.offsetWidth;
     stage.classList.remove("noanim");
   }
