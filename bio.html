@@ -44,6 +44,25 @@
     line-height: 0.95;
     margin: 0;
   }
+  .expansion {
+    font-family: Georgia, "Times New Roman", serif;
+    font-style: italic;
+    font-size: clamp(20px, 2.4vw, 32px);
+    letter-spacing: -0.01em;
+    color: rgba(255,255,255,0.78);
+    margin: 2.2vh 0 0 0;
+    cursor: pointer;
+    display: inline-block;
+  }
+  .expansion .exp-hint {
+    font-style: normal;
+    font-size: 0.65em;
+    opacity: 0.35;
+    margin-left: 0.5em;
+    vertical-align: 0.1em;
+  }
+  #expText { transition: opacity 0.35s ease; }
+  @media (prefers-reduced-motion: reduce) { #expText { transition: none; } }
 
   .about {
     display: grid;
@@ -77,7 +96,8 @@
 </nav>
 
 <header class="masthead">
-  <h1>What Would We Do?</h1>
+  <h1>wwwd</h1>
+  <p class="expansion" id="expansion"><span id="expText">what would we do?</span><span class="exp-hint" aria-hidden="true"> &#8635;</span></p>
 </header>
 
 <div class="about">
@@ -95,5 +115,35 @@
   </div>
 </div>
 
+<script>
+  /* the acronym never settles: its readings cycle beneath it */
+  var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var expansions = [
+    "what would we do?",
+    "what we would do?",
+    "where would we dwell?",
+    "what will we draw?"
+  ];
+  var expIdx = 0, expTimer = null;
+  var expText = document.getElementById("expText");
+  function showExpansion(i) {
+    expIdx = (i + expansions.length) % expansions.length;
+    if (reduceMotion) { expText.textContent = expansions[expIdx]; return; }
+    expText.style.opacity = "0";
+    setTimeout(function() {
+      expText.textContent = expansions[expIdx];
+      expText.style.opacity = "1";
+    }, 350);
+  }
+  function restartExpTimer() {
+    if (expTimer) clearInterval(expTimer);
+    if (!reduceMotion) expTimer = setInterval(function() { showExpansion(expIdx + 1); }, 5200);
+  }
+  document.getElementById("expansion").addEventListener("click", function() {
+    showExpansion(expIdx + 1);
+    restartExpTimer();
+  });
+  restartExpTimer();
+</script>
 </body>
 </html>
