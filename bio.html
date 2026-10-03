@@ -40,29 +40,25 @@
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 600;
     letter-spacing: -0.05em;
-    font-size: clamp(44px, 7vw, 108px);
-    line-height: 0.95;
+    font-size: clamp(38px, 5.2vw, 80px);
+    line-height: 1.05;
     margin: 0;
-  }
-  .expansion {
-    font-family: Georgia, "Times New Roman", serif;
-    font-style: italic;
-    font-size: clamp(20px, 2.4vw, 32px);
-    letter-spacing: -0.01em;
-    color: rgba(255,255,255,0.78);
-    margin: 2.2vh 0 0 0;
     cursor: pointer;
+  }
+  .masthead h1.typing::after {
+    content: "";
     display: inline-block;
+    width: 0.055em;
+    height: 0.8em;
+    background: #fff;
+    margin-left: 0.06em;
+    vertical-align: -0.02em;
+    animation: caretBlink 1s steps(1) infinite;
   }
-  .expansion .exp-hint {
-    font-style: normal;
-    font-size: 0.65em;
-    opacity: 0.35;
-    margin-left: 0.5em;
-    vertical-align: 0.1em;
+  @keyframes caretBlink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) {
+    .masthead h1.typing::after { animation: none; }
   }
-  #expText { transition: opacity 0.35s ease; }
-  @media (prefers-reduced-motion: reduce) { #expText { transition: none; } }
 
   .about {
     display: grid;
@@ -96,8 +92,7 @@
 </nav>
 
 <header class="masthead">
-  <h1>wwwd</h1>
-  <p class="expansion" id="expansion"><span id="expText">what would we do?</span><span class="exp-hint" aria-hidden="true"> &#8635;</span></p>
+  <h1 class="typing" id="typeLine">wwwd</h1>
 </header>
 
 <div class="about">
@@ -116,34 +111,55 @@
 </div>
 
 <script>
-  /* the acronym never settles: its readings cycle beneath it */
+  /* wwwd types itself out, then keeps becoming other readings */
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var expansions = [
     "what would we do?",
     "what we would do?",
     "where would we dwell?",
-    "what will we draw?"
+    "what will we draw?",
+    "what would we discover?",
+    "what will we define?",
+    "what would we detail?",
+    "where will we drift?"
   ];
-  var expIdx = 0, expTimer = null;
-  var expText = document.getElementById("expText");
-  function showExpansion(i) {
-    expIdx = (i + expansions.length) % expansions.length;
-    if (reduceMotion) { expText.textContent = expansions[expIdx]; return; }
-    expText.style.opacity = "0";
-    setTimeout(function() {
-      expText.textContent = expansions[expIdx];
-      expText.style.opacity = "1";
-    }, 350);
+  var typeLine = document.getElementById("typeLine");
+  var expIdx = -1;
+  var timers = [];
+  function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
+  function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+  function typeText(text, done, speed) {
+    var i = 0;
+    typeLine.textContent = "";
+    (function tick() {
+      if (i <= text.length) {
+        typeLine.textContent = text.slice(0, i++);
+        later(tick, speed);
+      } else if (done) done();
+    })();
   }
-  function restartExpTimer() {
-    if (expTimer) clearInterval(expTimer);
-    if (!reduceMotion) expTimer = setInterval(function() { showExpansion(expIdx + 1); }, 5200);
+  function deleteText(done, speed) {
+    (function tick() {
+      var t = typeLine.textContent;
+      if (t.length > 0) {
+        typeLine.textContent = t.slice(0, -1);
+        later(tick, speed);
+      } else if (done) done();
+    })();
   }
-  document.getElementById("expansion").addEventListener("click", function() {
-    showExpansion(expIdx + 1);
-    restartExpTimer();
-  });
-  restartExpTimer();
+  function showNext() {
+    clearTimers();
+    expIdx = (expIdx + 1) % expansions.length;
+    deleteText(function() {
+      typeText(expansions[expIdx], function() { later(showNext, 4600); }, 48);
+    }, 24);
+  }
+  typeLine.addEventListener("click", showNext);
+  if (reduceMotion) {
+    typeLine.textContent = expansions[0];
+  } else {
+    typeText("wwwd", function() { later(showNext, 1100); }, 130);
+  }
 </script>
 </body>
 </html>
