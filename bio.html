@@ -45,8 +45,7 @@
     margin: 0;
     cursor: pointer;
   }
-  .masthead h1.typing::after {
-    content: "";
+  .masthead .caretblink {
     display: inline-block;
     width: 0.055em;
     height: 0.8em;
@@ -63,7 +62,7 @@
   .masthead h1 .w-out { opacity: 0; transform: translateY(-0.32em); }
   .masthead h1 .w-in { opacity: 0; transform: translateY(0.32em); }
   @media (prefers-reduced-motion: reduce) {
-    .masthead h1.typing::after { animation: none; }
+    .masthead .caretblink { animation: none; }
     .masthead h1 .w { transition: none; }
   }
 
@@ -99,7 +98,7 @@
 </nav>
 
 <header class="masthead">
-  <h1 class="typing" id="typeLine">wwwd</h1>
+  <h1 id="typeLine">wwwd</h1>
 </header>
 
 <div class="about">
@@ -118,8 +117,9 @@
 </div>
 
 <script>
-  /* wwwd types itself out; then its readings turn over the way a person
-     rephrases a question — only the words that change move, the rest stay */
+  /* wwwd types itself out; then a person toys with the acronym —
+     backspacing each changed word to its shared root and retyping
+     the new ending, the caret jumping to wherever the hand is */
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var expansions = [
     "what would we do?",
@@ -132,15 +132,21 @@
     "where will we drift?"
   ];
   var typeLine = document.getElementById("typeLine");
+  var caret = document.createElement("span");
+  caret.className = "caretblink";
+  caret.setAttribute("aria-hidden", "true");
   var expIdx = -1;
   var timers = [];
   function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
   function clearTimers() { timers.forEach(clearTimeout); timers = []; }
-  function settle() {
-    Array.prototype.forEach.call(typeLine.querySelectorAll(".w"), function(s) {
-      s.classList.remove("w-out");
-      s.classList.remove("w-in");
-    });
+  function placeCaret(afterSpan) {
+    if (afterSpan && afterSpan.nextSibling) typeLine.insertBefore(caret, afterSpan.nextSibling);
+    else typeLine.appendChild(caret);
+  }
+  function commonPrefix(a, b) {
+    var n = Math.min(a.length, b.length), i = 0;
+    while (i < n && a.charAt(i) === b.charAt(i)) i++;
+    return i;
   }
   function renderWords(words) {
     typeLine.innerHTML = "";
@@ -151,8 +157,9 @@
       typeLine.appendChild(s);
       if (i < words.length - 1) typeLine.appendChild(document.createTextNode(" "));
     });
+    typeLine.appendChild(caret);
   }
-  /* first reading arrives word by word, like the thought forming */
+  /* the first reading arrives word by word, like the thought forming */
   function revealWords(words) {
     renderWords(words);
     var spans = typeLine.querySelectorAll(".w");
@@ -162,71 +169,84 @@
       later(function() { s.classList.remove("w-in"); }, i * 130);
     });
   }
-  /* later readings: changed words lift away and settle back reworded,
-     staggered left to right; unchanged words never move */
-  function morphTo(words) {
-    var spans = typeLine.querySelectorAll(".w");
-    var cur = Array.prototype.map.call(spans, function(s) { return s.textContent; });
-    var delay = 0;
-    for (var i = 0; i < words.length; i++) {
-      (function(i) {
-        if (cur[i] !== words[i]) {
-          later(function() {
-            var s = spans[i];
-            s.classList.add("w-out");
-            later(function() {
-              s.textContent = words[i];
-              s.classList.remove("w-out");
-            }, 260);
-          }, delay);
-          delay += 110;
-        }
-      })(i);
-    }
-    return delay + 710;
+  /* backspace to the shared root, then type the new ending */
+  function editWord(span, from, to, done) {
+    if (reduceMotion) { span.textContent = to; if (done) done(); return; }
+    placeCaret(span);
+    var p = commonPrefix(from, to);
+    var t = from;
+    (function back() {
+      if (t.length > p) {
+        t = t.slice(0, -1);
+        span.textContent = t;
+        later(back, 38 + Math.random() * 34);
+      } else if (to.length > p) {
+        var i = p;
+        (function type() {
+          i++;
+          span.textContent = to.slice(0, i);
+          if (i < to.length) later(type, 46 + Math.random() * 40);
+          else if (done) done();
+        })();
+      } else if (done) done();
+    })();
   }
   /* a person doesn't cycle on a metronome */
   function hold() { return 4200 + Math.random() * 1200; }
   function advance() {
     clearTimers();
-    settle();
     expIdx = (expIdx + 1) % expansions.length;
     var words = expansions[expIdx].split(" ");
-    var morphMs;
-    if (!typeLine.querySelectorAll(".w").length) {
+    var spans = typeLine.querySelectorAll(".w");
+    if (spans.length !== words.length) {
       revealWords(words);
-      morphMs = words.length * 130 + 450;
-    } else {
-      morphMs = morphTo(words);
+      later(advance, words.length * 130 + 450 + hold());
+      return;
     }
-    later(advance, morphMs + hold());
+    if (reduceMotion) {
+      for (var i = 0; i < words.length; i++) spans[i].textContent = words[i];
+      placeCaret(null);
+      return;
+    }
+    var cur = Array.prototype.map.call(spans, function(s) { return s.textContent; });
+    var queue = [];
+    for (var j = 0; j < words.length; j++) if (cur[j] !== words[j]) queue.push(j);
+    (function nextWord() {
+      if (!queue.length) { placeCaret(null); later(advance, hold()); return; }
+      var k = queue.shift();
+      later(function() {   /* the pause before touching a word */
+        editWord(spans[k], cur[k], words[k], function() {
+          cur[k] = words[k];
+          nextWord();
+        });
+      }, 220 + Math.random() * 260);
+    })();
   }
   typeLine.addEventListener("click", advance);
   if (reduceMotion) {
     renderWords(expansions[0].split(" "));
   } else {
     (function intro() {
-      typeLine.textContent = "";
+      var s = document.createElement("span");
+      s.className = "w";
+      typeLine.innerHTML = "";
+      typeLine.appendChild(s);
+      typeLine.appendChild(caret);
       var i = 0;
       (function tick() {
         if (i <= 4) {
-          typeLine.textContent = "wwwd".slice(0, i++);
+          s.textContent = "wwwd".slice(0, i++);
           later(tick, 130);
         } else {
-          later(function() {          /* erase to rethink, then begin */
-            deleteText(function() { advance(); }, 32);
+          later(function() {   /* erase to rethink, then begin */
+            (function del() {
+              var t = s.textContent;
+              if (t.length > 0) { s.textContent = t.slice(0, -1); later(del, 34); }
+              else advance();
+            })();
           }, 1000);
         }
       })();
-    })();
-  }
-  function deleteText(done, speed) {
-    (function tick() {
-      var t = typeLine.textContent;
-      if (t.length > 0) {
-        typeLine.textContent = t.slice(0, -1);
-        later(tick, speed);
-      } else if (done) done();
     })();
   }
 </script>
