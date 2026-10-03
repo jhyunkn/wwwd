@@ -31,13 +31,27 @@
   .nav a:hover { opacity: 1; }
   .nav .here { opacity: 0.35; pointer-events: none; }
 
+  .masthead {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 17vh 8vw 0;
+  }
+  .masthead h1 {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.05em;
+    font-size: clamp(44px, 7vw, 108px);
+    line-height: 0.95;
+    margin: 0;
+  }
+
   .about {
     display: grid;
     grid-template-columns: 1fr 2fr;
     gap: 6vw;
     max-width: 1200px;
     margin: 0 auto;
-    padding: 18vh 8vw 16vh;
+    padding: 7vh 8vw 16vh;
   }
   .contact { font-size: clamp(14px, 1.4vw, 17px); line-height: 2.1; }
   .contact a { color: #fff; }
@@ -61,6 +75,10 @@
   <a href="index.html">wwwd</a>
   <a href="index.html">Index</a>
 </nav>
+
+<header class="masthead">
+  <h1>What Would We Do?</h1>
+</header>
 
 <div class="about">
   <div class="contact">
