@@ -235,6 +235,7 @@
         <span class="line" data-l="0"></span>
         <span class="line" data-l="1"></span>
         <span class="line" data-l="2"></span>
+        <span class="line" data-l="3"></span>
       </div>
       <ul id="results" aria-label="Project index"></ul>
     </div>
@@ -519,9 +520,10 @@
   /* ----- hero: wwwd with a blinking caret; the statement stands beneath ----- */
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var statement = [
-    "A way of reading what spaces make possible.",
-    "Working through architecture, objects, and systems \u2014 tracing behavior, memory, construction, atmosphere, and care.",
-    "Where the invisible becomes visible."
+    "What would we do?",
+    "We care for what spaces make possible.",
+    "We work through architecture, objects, and thought \u2014 tracing behavior, memory, construction, history, culture, and care.",
+    "It begins with a conversation."
   ];
   var lines = Array.prototype.slice.call(document.querySelectorAll("#morph .line"));
   lines.forEach(function(el, k) { el.textContent = statement[k]; });
