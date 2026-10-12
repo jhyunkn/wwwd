@@ -100,7 +100,7 @@
   @keyframes caretBlink { 50% { opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { .caretblink { animation: none; } }
   @media (prefers-reduced-motion: reduce) {
-    .slide, .art img { transition: none !important; }
+    .slide, .art, .art img { transition: none !important; }
   }
   #results {
     display: none;
@@ -149,6 +149,7 @@
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
+    transition: height 0.35s ease;
   }
   .art img {
     width: 100%;
@@ -235,6 +236,7 @@
         <span class="line" data-l="0"></span>
         <span class="line" data-l="1"></span>
         <span class="line" data-l="2"></span>
+        <span class="line" data-l="3"></span>
       </div>
       <ul id="results" aria-label="Project index"></ul>
     </div>
@@ -246,12 +248,14 @@
       <div class="art" style="--w:4;--h:3"><img src="wwwd-img/chankillo.jpg" alt="Aerial site plan of the Chankillo observatory project, Peru"></div>
       <div class="card-text">
         <h3>In Between Scapes</h3>
-        <p>An observatory at Chankillo, Peru, investigating interstitiality &mdash; how can space commit to a singularity without excluding one or the other?</p>
+        <p>An observatory at Chankillo, Peru &mdash; a place that manifests as a threshold, oscillating between past and future. The project investigates interstitiality: how can space commit to a singularity without excluding one or the other?</p>
       </div>
       <div class="thumbs">
-        <button class="thumb active" data-src="wwwd-img/chankillo.jpg" data-cap="Aerial site plan of the Chankillo observatory project, Peru" aria-label="View: Aerial site plan of the Chankillo observatory project, Peru"><img src="wwwd-img/chankillo.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/chankillo-s1.jpg" data-cap="Tower lookout model &mdash; the circular opening frames the tower" aria-label="View: Tower lookout model"><img src="wwwd-img/chankillo-s1.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/chankillo-s2.jpg" data-cap="Tower lookout model, detail" aria-label="View: Tower lookout model, detail"><img src="wwwd-img/chankillo-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb active" data-src="wwwd-img/chankillo.jpg" data-cap="Aerial site plan of the Chankillo observatory project, Peru" aria-label="View: Aerial site plan of the Chankillo observatory project, Peru" data-w="4" data-h="3"><img src="wwwd-img/chankillo.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/chankillo-s1.jpg" data-cap="Tower lookout model &mdash; the circular opening frames the tower" aria-label="View: Tower lookout model" data-w="4" data-h="3"><img src="wwwd-img/chankillo-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/chankillo-s2.jpg" data-cap="Site model &mdash; observatory and dwellings" aria-label="View: Site model" data-w="4" data-h="3"><img src="wwwd-img/chankillo-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/chankillo-s3.jpg" data-cap="Dwellings &mdash; plan view" aria-label="View: Dwellings, plan view" data-w="1800" data-h="1800"><img src="wwwd-img/chankillo-s3.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/chankillo-s4.jpg" data-cap="Site diagram &mdash; circles of observation" aria-label="View: Site diagram" data-w="1800" data-h="1042"><img src="wwwd-img/chankillo-s4.jpg" alt="" loading="lazy"></button>
       </div>
       <p class="imgcap">Aerial site plan of the Chankillo observatory project, Peru</p>
     </div>
@@ -260,15 +264,17 @@
   <!-- card 2 -->
   <div class="slide">
     <div class="face">
-      <div class="art" style="--w:1;--h:1"><img src="wwwd-img/portsmouth.jpg" alt="Atlas of event and space collage, Portsmouth Square San Francisco"></div>
+      <div class="art" style="--w:3;--h:2"><img src="wwwd-img/portsmouth.jpg" alt="Atlas of event and space collage, Portsmouth Square San Francisco"></div>
       <div class="card-text">
         <h3>In-Side In</h3>
-        <p>A renovation bridging Portsmouth Square and the Hilton Hotel in San Francisco&rsquo;s Chinatown &mdash; expressing the multiplicity of Asian American identity, toward an architecture of hybridity.</p>
+        <p>A renovation bridging Portsmouth Square and the Hilton Hotel in San Francisco&rsquo;s Chinatown. Identities are constellations of cultures collected as multiples &mdash; the project embraces this multiplicity toward an architecture of hybridity, a third space.</p>
       </div>
       <div class="thumbs">
-        <button class="thumb active" data-src="wwwd-img/portsmouth.jpg" data-cap="Atlas of event and space collage, Portsmouth Square San Francisco" aria-label="View: Atlas of event and space collage"><img src="wwwd-img/portsmouth.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/portsmouth-s1.jpg" data-cap="Building section" aria-label="View: Building section"><img src="wwwd-img/portsmouth-s1.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/portsmouth-s2.jpg" data-cap="Model" aria-label="View: Model"><img src="wwwd-img/portsmouth-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb active" data-src="wwwd-img/portsmouth.jpg" data-cap="Atlas of event and space collage, Portsmouth Square San Francisco" aria-label="View: Atlas of event and space collage" data-w="3" data-h="2"><img src="wwwd-img/portsmouth.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/portsmouth-s1.jpg" data-cap="Building section" aria-label="View: Building section" data-w="3" data-h="2"><img src="wwwd-img/portsmouth-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/portsmouth-s2.jpg" data-cap="Model" aria-label="View: Model" data-w="3" data-h="2"><img src="wwwd-img/portsmouth-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/portsmouth-s3.jpg" data-cap="Courtyards &mdash; collage renderings" aria-label="View: Courtyards" data-w="1800" data-h="1165"><img src="wwwd-img/portsmouth-s3.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/portsmouth-s4.jpg" data-cap="Building tectonic &mdash; material study" aria-label="View: Building tectonic" data-w="1800" data-h="1165"><img src="wwwd-img/portsmouth-s4.jpg" alt="" loading="lazy"></button>
       </div>
       <p class="imgcap">Atlas of event and space collage, Portsmouth Square San Francisco</p>
     </div>
@@ -280,12 +286,14 @@
       <div class="art" style="--w:3;--h:4"><img src="wwwd-img/glass.jpg" alt="CNC-etched glass study for the Glass Pavilion"></div>
       <div class="card-text">
         <h3>Glass Pavilion</h3>
-        <p>An investigation on material utility over performance &mdash; glass at Seagram Plaza, CNC-milled to express the tectonic values of the material.</p>
+        <p>An investigation of material utility over performance at Seagram Plaza, Manhattan. Glass hasn&rsquo;t reached its potential beyond the simple envelope &mdash; CNC-milled and etched, it expresses the tectonic values of the material: dissipating, distorted, intimate.</p>
       </div>
       <div class="thumbs">
-        <button class="thumb active" data-src="wwwd-img/glass.jpg" data-cap="CNC-etched glass study for the Glass Pavilion" aria-label="View: CNC-etched glass study"><img src="wwwd-img/glass.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/glass-s1.jpg" data-cap="Layer &mdash; etched glass producing dissipating, distorted visual cues" aria-label="View: Layer"><img src="wwwd-img/glass-s1.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/glass-s2.jpg" data-cap="Sequence &mdash; experiential quality enhancing intimacy in the open public space" aria-label="View: Sequence"><img src="wwwd-img/glass-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb active" data-src="wwwd-img/glass.jpg" data-cap="CNC-etched glass study for the Glass Pavilion" aria-label="View: CNC-etched glass study" data-w="3" data-h="4"><img src="wwwd-img/glass.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/glass-s1.jpg" data-cap="Layer &mdash; etched glass producing dissipating, distorted visual cues" aria-label="View: Layer" data-w="3" data-h="4"><img src="wwwd-img/glass-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/glass-s2.jpg" data-cap="Sequence &mdash; experiential quality enhancing intimacy in the open public space" aria-label="View: Sequence" data-w="3" data-h="4"><img src="wwwd-img/glass-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/glass-s3.jpg" data-cap="Interior &mdash; beneath the glass arches" aria-label="View: Interior" data-w="1728" data-h="1008"><img src="wwwd-img/glass-s3.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/glass-s4.jpg" data-cap="The pavilion at night" aria-label="View: Night view" data-w="1728" data-h="1008"><img src="wwwd-img/glass-s4.jpg" alt="" loading="lazy"></button>
       </div>
       <p class="imgcap">CNC-etched glass study for the Glass Pavilion</p>
     </div>
@@ -294,17 +302,19 @@
   <!-- card 4 -->
   <div class="slide">
     <div class="face">
-      <div class="art" style="--w:4;--h:3"><img src="wwwd-img/jookbuin.jpg" alt="The bamboo wife, Jook Bu-In, in use"></div>
+      <div class="art" style="--w:4;--h:3"><img src="wwwd-img/jookbuin.jpg" alt="Rest, Hug, Lean &mdash; three typologies of the re-woven bamboo wife"></div>
       <div class="card-text">
         <h3>Jook Bu-In</h3>
-        <p>Deconstructing Korea&rsquo;s bamboo wife &mdash; re-orienting an indigenous weaving technique toward a tactile communication that celebrates intimacy in the public realm.</p>
+        <p>The bamboo wife &mdash; once a revered indigenous pillow, a device that cools the body on summer days. Through deconstructing and reconstructing in hand craft, the project re-orients its cultural meaning toward a tactile communication celebrating intimacy within the public realm.</p>
       </div>
       <div class="thumbs">
-        <button class="thumb active" data-src="wwwd-img/jookbuin.jpg" data-cap="The bamboo wife, Jook Bu-In, in use" aria-label="View: The bamboo wife in use"><img src="wwwd-img/jookbuin.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/jookbuin-s1.jpg" data-cap="Intimacy &mdash; a production of intimacy between bodies" aria-label="View: Intimacy"><img src="wwwd-img/jookbuin-s1.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/jookbuin-s2.jpg" data-cap="Jook Bu-In &mdash; woven bamboo detail" aria-label="View: woven bamboo detail"><img src="wwwd-img/jookbuin-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb active" data-src="wwwd-img/jookbuin.jpg" data-cap="Rest, Hug, Lean &mdash; three typologies of the re-woven bamboo wife" aria-label="View: Rest, Hug, Lean typologies" data-w="4" data-h="3"><img src="wwwd-img/jookbuin.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/jookbuin-s1.jpg" data-cap="Weaving the reed by hand" aria-label="View: Weaving the reed" data-w="4" data-h="3"><img src="wwwd-img/jookbuin-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/jookbuin-s2.jpg" data-cap="The bamboo wife in use &mdash; the precedent" aria-label="View: The bamboo wife in use" data-w="4" data-h="3"><img src="wwwd-img/jookbuin-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/jookbuin-s3.jpg" data-cap="The bamboo wife through history" aria-label="View: History" data-w="1800" data-h="1391"><img src="wwwd-img/jookbuin-s3.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/jookbuin-s4.jpg" data-cap="Compression studies &mdash; the woven sphere under the hand" aria-label="View: Compression studies" data-w="1800" data-h="1391"><img src="wwwd-img/jookbuin-s4.jpg" alt="" loading="lazy"></button>
       </div>
-      <p class="imgcap">The bamboo wife, Jook Bu-In, in use</p>
+      <p class="imgcap">Rest, Hug, Lean &mdash; three typologies of the re-woven bamboo wife</p>
     </div>
   </div>
 
@@ -314,12 +324,14 @@
       <div class="art" style="--w:16;--h:9"><img src="wwwd-img/kitchen.jpg" alt="Collective cooking session, Kitchen within Boundaries research"></div>
       <div class="card-text">
         <h3>Kitchen within Boundaries</h3>
-        <p>Cooking as a medium of design research &mdash; after the pandemic&rsquo;s abandonment of the kitchen: can the disposition of value exist prior to architecture?</p>
+        <p>Kitchen is a way of connecting bodies &mdash; spatial, biological, cultural. To constitute kitchens as centers of architecture, spaces appear as fragments hosting all walks of life: small moments as memories, encapsulating something universal, communicable prior to words.</p>
       </div>
       <div class="thumbs">
-        <button class="thumb active" data-src="wwwd-img/kitchen.jpg" data-cap="Collective cooking session, Kitchen within Boundaries research" aria-label="View: Collective cooking session"><img src="wwwd-img/kitchen.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/kitchen-s1.jpg" data-cap="Kitchen within Boundaries &mdash; collective proposal drawing" aria-label="View: collective proposal drawing"><img src="wwwd-img/kitchen-s1.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/kitchen-s2.jpg" data-cap="Kitchen within Boundaries &mdash; cooking session" aria-label="View: cooking session"><img src="wwwd-img/kitchen-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb active" data-src="wwwd-img/kitchen.jpg" data-cap="Collective cooking session, Kitchen within Boundaries research" aria-label="View: Collective cooking session" data-w="16" data-h="9"><img src="wwwd-img/kitchen.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/kitchen-s1.jpg" data-cap="Kitchen within Boundaries &mdash; collective proposal drawing" aria-label="View: collective proposal drawing" data-w="16" data-h="9"><img src="wwwd-img/kitchen-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/kitchen-s2.jpg" data-cap="Kitchen within Boundaries &mdash; cooking session" aria-label="View: cooking session" data-w="16" data-h="9"><img src="wwwd-img/kitchen-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/kitchen-s3.jpg" data-cap="Comparative study &mdash; cooking across cultures" aria-label="View: Comparative study" data-w="1800" data-h="1165"><img src="wwwd-img/kitchen-s3.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/kitchen-s4.jpg" data-cap="The space of cooking" aria-label="View: The space of cooking" data-w="1800" data-h="1165"><img src="wwwd-img/kitchen-s4.jpg" alt="" loading="lazy"></button>
       </div>
       <p class="imgcap">Collective cooking session, Kitchen within Boundaries research</p>
     </div>
@@ -330,14 +342,15 @@
     <div class="face">
       <div class="art" style="--w:3;--h:2"><img src="wwwd-img/eastriver.jpg" alt="Aerial plan of the East River Social Disciplinary Center archipelago"></div>
       <div class="card-text">
-        <h3>East River SDC</h3>
-        <p>A social disciplinary center in the East River &mdash; overhauling the punitive system into a rehabilitative one, challenging the prison typology as a whole.</p>
+        <h3>East River Prison</h3>
+        <p>A social disciplinary center rising in the East River, Manhattan. Overhauling the punitive system into a rehabilitative one &mdash; humanitarian discipline through collaboration, enhanced living cells, and rehabilitative programs &mdash; challenging the prison typology as a whole.</p>
       </div>
       <div class="thumbs">
-        <button class="thumb active" data-src="wwwd-img/eastriver.jpg" data-cap="Aerial plan of the East River Social Disciplinary Center archipelago" aria-label="View: Aerial plan of the archipelago"><img src="wwwd-img/eastriver.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/eastriver-s1.jpg" data-cap="Archipelago &mdash; inmate housing scattered on the water" aria-label="View: Archipelago"><img src="wwwd-img/eastriver-s1.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/eastriver-s2.jpg" data-cap="Space of contemplation" aria-label="View: Space of contemplation"><img src="wwwd-img/eastriver-s2.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/eastriver-s3.jpg" data-cap="Space of redemption" aria-label="View: Space of redemption"><img src="wwwd-img/eastriver-s3.jpg" alt="" loading="lazy"></button>
+        <button class="thumb active" data-src="wwwd-img/eastriver.jpg" data-cap="Aerial plan of the East River Social Disciplinary Center archipelago" aria-label="View: Aerial plan of the archipelago" data-w="3" data-h="2"><img src="wwwd-img/eastriver.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/eastriver-s1.jpg" data-cap="Archipelago &mdash; inmate housing scattered on the water" aria-label="View: Archipelago" data-w="3" data-h="2"><img src="wwwd-img/eastriver-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/eastriver-s2.jpg" data-cap="Space of contemplation" aria-label="View: Space of contemplation" data-w="3" data-h="2"><img src="wwwd-img/eastriver-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/eastriver-s3.jpg" data-cap="Space of redemption" aria-label="View: Space of redemption" data-w="3" data-h="2"><img src="wwwd-img/eastriver-s3.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/eastriver-s4.jpg" data-cap="Axonometric &mdash; the archipelago and its programs" aria-label="View: Axonometric" data-w="1800" data-h="1165"><img src="wwwd-img/eastriver-s4.jpg" alt="" loading="lazy"></button>
       </div>
       <p class="imgcap">Aerial plan of the East River Social Disciplinary Center archipelago</p>
     </div>
@@ -349,12 +362,14 @@
       <div class="art" style="--w:16;--h:10"><img src="wwwd-img/aarondavis.jpg" alt="Model of the Aaron Davis Hall facade proposal, CCNY"></div>
       <div class="card-text">
         <h3>Aaron Davis Facade</h3>
-        <p>A facade as stage for Aaron Davis Hall &mdash; the curtain&rsquo;s symbolic and functional tactility, a skin that bisects interior and exterior.</p>
+        <p>A facade as stage for Aaron Davis Hall at CCNY. Bringing the programmatic activity of the theatre to the facade &mdash; where public and private spheres of campus are activated &mdash; questioning the purpose of performance through the curtain&rsquo;s symbolic and material tactility.</p>
       </div>
       <div class="thumbs">
-        <button class="thumb active" data-src="wwwd-img/aarondavis.jpg" data-cap="Model of the Aaron Davis Hall facade proposal, CCNY" aria-label="View: Facade proposal model"><img src="wwwd-img/aarondavis.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/aarondavis-s1.jpg" data-cap="Chainmail curtain &mdash; detail model" aria-label="View: Chainmail curtain detail"><img src="wwwd-img/aarondavis-s1.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/aarondavis-s2.jpg" data-cap="Facade model &mdash; the curtain as stage" aria-label="View: the curtain as stage"><img src="wwwd-img/aarondavis-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb active" data-src="wwwd-img/aarondavis.jpg" data-cap="Model of the Aaron Davis Hall facade proposal, CCNY" aria-label="View: Facade proposal model" data-w="16" data-h="10"><img src="wwwd-img/aarondavis.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/aarondavis-s1.jpg" data-cap="Chainmail curtain &mdash; detail model" aria-label="View: Chainmail curtain detail" data-w="16" data-h="10"><img src="wwwd-img/aarondavis-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/aarondavis-s2.jpg" data-cap="Model from above &mdash; terraces and curtain volumes" aria-label="View: Model from above" data-w="16" data-h="10"><img src="wwwd-img/aarondavis-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/aarondavis-s3.jpg" data-cap="Presentation board &mdash; the transition" aria-label="View: Presentation board" data-w="1391" data-h="1800"><img src="wwwd-img/aarondavis-s3.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/aarondavis-s4.jpg" data-cap="Wall study &mdash; layers and chainmail" aria-label="View: Wall study" data-w="1391" data-h="1800"><img src="wwwd-img/aarondavis-s4.jpg" alt="" loading="lazy"></button>
       </div>
       <p class="imgcap">Model of the Aaron Davis Hall facade proposal, CCNY</p>
     </div>
@@ -365,13 +380,15 @@
     <div class="face">
       <div class="art" style="--w:3;--h:2"><img src="wwwd-img/brownsville.jpg" alt="Brownsville neighborhood strategy map, Brooklyn"></div>
       <div class="card-text">
-        <h3>Brownsville Dwelling</h3>
-        <p>A micro-collective dwelling for Brownsville, Brooklyn &mdash; home, work, and communal gathering toward self-sufficiency: not exclusive inclusion, but inclusionary exclusion.</p>
+        <h3>Brownsville Urban Dwelling</h3>
+        <p>A micro-collective social dwelling on Belmont Avenue, Brownsville, Brooklyn. Home, work, and communal gathering hub &mdash; healthy diet, living cost, communal identity &mdash; toward self-sufficiency: not exclusive inclusion, but inclusionary exclusion.</p>
       </div>
       <div class="thumbs">
-        <button class="thumb active" data-src="wwwd-img/brownsville.jpg" data-cap="Brownsville neighborhood strategy map, Brooklyn" aria-label="View: neighborhood strategy map"><img src="wwwd-img/brownsville.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/brownsville-s1.jpg" data-cap="Brownsville mural by XMental Paint" aria-label="View: mural by XMental Paint"><img src="wwwd-img/brownsville-s1.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/brownsville-s2.jpg" data-cap="Mural by Eelco" aria-label="View: mural by Eelco"><img src="wwwd-img/brownsville-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb active" data-src="wwwd-img/brownsville.jpg" data-cap="Brownsville neighborhood strategy map, Brooklyn" aria-label="View: neighborhood strategy map" data-w="3" data-h="2"><img src="wwwd-img/brownsville.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/brownsville-s1.jpg" data-cap="Brownsville mural by XMental Paint" aria-label="View: mural by XMental Paint" data-w="3" data-h="2"><img src="wwwd-img/brownsville-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/brownsville-s2.jpg" data-cap="Mural by Eelco" aria-label="View: mural by Eelco" data-w="3" data-h="2"><img src="wwwd-img/brownsville-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/brownsville-s3.jpg" data-cap="Exploded axonometric &mdash; live, work, gather" aria-label="View: Exploded axonometric" data-w="1391" data-h="1800"><img src="wwwd-img/brownsville-s3.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/brownsville-s4.jpg" data-cap="Live / Work / Gather &mdash; board" aria-label="View: Live Work Gather board" data-w="1391" data-h="1800"><img src="wwwd-img/brownsville-s4.jpg" alt="" loading="lazy"></button>
       </div>
       <p class="imgcap">Brownsville neighborhood strategy map, Brooklyn</p>
     </div>
@@ -383,12 +400,13 @@
       <div class="art" style="--w:16;--h:10"><img src="wwwd-img/bench.jpg" alt="Pyung Sang flat bench, bent plywood seating"></div>
       <div class="card-text">
         <h3>Pyung Sang</h3>
-        <p>A series of benches in varied sizes, promoting activities beyond seating &mdash; Korea&rsquo;s traditional social bench, reimagined. With Dash Marshall.</p>
+        <p>A series of benches in varied sizes promoting activities beyond seating &mdash; Korea&rsquo;s traditional social gathering, reimagined. An unconventionally large bench holds different postures, comfortable for long durations. With Dash Marshall.</p>
       </div>
       <div class="thumbs">
-        <button class="thumb active" data-src="wwwd-img/bench.jpg" data-cap="Pyung Sang flat bench, bent plywood seating" aria-label="View: Pyung Sang flat bench"><img src="wwwd-img/bench.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/bench-s1.jpg" data-cap="Pyung Sang &mdash; joinery detail" aria-label="View: joinery detail"><img src="wwwd-img/bench-s1.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/bench-s2.jpg" data-cap="Pyung Sang &mdash; assembly axonometric" aria-label="View: assembly axonometric"><img src="wwwd-img/bench-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb active" data-src="wwwd-img/bench.jpg" data-cap="Pyung Sang flat bench, bent plywood seating" aria-label="View: Pyung Sang flat bench" data-w="16" data-h="10"><img src="wwwd-img/bench.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/bench-s1.jpg" data-cap="Pyung Sang &mdash; joinery detail" aria-label="View: joinery detail" data-w="16" data-h="10"><img src="wwwd-img/bench-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/bench-s2.jpg" data-cap="Pyung Sang &mdash; assembly axonometric" aria-label="View: assembly axonometric" data-w="16" data-h="10"><img src="wwwd-img/bench-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/bench-s3.jpg" data-cap="Beneath the bench" aria-label="View: Beneath the bench" data-w="448" data-h="299"><img src="wwwd-img/bench-s3.jpg" alt="" loading="lazy"></button>
       </div>
       <p class="imgcap">Pyung Sang flat bench, bent plywood seating</p>
     </div>
@@ -400,14 +418,128 @@
       <div class="art" style="--w:3;--h:1"><img src="wwwd-img/royalcrescent.jpg" alt="Model of the Royal Crescent, Bath"></div>
       <div class="card-text">
         <h3>Royal Crescent</h3>
-        <p>A precedent study of John Wood the Younger&rsquo;s 1774 crescent at Bath &mdash; thirty units behind a unified facade, an early <em>rus in urbe</em>, still relevant for housing in the city.</p>
+        <p>A precedent study: John Wood the Younger&rsquo;s 1774 crescent at Bath, England &mdash; thirty units behind a unified facade, integrating architecture and landscape. An early <em>rus in urbe</em>, still relevant for contemporary urban housing.</p>
       </div>
       <div class="thumbs">
-        <button class="thumb active" data-src="wwwd-img/royalcrescent.jpg" data-cap="Model of the Royal Crescent, Bath" aria-label="View: Royal Crescent model"><img src="wwwd-img/royalcrescent.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/royalcrescent-s1.jpg" data-cap="Royal Crescent model &mdash; detail" aria-label="View: model detail"><img src="wwwd-img/royalcrescent-s1.jpg" alt="" loading="lazy"></button>
-        <button class="thumb" data-src="wwwd-img/royalcrescent-s2.jpg" data-cap="Royal Crescent model &mdash; detail" aria-label="View: model detail"><img src="wwwd-img/royalcrescent-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb active" data-src="wwwd-img/royalcrescent.jpg" data-cap="Model of the Royal Crescent, Bath" aria-label="View: Royal Crescent model" data-w="3" data-h="1"><img src="wwwd-img/royalcrescent.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/royalcrescent-s1.jpg" data-cap="Royal Crescent model &mdash; detail" aria-label="View: model detail" data-w="3" data-h="1"><img src="wwwd-img/royalcrescent-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/royalcrescent-s2.jpg" data-cap="Royal Crescent model &mdash; detail" aria-label="View: model detail" data-w="3" data-h="1"><img src="wwwd-img/royalcrescent-s2.jpg" alt="" loading="lazy"></button>
       </div>
       <p class="imgcap">Model of the Royal Crescent, Bath</p>
+    </div>
+  </div>
+
+  <!-- card 11 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:2;--h:1"><img src="wwwd-img/gallery.jpg" alt="Gallery interior rendering, auction house project"></div>
+      <div class="card-text">
+        <h3>Gallery / Auction House</h3>
+        <p>A gallery and auction house &mdash; public exhibition, auction, conference, and event spaces organized around a central atrium. With Scott Melancon Architects.</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/gallery.jpg" data-cap="Gallery interior rendering" aria-label="View: Gallery interior" data-w="2" data-h="1"><img src="wwwd-img/gallery.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/gallery-s1.jpg" data-cap="Building section" aria-label="View: Building section" data-w="2" data-h="1"><img src="wwwd-img/gallery-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/gallery-s2.jpg" data-cap="Atrium rendering" aria-label="View: Atrium" data-w="2" data-h="1"><img src="wwwd-img/gallery-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/gallery-s3.jpg" data-cap="Section perspective &mdash; the atrium stair" aria-label="View: Section perspective" data-w="1800" data-h="915"><img src="wwwd-img/gallery-s3.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/gallery-s4.jpg" data-cap="Plan and section &mdash; 432 Park Avenue" aria-label="View: Plan and section" data-w="1391" data-h="1800"><img src="wwwd-img/gallery-s4.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">Gallery interior rendering</p>
+    </div>
+  </div>
+
+  <!-- card 12 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:3;--h:2"><img src="wwwd-img/vacation.jpg" alt="White model of the vacation home, aerial view"></div>
+      <div class="card-text">
+        <h3>Vacation Home</h3>
+        <p>A private residence &mdash; a vacation home studied through white models and plans, from interior to aerial view. With Dash Marshall.</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/vacation.jpg" data-cap="White model, aerial view" aria-label="View: Model aerial" data-w="3" data-h="2"><img src="wwwd-img/vacation.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/vacation-s1.jpg" data-cap="White model, interior view" aria-label="View: Model interior" data-w="3" data-h="2"><img src="wwwd-img/vacation-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/vacation-s2.jpg" data-cap="Floor plan" aria-label="View: Floor plan" data-w="3" data-h="2"><img src="wwwd-img/vacation-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/vacation-s3.jpg" data-cap="Presentation page &mdash; perspective, model, plans" aria-label="View: Presentation page" data-w="1800" data-h="1165"><img src="wwwd-img/vacation-s3.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/vacation-s4.jpg" data-cap="Presentation page &mdash; renderings and plan" aria-label="View: Renderings and plan" data-w="1800" data-h="1165"><img src="wwwd-img/vacation-s4.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">White model, aerial view</p>
+    </div>
+  </div>
+
+  <!-- card 13 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:3;--h:2"><img src="wwwd-img/korilla.jpg" alt="Korilla restaurant dining room"></div>
+      <div class="card-text">
+        <h3>Korilla</h3>
+        <p>A commercial restaurant renovation for Korilla &mdash; the dining room, a product display wall, and construction details. With Dash Marshall.</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/korilla.jpg" data-cap="Dining room" aria-label="View: Dining room" data-w="3" data-h="2"><img src="wwwd-img/korilla.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/korilla-s1.jpg" data-cap="Dining room rendering" aria-label="View: Dining room rendering" data-w="3" data-h="2"><img src="wwwd-img/korilla-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/korilla-s2.jpg" data-cap="Product display axonometric" aria-label="View: Product display" data-w="3" data-h="2"><img src="wwwd-img/korilla-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/korilla-s3.jpg" data-cap="Exploded axonometric &mdash; counter, grate light, dining table" aria-label="View: Exploded axonometric" data-w="1391" data-h="1800"><img src="wwwd-img/korilla-s3.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/korilla-s4.jpg" data-cap="The bottle wall &mdash; board" aria-label="View: Bottle wall board" data-w="1391" data-h="1800"><img src="wwwd-img/korilla-s4.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">Dining room</p>
+    </div>
+  </div>
+
+  <!-- card 14 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:3;--h:4"><img src="wwwd-img/housebyriver.jpg" alt="House by River — section perspective showing private, semi-public and public space"></div>
+      <div class="card-text">
+        <h3>House by River</h3>
+        <p>A house by the river — private life and public life divided by a semi-public outdoor pathway that acts as a buffer zone. Punctured walls divide; the open structure lets the two coexist.</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/housebyriver.jpg" data-cap="Section perspective — private, semi-public, public" aria-label="View: Section perspective" data-w="3" data-h="4"><img src="wwwd-img/housebyriver.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/housebyriver-s1.jpg" data-cap="Axonometric" aria-label="View: Axonometric" data-w="3" data-h="4"><img src="wwwd-img/housebyriver-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/housebyriver-s2.jpg" data-cap="Physical model, aerial view" aria-label="View: Model aerial" data-w="3" data-h="4"><img src="wwwd-img/housebyriver-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/housebyriver-s3.jpg" data-cap="Physical model &mdash; interior partitions" aria-label="View: Model, partitions" data-w="1800" data-h="1288"><img src="wwwd-img/housebyriver-s3.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/housebyriver-s4.jpg" data-cap="Physical model &mdash; the grid roofs" aria-label="View: Model, grid roofs" data-w="1800" data-h="1350"><img src="wwwd-img/housebyriver-s4.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">Section perspective — private, semi-public, public</p>
+    </div>
+  </div>
+
+  <!-- card 15 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:3;--h:4"><img src="wwwd-img/translation.jpg" alt="Translation — layered terrain model"></div>
+      <div class="card-text">
+        <h3>Translation</h3>
+        <p>Translating music into architecture — layered terrains explore how sound becomes spatial form.</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/translation.jpg" data-cap="Layered terrain model" aria-label="View: Terrain model" data-w="3" data-h="4"><img src="wwwd-img/translation.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/translation-s1.jpg" data-cap="Terrain study" aria-label="View: Terrain study" data-w="3" data-h="4"><img src="wwwd-img/translation-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/translation-s2.jpg" data-cap="Study model" aria-label="View: Study model" data-w="3" data-h="4"><img src="wwwd-img/translation-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/translation-s3.jpg" data-cap="John Cage, 4&prime;33&Prime; &mdash; research page" aria-label="View: John Cage score" data-w="1391" data-h="1800"><img src="wwwd-img/translation-s3.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/translation-s4.jpg" data-cap="Graphic notation &mdash; research page" aria-label="View: Graphic notation" data-w="1391" data-h="1800"><img src="wwwd-img/translation-s4.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">Layered terrain model</p>
+    </div>
+  </div>
+
+  <!-- card 16 -->
+  <div class="slide">
+    <div class="face">
+      <div class="art" style="--w:2;--h:1"><img src="wwwd-img/ontheground.jpg" alt="On the Ground — model aerial of the courtyard project"></div>
+      <div class="card-text">
+        <h3>On the Ground</h3>
+        <p>A ground-plane project for the empty lawn in front of 141 Convent Ave, City College of New York — north and south entrances studied through models.</p>
+      </div>
+      <div class="thumbs">
+        <button class="thumb active" data-src="wwwd-img/ontheground.jpg" data-cap="Model, aerial view" aria-label="View: Model aerial" data-w="2" data-h="1"><img src="wwwd-img/ontheground.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/ontheground-s1.jpg" data-cap="North entrance" aria-label="View: North entrance" data-w="2" data-h="1"><img src="wwwd-img/ontheground-s1.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/ontheground-s2.jpg" data-cap="South entrance" aria-label="View: South entrance" data-w="2" data-h="1"><img src="wwwd-img/ontheground-s2.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/ontheground-s3.jpg" data-cap="Site plan" aria-label="View: Site plan" data-w="1391" data-h="1800"><img src="wwwd-img/ontheground-s3.jpg" alt="" loading="lazy"></button>
+        <button class="thumb" data-src="wwwd-img/ontheground-s4.jpg" data-cap="Circulation diagram and section" aria-label="View: Circulation and section" data-w="1391" data-h="1800"><img src="wwwd-img/ontheground-s4.jpg" alt="" loading="lazy"></button>
+      </div>
+      <p class="imgcap">Model, aerial view</p>
     </div>
   </div>
 
@@ -417,9 +549,10 @@
   /* ----- hero: wwwd with a blinking caret; the statement stands beneath ----- */
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var statement = [
-    "A way of reading what spaces make possible.",
-    "Working through architecture, objects, and systems \u2014 tracing behavior, memory, construction, atmosphere, and care.",
-    "Where the invisible becomes visible."
+    "What would we do?",
+    "We care for what spaces make possible.",
+    "We work through architecture, objects, and thought \u2014 tracing behavior, memory, construction, history, culture, and care.",
+    "It begins with a conversation."
   ];
   var lines = Array.prototype.slice.call(document.querySelectorAll("#morph .line"));
   lines.forEach(function(el, k) { el.textContent = statement[k]; });
@@ -544,6 +677,8 @@
     btn.classList.add("active");
     var apply = function() {
       artImg.src = btn.getAttribute("data-src");
+      var aw = btn.getAttribute("data-w"), ah = btn.getAttribute("data-h");
+      if (aw && ah) { var artEl = face.querySelector(".art"); if (artEl) { artEl.style.setProperty("--w", aw); artEl.style.setProperty("--h", ah); } }
       var c = btn.getAttribute("data-cap");
       artImg.alt = c;
       if (cap) cap.textContent = c;
