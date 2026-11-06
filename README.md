@@ -13,6 +13,7 @@ This project uses a `wwwd-` prefix for major CSS classes and design tokens to av
 - `wwwd-img/` — project images. The `.jpg` files are the untouched originals.
   - `wwwd-img/web/` — WebP copies the site actually serves (same images, smaller files).
   - `wwwd-img/thumbs/` — 160px WebP thumbnails for the view buttons.
+  - `wwwd-img/cards/` — 720px WebP of each project's lead image, for the Index.
   - `wwwd-img/og.png` — the link-preview image (1200×630).
 - `objects/` — WWWD Objects sub-platform prototype (see `objects/README.md`).
 - `vercel.json` — cache headers for images and assets.
@@ -33,6 +34,16 @@ This project uses a `wwwd-` prefix for major CSS classes and design tokens to av
 3. Reference `wwwd-img/web/name.webp` in the thumb button's `data-src` (and the card's main `data-lazy`), and `wwwd-img/thumbs/name.webp` in the thumb's `data-lazy`. Set `data-w`/`data-h` to the image's pixel size.
 
 Images load only when their card is current or adjacent, so card images use `data-lazy` instead of `src`.
+
+## Project details and the Index
+
+Each card has one details line right under its title:
+
+```html
+<div class="meta"><span class="place">Chankillo, Peru</span><span class="with">Dash Marshall</span></div>
+```
+
+Fill in `place` and/or `with` (the collaborator; "with" is added automatically). Leave a span empty and it disappears. The Index (`/#index`) is built from the cards, so it updates on its own; it shows `wwwd-img/cards/<lead image>.webp` (720px), so a new card's lead image needs one there too.
 
 ## Project links
 

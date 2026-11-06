@@ -40,6 +40,8 @@
   }
   .nav a { color: #fff; text-decoration: none; opacity: 0.75; }
   .nav a:hover { opacity: 1; }
+  .nav-r a + a { margin-left: 24px; }
+  body.index-open #indexLink { opacity: 1; }
 
   /* ---------- one stage: hero opens the deck, projects flip as cards ---------- */
   .stage {
@@ -177,6 +179,20 @@
     color: rgba(255,255,255,0.62);
   }
 
+  /* location · collaborator; an empty field simply disappears */
+  .meta {
+    display: block;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 11px;
+    letter-spacing: 0.04em;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.55);
+    margin: -0.6vh 0 1.4vh;
+  }
+  .meta span:empty { display: none; }
+  .meta .with::before { content: "with "; }
+  .meta .place:not(:empty) + .with::before { content: "\00a0\00b7\00a0 with "; }
+
   /* supplementary images: quiet thumbnails that swap the main image in place */
   .thumbs {
     position: relative;
@@ -226,6 +242,64 @@
     cursor: pointer;
   }
   .counter:hover, .counter:focus-visible { opacity: 1; }
+  body.index-open .counter { display: none; }
+
+  /* the index: every project at once, each image whole, titles on one line per row */
+  .all {
+    position: fixed;
+    inset: 0;
+    z-index: 15;
+    background: #000;
+    overflow-y: auto;
+    padding: 104px 28px 72px;
+  }
+  .all[hidden] { display: none; }
+  .all-grid {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 64px 28px;
+  }
+  .all-item button {
+    all: unset;
+    display: block;
+    width: 100%;
+    cursor: pointer;
+  }
+  .all-item button:focus-visible { outline: 1px solid rgba(255,255,255,0.85); outline-offset: 8px; }
+  .all-img {
+    height: clamp(150px, 16vw, 250px);
+    display: flex;
+    align-items: flex-end;
+    margin-bottom: 16px;
+  }
+  .all-img img {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+    display: block;
+    opacity: 0.8;
+    transition: opacity 0.25s ease;
+  }
+  .all-item button:hover img, .all-item button:focus-visible img { opacity: 1; }
+  .all-num {
+    display: block;
+    font-family: "Space Mono", ui-monospace, monospace;
+    font-size: 11px;
+    color: rgba(255,255,255,0.4);
+  }
+  .all-title {
+    display: block;
+    font-size: 15px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    margin: 4px 0 6px;
+  }
+  .all-item .meta { margin: 0; }
+  @media (max-width: 1000px) {
+    .all-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  }
 
   @media (max-width: 640px) {
     .thumb { width: 46px; height: 46px; }
@@ -233,6 +307,9 @@
     .art { height: min(46vh, calc(92vw * var(--h) / var(--w))); }
     .face { gap: 2.2vh; padding: 7vh 5vw; }
     .counter { right: 20px; bottom: 16px; }
+    .all { padding: 84px 20px 56px; }
+    .all-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 16px; }
+    .all-img { height: 130px; margin-bottom: 12px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .slide { transition: none; }
@@ -245,7 +322,7 @@
 
 <nav class="nav">
   <a href="index.html">wwwd</a>
-  <a href="bio.html">Bio</a>
+  <span class="nav-r"><a href="#index" id="indexLink">Index</a><a href="bio.html">Bio</a></span>
 </nav>
 
 <div class="stage" id="stage" aria-label="project viewer">
@@ -269,6 +346,7 @@
       <div class="art" style="--w:1800;--h:1800"><img data-lazy="wwwd-img/web/chankillo.webp" alt="Aerial site plan of the Chankillo observatory project, Peru"></div>
       <div class="card-text">
         <h3>In Between Scapes</h3>
+        <div class="meta"><span class="place">Chankillo, Peru</span><span class="with"></span></div>
         <p>An observatory at Chankillo, Peru &mdash; a place that manifests as a threshold, oscillating between past and future. The project investigates interstitiality: how can space commit to a singularity without excluding one or the other?</p>
       </div>
       <div class="thumbs">
@@ -288,6 +366,7 @@
       <div class="art" style="--w:1800;--h:1165"><img data-lazy="wwwd-img/web/portsmouth.webp" alt="Atlas of event and space collage, Portsmouth Square San Francisco"></div>
       <div class="card-text">
         <h3>In-Side In</h3>
+        <div class="meta"><span class="place">Chinatown, San Francisco</span><span class="with"></span></div>
         <p>A renovation bridging Portsmouth Square and the Hilton Hotel in San Francisco&rsquo;s Chinatown. Identities are constellations of cultures collected as multiples &mdash; the project embraces this multiplicity toward an architecture of hybridity, a third space.</p>
       </div>
       <div class="thumbs">
@@ -307,6 +386,7 @@
       <div class="art" style="--w:262;--h:390"><img data-lazy="wwwd-img/web/glass.webp" alt="CNC-etched glass study for the Glass Pavilion"></div>
       <div class="card-text">
         <h3>Glass Pavilion</h3>
+        <div class="meta"><span class="place">Seagram Plaza, Manhattan</span><span class="with"></span></div>
         <p>An investigation of material utility over performance at Seagram Plaza, Manhattan. Glass hasn&rsquo;t reached its potential beyond the simple envelope &mdash; CNC-milled and etched, it expresses the tectonic values of the material: dissipating, distorted, intimate.</p>
       </div>
       <div class="thumbs">
@@ -326,6 +406,7 @@
       <div class="art" style="--w:1800;--h:1391"><img data-lazy="wwwd-img/web/jookbuin.webp" alt="Rest, Hug, Lean &mdash; three typologies of the re-woven bamboo wife"></div>
       <div class="card-text">
         <h3>Jook Bu-In</h3>
+        <div class="meta"><span class="place"></span><span class="with"></span></div>
         <p>The bamboo wife &mdash; once a revered indigenous pillow, a device that cools the body on summer days. Through deconstructing and reconstructing in hand craft, the project re-orients its cultural meaning toward a tactile communication celebrating intimacy within the public realm.</p>
       </div>
       <div class="thumbs">
@@ -345,6 +426,7 @@
       <div class="art" style="--w:481;--h:280"><img data-lazy="wwwd-img/web/kitchen.webp" alt="Collective cooking session, Kitchen within Boundaries research"></div>
       <div class="card-text">
         <h3>Kitchen within Boundaries</h3>
+        <div class="meta"><span class="place"></span><span class="with"></span></div>
         <p>Kitchen is a way of connecting bodies &mdash; spatial, biological, cultural. To constitute kitchens as centers of architecture, spaces appear as fragments hosting all walks of life: small moments as memories, encapsulating something universal, communicable prior to words.</p>
       </div>
       <div class="thumbs">
@@ -364,6 +446,7 @@
       <div class="art" style="--w:994;--h:663"><img data-lazy="wwwd-img/web/eastriver.webp" alt="Aerial plan of the East River Social Disciplinary Center archipelago"></div>
       <div class="card-text">
         <h3>East River Prison</h3>
+        <div class="meta"><span class="place">East River, Manhattan</span><span class="with"></span></div>
         <p>A social disciplinary center rising in the East River, Manhattan. Overhauling the punitive system into a rehabilitative one &mdash; humanitarian discipline through collaboration, enhanced living cells, and rehabilitative programs &mdash; challenging the prison typology as a whole.</p>
       </div>
       <div class="thumbs">
@@ -383,6 +466,7 @@
       <div class="art" style="--w:1391;--h:1800"><img data-lazy="wwwd-img/web/aarondavis.webp" alt="Presentation board — model photographs"></div>
       <div class="card-text">
         <h3>Aaron Davis Facade</h3>
+        <div class="meta"><span class="place">City College of New York</span><span class="with"></span></div>
         <p>A facade as stage for Aaron Davis Hall at CCNY. Bringing the programmatic activity of the theatre to the facade &mdash; where public and private spheres of campus are activated &mdash; questioning the purpose of performance through the curtain&rsquo;s symbolic and material tactility.</p>
       </div>
       <div class="thumbs">
@@ -401,6 +485,7 @@
       <div class="art" style="--w:1391;--h:1800"><img data-lazy="wwwd-img/web/brownsville.webp" alt="Brownsville neighborhood strategy map, Brooklyn"></div>
       <div class="card-text">
         <h3>Brownsville Urban Dwelling</h3>
+        <div class="meta"><span class="place">Brownsville, Brooklyn</span><span class="with"></span></div>
         <p>A micro-collective social dwelling on Belmont Avenue, Brownsville, Brooklyn. Home, work, and communal gathering hub &mdash; healthy diet, living cost, communal identity &mdash; toward self-sufficiency: not exclusive inclusion, but inclusionary exclusion.</p>
       </div>
       <div class="thumbs">
@@ -420,7 +505,8 @@
       <div class="art" style="--w:701;--h:467"><img data-lazy="wwwd-img/web/bench.webp" alt="Pyung Sang flat bench, bent plywood seating"></div>
       <div class="card-text">
         <h3>Pyung Sang</h3>
-        <p>A series of benches in varied sizes promoting activities beyond seating &mdash; Korea&rsquo;s traditional social gathering, reimagined. An unconventionally large bench holds different postures, comfortable for long durations. With Dash Marshall.</p>
+        <div class="meta"><span class="place"></span><span class="with">Dash Marshall</span></div>
+        <p>A series of benches in varied sizes promoting activities beyond seating &mdash; Korea&rsquo;s traditional social gathering, reimagined. An unconventionally large bench holds different postures, comfortable for long durations.</p>
       </div>
       <div class="thumbs">
         <button class="thumb active" data-src="wwwd-img/web/bench.webp" data-cap="Pyung Sang flat bench, bent plywood seating" aria-label="View: Pyung Sang flat bench" data-w="701" data-h="467"><img data-lazy="wwwd-img/thumbs/bench.webp" alt=""></button>
@@ -438,6 +524,7 @@
       <div class="art" style="--w:753;--h:248"><img data-lazy="wwwd-img/web/royalcrescent.webp" alt="Model of the Royal Crescent, Bath"></div>
       <div class="card-text">
         <h3>Royal Crescent</h3>
+        <div class="meta"><span class="place">Bath, England</span><span class="with"></span></div>
         <p>A precedent study: John Wood the Younger&rsquo;s 1774 crescent at Bath, England &mdash; thirty units behind a unified facade, integrating architecture and landscape. An early <em>rus in urbe</em>, still relevant for contemporary urban housing.</p>
       </div>
       <div class="thumbs">
@@ -455,7 +542,8 @@
       <div class="art" style="--w:1800;--h:922"><img data-lazy="wwwd-img/web/gallery.webp" alt="Gallery interior rendering, auction house project"></div>
       <div class="card-text">
         <h3>Gallery / Auction House</h3>
-        <p>A gallery and auction house &mdash; public exhibition, auction, conference, and event spaces organized around a central atrium. With Scott Melancon Architects.</p>
+        <div class="meta"><span class="place">432 Park Avenue, Manhattan</span><span class="with">Scott Melancon Architects</span></div>
+        <p>A gallery and auction house &mdash; public exhibition, auction, conference, and event spaces organized around a central atrium.</p>
       </div>
       <div class="thumbs">
         <button class="thumb active" data-src="wwwd-img/web/gallery.webp" data-cap="Gallery interior rendering" aria-label="View: Gallery interior" data-w="1800" data-h="922"><img data-lazy="wwwd-img/thumbs/gallery.webp" alt=""></button>
@@ -473,7 +561,8 @@
       <div class="art" style="--w:573;--h:404"><img data-lazy="wwwd-img/web/vacation.webp" alt="White model of the vacation home, aerial view"></div>
       <div class="card-text">
         <h3>Vacation Home</h3>
-        <p>A private residence &mdash; a vacation home studied through white models and plans, from interior to aerial view. With Dash Marshall.</p>
+        <div class="meta"><span class="place"></span><span class="with">Dash Marshall</span></div>
+        <p>A private residence &mdash; a vacation home studied through white models and plans, from interior to aerial view.</p>
       </div>
       <div class="thumbs">
         <button class="thumb active" data-src="wwwd-img/web/vacation.webp" data-cap="White model, aerial view" aria-label="View: Model aerial" data-w="573" data-h="404"><img data-lazy="wwwd-img/thumbs/vacation.webp" alt=""></button>
@@ -492,7 +581,8 @@
       <div class="art" style="--w:1391;--h:1800"><img data-lazy="wwwd-img/web/korilla.webp" alt="Korilla restaurant dining room"></div>
       <div class="card-text">
         <h3>Korilla</h3>
-        <p>A commercial restaurant renovation for Korilla &mdash; the dining room, a product display wall, and construction details. With Dash Marshall.</p>
+        <div class="meta"><span class="place"></span><span class="with">Dash Marshall</span></div>
+        <p>A commercial restaurant renovation for Korilla &mdash; the dining room, a product display wall, and construction details.</p>
       </div>
       <div class="thumbs">
         <button class="thumb active" data-src="wwwd-img/web/korilla.webp" data-cap="Dining room" aria-label="View: Dining room" data-w="1391" data-h="1800"><img data-lazy="wwwd-img/thumbs/korilla.webp" alt=""></button>
@@ -511,6 +601,7 @@
       <div class="art" style="--w:1391;--h:1800"><img data-lazy="wwwd-img/web/housebyriver.webp" alt="House by River — section perspective showing private, semi-public and public space"></div>
       <div class="card-text">
         <h3>House by River</h3>
+        <div class="meta"><span class="place"></span><span class="with"></span></div>
         <p>A house by the river — private life and public life divided by a semi-public outdoor pathway that acts as a buffer zone. Punctured walls divide; the open structure lets the two coexist.</p>
       </div>
       <div class="thumbs">
@@ -530,6 +621,7 @@
       <div class="art" style="--w:1391;--h:1800"><img data-lazy="wwwd-img/web/translation.webp" alt="Translation — layered terrain model"></div>
       <div class="card-text">
         <h3>Translation</h3>
+        <div class="meta"><span class="place"></span><span class="with"></span></div>
         <p>Translating music into architecture — layered terrains explore how sound becomes spatial form.</p>
       </div>
       <div class="thumbs">
@@ -549,6 +641,7 @@
       <div class="art" style="--w:1210;--h:907"><img data-lazy="wwwd-img/web/ontheground.webp" alt="On the Ground — model aerial of the courtyard project"></div>
       <div class="card-text">
         <h3>On the Ground</h3>
+        <div class="meta"><span class="place">City College of New York</span><span class="with"></span></div>
         <p>A ground-plane project for the empty lawn in front of 141 Convent Ave, City College of New York — north and south entrances studied through models.</p>
       </div>
       <div class="thumbs">
@@ -565,6 +658,11 @@
 </div>
 
 <button class="counter" id="counter" type="button"></button>
+
+<!-- the index: built from the cards above, so a card's details only live in one place -->
+<section class="all" id="all" aria-label="All projects" hidden>
+  <ol class="all-grid" id="allGrid"></ol>
+</section>
 
 <script>
   /* ----- hero: wwwd with a blinking caret; the statement stands beneath ----- */
@@ -650,13 +748,77 @@
     if (i === 0 && typeof q !== "undefined" && q) focusSearch();
   }
   show(idxFromHash(), true);
-  window.addEventListener("popstate", function() { show(idxFromHash(), true); });
   counter.addEventListener("click", function() { show(step(1)); });
+
+  /* ----- the index: every project at once, opened at #index ----- */
+  var all = document.getElementById("all");
+  var allGrid = document.getElementById("allGrid");
+  var indexLink = document.getElementById("indexLink");
+  var indexOpen = false;
+  slides.forEach(function(s, k) {
+    if (k === 0) return;
+    var lead = s.querySelector(".thumb");
+    var li = document.createElement("li");
+    li.className = "all-item";
+    var b = document.createElement("button");
+    b.type = "button";
+    var box = document.createElement("span");
+    box.className = "all-img";
+    var im = document.createElement("img");
+    im.loading = "lazy";
+    im.alt = "";
+    im.width = lead.getAttribute("data-w");
+    im.height = lead.getAttribute("data-h");
+    im.src = "wwwd-img/cards/" + lead.getAttribute("data-src").split("/").pop();
+    box.appendChild(im);
+    var num = document.createElement("span");
+    num.className = "all-num";
+    num.textContent = (k < 10 ? "0" : "") + k;
+    var title = document.createElement("span");
+    title.className = "all-title";
+    title.textContent = s.querySelector(".card-text h3").textContent;
+    var meta = document.createElement("span");
+    meta.className = "meta";
+    meta.innerHTML = s.querySelector(".meta").innerHTML;
+    b.appendChild(box); b.appendChild(num); b.appendChild(title); b.appendChild(meta);
+    b.addEventListener("click", function() { closeIndex(); show(k); });
+    li.appendChild(b);
+    allGrid.appendChild(li);
+  });
+  function openIndex(fromHistory) {
+    indexOpen = true;
+    all.hidden = false;
+    document.body.classList.add("index-open");
+    stage.inert = true;
+    document.title = "Index — wwwd";
+    if (!fromHistory && location.hash !== "#index") history.pushState(null, "", "#index");
+  }
+  function closeIndex() {
+    indexOpen = false;
+    all.hidden = true;
+    document.body.classList.remove("index-open");
+    stage.inert = false;
+  }
+  indexLink.addEventListener("click", function(e) {
+    e.preventDefault();
+    if (indexOpen) { closeIndex(); show(idx); }
+    else openIndex();
+  });
+  window.addEventListener("keydown", function(e) {
+    if (indexOpen && e.key === "Escape") { closeIndex(); show(idx); }
+  });
+  window.addEventListener("popstate", function() {
+    if (location.hash === "#index") { openIndex(true); return; }
+    if (indexOpen) closeIndex();
+    show(idxFromHash(), true);
+  });
+  if (location.hash === "#index") openIndex(true);
 
   /* the wwwd mark returns to the hero without reloading */
   var logoLink = document.querySelector(".nav a");
   if (logoLink) logoLink.addEventListener("click", function(e) {
     e.preventDefault();
+    if (indexOpen) closeIndex();
     show(0);
   });
 
@@ -671,7 +833,7 @@
     projects.push({
       i: pi,
       title: ps.querySelector(".card-text h3").textContent,
-      desc: ps.querySelector(".card-text p").textContent
+      desc: ps.querySelector(".card-text p").textContent + " " + ps.querySelector(".meta").textContent
     });
   }
   function esc(s) {
@@ -797,6 +959,7 @@
 
   /* keyboard: arrows flip cards */
   window.addEventListener("keydown", function(e) {
+    if (indexOpen) return;
     if (e.key === "ArrowRight") show(step(1));
     else if (e.key === "ArrowLeft") show(step(-1));
   });
