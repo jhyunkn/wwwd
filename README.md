@@ -1,34 +1,47 @@
-# WWWD Website Prototype
+# WWWD
 
-Initial static prototype for the WWWD website.
+Static website for WWWD (What Would We Do?), deployed on Vercel: https://wwwd-theta.vercel.app
 
 ## Project naming conventions
 
 This project uses a `wwwd-` prefix for major CSS classes and design tokens to avoid confusion with other website projects and make future maintenance easier.
 
-Examples:
-- `wwwd-site-header`
-- `wwwd-hero-section`
-- `--wwwd-color-bg`
-
 ## Files
 
-- `index.html` — homepage prototype
-- `styles.css` — project-specific styles
+- `index.html` — the homepage: a hero card followed by a deck of project cards. Styles and script are inline.
+- `bio.html` — bio and contact.
+- `wwwd-img/` — project images. The `.jpg` files are the untouched originals.
+  - `wwwd-img/web/` — WebP copies the site actually serves (same images, smaller files).
+  - `wwwd-img/thumbs/` — 160px WebP thumbnails for the view buttons.
+  - `wwwd-img/og.png` — the link-preview image (1200×630).
+- `objects/` — WWWD Objects sub-platform prototype (see `objects/README.md`).
+- `vercel.json` — cache headers for images and assets.
+- `publish-wwwd.ps1` — commits and pushes to `main`.
+
+## Adding or replacing an image
+
+1. Put the original `.jpg` in `wwwd-img/`.
+2. Make the WebP copy and thumbnail with the same base name, e.g. with Python + Pillow:
+
+   ```python
+   from PIL import Image
+   im = Image.open("wwwd-img/name.jpg").convert("RGB")
+   im.save("wwwd-img/web/name.webp", "WEBP", quality=84, method=6)
+   im.thumbnail((160, 160)); im.save("wwwd-img/thumbs/name.webp", "WEBP", quality=78, method=6)
+   ```
+
+3. Reference `wwwd-img/web/name.webp` in the thumb button's `data-src` (and the card's main `data-lazy`), and `wwwd-img/thumbs/name.webp` in the thumb's `data-lazy`. Set `data-w`/`data-h` to the image's pixel size.
+
+Images load only when their card is current or adjacent, so card images use `data-lazy` instead of `src`.
+
+## Project links
+
+Each project has its own address from its title, e.g. `/#glass-pavilion`. Renaming a project's `<h3>` changes its link.
 
 ## Local preview
 
-Open `index.html` in a browser.
+Open `index.html` in a browser, or run `npx serve .`.
 
-## Deploy flow
+## Deploy
 
-1. Commit changes to GitHub.
-2. Connect the GitHub repo to Vercel.
-3. Vercel deploys the current state of `main`.
-
-## Next recommended steps
-
-- Add project detail pages
-- Add real imagery or drawings
-- Add a stronger inquiry/contact flow
-- Decide whether to remain static or move to a component-based framework later
+Vercel deploys `main` to production; pushing any other branch creates a preview deployment.
