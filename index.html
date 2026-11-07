@@ -263,6 +263,8 @@
     display: grid;
     grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 64px 28px;
+    container-type: inline-size;
+    --h: calc((100cqw - 84px) / 4); /* one column's width: every cell is this tall */
   }
   .all-item button {
     all: unset;
@@ -271,20 +273,26 @@
     cursor: pointer;
   }
   .all-item button:focus-visible { outline: 1px solid rgba(255,255,255,0.85); outline-offset: 8px; }
-  /* each cell is the same square; the image sits centered in it, cropped to
-     the nearest of four shapes so the grid reads as a set */
+  /* every cell is a square (two squares for a wide item), so titles line up
+     across a row; inside it the image is centered at its own shape and size
+     (sizes set in the script) */
   .all-img {
     display: flex;
     align-items: center;
     justify-content: center;
-    aspect-ratio: 1 / 1;
+    height: var(--h);
     margin-bottom: 16px;
   }
-  .all-frame { display: block; overflow: hidden; }
-  .all-frame.portrait { height: 90%; aspect-ratio: 4 / 5; }
-  .all-frame.square   { width: 80%;  aspect-ratio: 1 / 1; }
-  .all-frame.land     { width: 100%; aspect-ratio: 3 / 2; }
-  .all-frame.wide     { width: 100%; aspect-ratio: 2 / 1; }
+  /* --r: the image's shape, --s: its size; it fits inside the cell */
+  .all-frame {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: var(--r);
+    width: calc(var(--s) * min(100%, var(--h) * var(--r)));
+  }
+  @media (min-width: 1001px) {
+    .all-item.wide { grid-column: span 2; }
+  }
   .all-img img {
     width: 100%;
     height: 100%;
@@ -310,7 +318,7 @@
   }
   .all-item .meta { margin: 0; }
   @media (max-width: 1000px) {
-    .all-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .all-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); --h: calc((100cqw - 56px) / 3); }
   }
 
   @media (max-width: 640px) {
@@ -320,7 +328,7 @@
     .face { gap: 2.2vh; padding: 7vh 5vw; }
     .counter { right: 20px; bottom: 16px; }
     .all { padding: 84px 20px 56px; }
-    .all-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 16px; }
+    .all-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 16px; --h: calc((100cqw - 16px) / 2); }
     .all-img { margin-bottom: 12px; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -373,7 +381,7 @@
   </div>
 
   <!-- card 2 -->
-  <div class="slide">
+  <div class="slide" data-index="wide">
     <div class="face">
       <div class="art" style="--w:1800;--h:1165"><img data-lazy="wwwd-img/web/portsmouth.webp" alt="Atlas of event and space collage, Portsmouth Square San Francisco"></div>
       <div class="card-text">
@@ -453,7 +461,7 @@
   </div>
 
   <!-- card 6 -->
-  <div class="slide">
+  <div class="slide" data-index="wide">
     <div class="face">
       <div class="art" style="--w:994;--h:663"><img data-lazy="wwwd-img/web/eastriver.webp" alt="Aerial plan of the East River Social Disciplinary Center archipelago"></div>
       <div class="card-text">
@@ -512,7 +520,7 @@
   </div>
 
   <!-- card 9 -->
-  <div class="slide">
+  <div class="slide" data-index="wide">
     <div class="face">
       <div class="art" style="--w:701;--h:467"><img data-lazy="wwwd-img/web/bench.webp" alt="Pyung Sang flat bench, bent plywood seating"></div>
       <div class="card-text">
@@ -531,7 +539,7 @@
   </div>
 
   <!-- card 10 -->
-  <div class="slide">
+  <div class="slide" data-index="wide">
     <div class="face">
       <div class="art" style="--w:753;--h:248"><img data-lazy="wwwd-img/web/royalcrescent.webp" alt="Model of the Royal Crescent, Bath"></div>
       <div class="card-text">
@@ -771,6 +779,18 @@
   var allGrid = document.getElementById("allGrid");
   var indexLink = document.getElementById("indexLink");
   var indexOpen = false;
+  /* each image is cropped lightly to the nearest of a few shapes and drawn
+     at one of a few sizes, so neighbors differ; wide items stay large */
+  var SHAPES = [2/3, 4/5, 1, 4/3, 3/2, 2, 3];
+  var SIZES = [1, 0.78, 0.9, 0.72, 0.96, 0.84];
+  function sizeFrame(frame, ratio, k, wide) {
+    var shape = SHAPES.reduce(function(a, b) {
+      return Math.abs(Math.log(b / ratio)) < Math.abs(Math.log(a / ratio)) ? b : a;
+    });
+    var size = wide ? (k % 2 ? 0.9 : 1) : SIZES[k % SIZES.length];
+    frame.style.setProperty("--r", shape);
+    frame.style.setProperty("--s", size);
+  }
   slides.forEach(function(s, k) {
     if (k === 0) return;
     var lead = s.querySelector(".thumb");
@@ -786,9 +806,10 @@
     im.width = lead.getAttribute("data-w");
     im.height = lead.getAttribute("data-h");
     im.src = "wwwd-img/cards/" + lead.getAttribute("data-src").split("/").pop();
-    var ratio = lead.getAttribute("data-w") / lead.getAttribute("data-h");
     var frame = document.createElement("span");
-    frame.className = "all-frame " + (ratio < 0.9 ? "portrait" : ratio < 1.2 ? "square" : ratio < 1.8 ? "land" : "wide");
+    frame.className = "all-frame";
+    sizeFrame(frame, lead.getAttribute("data-w") / lead.getAttribute("data-h"), k, s.getAttribute("data-index") === "wide");
+    if (s.getAttribute("data-index") === "wide") li.classList.add("wide");
     frame.appendChild(im);
     box.appendChild(frame);
     var num = document.createElement("span");
