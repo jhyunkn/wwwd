@@ -260,17 +260,16 @@
   .all:not([hidden]) { animation: all-in 0.35s ease; }
   @keyframes all-in { from { opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { .all:not([hidden]) { animation: none; } }
-  /* justified rows: every image in a row shares one height, widths follow
-     each image's shape, and each row fills the width, so the gaps are even
-     (widths set in the script) */
+  /* columns of equal width; each project fills its column at its own shape
+     and sits right under the one above, so every gap is the same (positions
+     set in the script; --cols and --gap read from here) */
   .all-grid {
     list-style: none;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: flex-start;
-    gap: 56px 28px;
+    position: relative;
+    --cols: 5;
+    --gap: 28px;
   }
-  .all-item { flex: none; }
+  .all-item { position: absolute; top: 0; left: 0; }
   .all-item button {
     all: unset;
     display: block;
@@ -281,7 +280,7 @@
   .all-img {
     display: block;
     overflow: hidden;
-    margin-bottom: 16px;
+    margin-bottom: 14px;
   }
   .all-img img {
     width: 100%;
@@ -307,6 +306,7 @@
     margin: 4px 0 6px;
   }
   .all-item .meta { margin: 0; }
+  @media (max-width: 1000px) { .all-grid { --cols: 4; } }
   @media (max-width: 1000px) {
 
   }
@@ -318,7 +318,7 @@
     .face { gap: 2.2vh; padding: 7vh 5vw; }
     .counter { right: 20px; bottom: 16px; }
     .all { padding: 84px 20px 56px; }
-    .all-grid { gap: 40px 16px; }
+    .all-grid { --cols: 2; --gap: 16px; }
     .all-img { margin-bottom: 12px; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -529,7 +529,7 @@
   </div>
 
   <!-- card 10 -->
-  <div class="slide" data-cover="wwwd-img/index/royalcrescent.webp" data-cover-w="753" data-cover-h="248">
+  <div class="slide" data-cover="wwwd-img/index/royalcrescent-s1.webp" data-cover-w="252" data-cover-h="126">
     <div class="face">
       <div class="art" style="--w:753;--h:248"><img data-lazy="wwwd-img/web/royalcrescent.webp" alt="Model of the Royal Crescent, Bath"></div>
       <div class="card-text">
@@ -796,7 +796,8 @@
     im.height = s.getAttribute("data-cover-h");
     im.src = cover;
     /* very tall or very wide images are cropped a little so rows stay balanced */
-    li.ratio = Math.min(3, Math.max(0.7, im.width / im.height));
+    li.ratio = Math.min(2, Math.max(0.7, im.width / im.height));
+    box.style.aspectRatio = li.ratio;
     box.appendChild(im);
     var num = document.createElement("span");
     num.className = "all-num";
@@ -812,45 +813,28 @@
     li.appendChild(b);
     allGrid.appendChild(li);
   });
-  /* split the projects, in order, into as many rows as fit at about the
-     target height, balanced so no row is left half empty; then scale each
-     row so it spans the width exactly */
+  /* masonry: each project, in order, goes to the shortest column, directly
+     under what's there, with the same gap across and down */
   function layoutIndex() {
     var W = allGrid.clientWidth;
     if (!W) return;
-    var gap = parseFloat(getComputedStyle(allGrid).columnGap) || 0;
-    var target = W < 600 ? 96 : W < 1000 ? 140 : W / 8.5;
-    var items = Array.prototype.slice.call(allGrid.children);
-    var r = items.map(function(li) { return li.ratio; });
-    var n = r.length, total = r.reduce(function(a, b) { return a + b; }, 0);
-    var rows = Math.max(1, Math.min(n, Math.round(total * target / W)));
-    /* best[k][i]: least uneven way to put the first i items in k rows */
-    var pre = [0];
-    r.forEach(function(x, i) { pre.push(pre[i] + x); });
-    var avg = total / rows, best = [], cut = [];
-    for (var k = 0; k <= rows; k++) { best.push([]); cut.push([]); }
-    for (var i = 0; i <= n; i++) best[0][i] = i ? Infinity : 0;
-    for (k = 1; k <= rows; k++) {
-      for (i = 0; i <= n; i++) {
-        best[k][i] = Infinity;
-        for (var j = k - 1; j < i; j++) {
-          var d = pre[i] - pre[j] - avg, c = best[k - 1][j] + d * d;
-          if (c < best[k][i]) { best[k][i] = c; cut[k][i] = j; }
-        }
-      }
-    }
-    var end = n;
-    for (k = rows; k >= 1; k--) {
-      var start = cut[k][end], row = items.slice(start, end);
-      var h = (W - gap * (row.length - 1)) / (pre[end] - pre[start]);
-      row.forEach(function(li) {
-        li.style.width = Math.floor(li.ratio * h * 100) / 100 + "px";
-        li.querySelector(".all-img").style.height = h + "px";
-      });
-      end = start;
-    }
+    var cs = getComputedStyle(allGrid);
+    var cols = parseInt(cs.getPropertyValue("--cols"), 10) || 1;
+    var gap = parseFloat(cs.getPropertyValue("--gap")) || 0;
+    var cw = (W - gap * (cols - 1)) / cols;
+    var heights = [];
+    for (var c = 0; c < cols; c++) heights.push(0);
+    Array.prototype.forEach.call(allGrid.children, function(li) {
+      li.style.width = cw + "px";
+      var c = heights.indexOf(Math.min.apply(null, heights));
+      li.style.transform = "translate(" + c * (cw + gap) + "px," + heights[c] + "px)";
+      heights[c] += li.offsetHeight + gap;
+    });
+    allGrid.style.height = Math.max.apply(null, heights) - gap + "px";
   }
   window.addEventListener("resize", function() { if (indexOpen) layoutIndex(); });
+  /* captions change height once the web fonts arrive */
+  if (document.fonts) document.fonts.ready.then(function() { if (indexOpen) layoutIndex(); });
   function openIndex(fromHistory) {
     indexOpen = true;
     all.hidden = false;

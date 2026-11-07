@@ -45,7 +45,7 @@ Each card has one details line right under its title:
 
 Fill in `place` and/or `with` (the collaborator; "with" is added automatically). Leave a span empty and it disappears. The Index (`/#index`) is built from the cards, so it updates on its own. Its image is chosen per project on the card: `<div class="slide" data-cover="wwwd-img/index/name.webp" data-cover-w="1000" data-cover-h="750">` — pick a full-bleed view (a photo, render or model) rather than a whole presentation sheet, or crop into the drawing.
 
-In the Index, images sit in justified rows: every image in a row has the same height, widths follow each image's shape, and each row fills the page width, so the spacing is even. Very tall or very wide images are cropped slightly (between 0.7 and 3 wide-to-tall).
+In the Index, projects sit in equal-width columns (5 on desktop, 4 on tablet, 2 on phones); each image fills its column at its own shape (cropped slightly if taller than 0.7 or wider than 2 wide-to-tall), and each project goes, in order, under the shortest column, so every gap is the same.
 
 ## Project links
 
