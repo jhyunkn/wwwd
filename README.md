@@ -45,6 +45,8 @@ Each card has one details line right under its title:
 
 Fill in `place` and/or `with` (the collaborator; "with" is added automatically). Leave a span empty and it disappears. The Index (`/#index`) is built from the cards, so it updates on its own; it shows `wwwd-img/cards/<lead image>.webp` (720px), so a new card's lead image needs one there too.
 
+In the Index, each lead image is cropped lightly to the nearest of a few shapes and shown at one of a few sizes (`SHAPES` and `SIZES` in the script). To make a project span two columns on desktop, mark its card `<div class="slide" data-index="wide">`; keep the number of wide projects such that rows fill evenly (16 projects + 4 wide = 20 cells = 5 rows of 4), and place them so each lands with room in its row.
+
 ## Project links
 
 Each project has its own address from its title, e.g. `/#glass-pavilion`. Renaming a project's `<h3>` changes its link.
