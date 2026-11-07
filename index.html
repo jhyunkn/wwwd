@@ -275,13 +275,13 @@
     cursor: pointer;
   }
   .all-item button:focus-visible { outline: 1px solid rgba(255,255,255,0.85); outline-offset: 8px; }
-  /* every cell is a square (two squares for a wide item), so titles line up
-     across a row; inside it the image is centered at its own shape and size
-     (sizes set in the script) */
+  /* every cell is one column tall, so titles line up across a row; the image
+     sits at its own shape and size on the cell's bottom-left corner, flush
+     with the text under it (sizes set in the script) */
   .all-img {
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: flex-end;
+    justify-content: flex-start;
     height: var(--h);
     margin-bottom: 16px;
   }
