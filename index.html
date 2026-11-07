@@ -254,6 +254,9 @@
     padding: 104px 28px 72px;
   }
   .all[hidden] { display: none; }
+  .all:not([hidden]) { animation: all-in 0.35s ease; }
+  @keyframes all-in { from { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .all:not([hidden]) { animation: none; } }
   .all-grid {
     list-style: none;
     display: grid;
@@ -729,12 +732,11 @@
   }
   function afterChange(fromHistory) {
     loadSlide(slides[idx]);
-    loadSlide(slides[step(1)]);
-    loadSlide(slides[step(-1)]);
+    if (idx > 0) { loadSlide(slides[step(1)]); loadSlide(slides[step(-1)]); }
     if (idx > 0) warmViews(slides[idx]);
     function pad(n) { return (n < 10 ? "0" : "") + n; }
     counter.textContent = idx ? pad(idx) + " / " + pad(NPROJ) : NPROJ + " projects →";
-    counter.setAttribute("aria-label", idx ? "Next project" : "View projects");
+    counter.setAttribute("aria-label", idx ? "Next project" : "Index of all projects");
     document.title = idx ? slides[idx].querySelector(".card-text h3").textContent + " — wwwd" : baseTitle;
     var hash = idx ? "#" + slugs[idx] : "";
     if (!fromHistory && location.hash !== hash) {
@@ -747,8 +749,13 @@
     afterChange(fromHistory);
     if (i === 0 && typeof q !== "undefined" && q) focusSearch();
   }
+  /* from the hero, forward opens the Index; there is nothing behind the hero */
+  function go(dir) {
+    if (idx === 0) { if (dir > 0) openIndex(); return; }
+    show(step(dir));
+  }
   show(idxFromHash(), true);
-  counter.addEventListener("click", function() { show(step(1)); });
+  counter.addEventListener("click", function() { go(1); });
 
   /* ----- the index: every project at once, opened at #index ----- */
   var all = document.getElementById("all");
@@ -887,6 +894,8 @@
       }
     } else if (e.key === "Escape") {
       exitSearch();
+    } else if (e.key === "ArrowRight" && !q.value) {
+      openIndex(); /* nothing typed: the arrow moves on, as it does on a card */
     }
     e.stopPropagation(); /* hero typing never reaches the card-flip keys */
   });
@@ -953,15 +962,15 @@
     }
     cool = true;
     flippedAt = Date.now();
-    show(step(d > 0 ? 1 : -1));
+    go(d > 0 ? 1 : -1);
     coolTimer = setTimeout(unlockWheel, 700);
   }, { passive: false });
 
   /* keyboard: arrows flip cards */
   window.addEventListener("keydown", function(e) {
     if (indexOpen) return;
-    if (e.key === "ArrowRight") show(step(1));
-    else if (e.key === "ArrowLeft") show(step(-1));
+    if (e.key === "ArrowRight") go(1);
+    else if (e.key === "ArrowLeft") go(-1);
   });
 
   /* drag with 1:1 tracking: the deck follows the finger, release to snap or settle */
@@ -982,6 +991,7 @@
     slides.forEach(function(s) { s.style.transform = ""; s.style.opacity = ""; });
   }
   function layoutDrag(dx) {
+    if (idx === 0) return; /* the hero doesn't slide; a swipe opens the Index */
     var w = stage.clientWidth;
     var cur = slideAt(0), prv = slideAt(-1), nxt = slideAt(1);
     slides.forEach(function(s) {
@@ -1034,7 +1044,14 @@
       stage.classList.remove("noanim");
       sx = null;
       if (th) { swapImage(th); return; }
-      if (z) show(neighborIdx(z.classList.contains("next") ? 1 : -1));
+      if (z) go(z.classList.contains("next") ? 1 : -1);
+      return;
+    }
+    if (idx === 0) {
+      clearInline();
+      if (dx0 <= -Math.min(120, stage.clientWidth * 0.15)) openIndex();
+      sx = null;
+      setTimeout(function() { dragged = false; }, 0);
       return;
     }
     settling = true;

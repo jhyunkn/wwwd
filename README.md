@@ -8,7 +8,7 @@ This project uses a `wwwd-` prefix for major CSS classes and design tokens to av
 
 ## Files
 
-- `index.html` — the homepage: a hero card followed by a deck of project cards. Styles and script are inline.
+- `index.html` — the homepage: a hero card, then the Index of all projects, then a deck of project cards. Styles and script are inline.
 - `bio.html` — bio and contact.
 - `wwwd-img/` — project images. The `.jpg` files are the untouched originals.
   - `wwwd-img/web/` — WebP copies the site actually serves (same images, smaller files).
