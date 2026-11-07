@@ -31,7 +31,8 @@ This project uses a `wwwd-` prefix for major CSS classes and design tokens to av
    im.thumbnail((160, 160)); im.save("wwwd-img/thumbs/name.webp", "WEBP", quality=78, method=6)
    ```
 
-3. Reference `wwwd-img/web/name.webp` in the thumb button's `data-src` (and the card's main `data-lazy`), and `wwwd-img/thumbs/name.webp` in the thumb's `data-lazy`. Set `data-w`/`data-h` to the image's pixel size.
+3. Each view is one picture, never a whole presentation sheet: crop single images out of a board (drop the paper margin and text) before converting.
+4. Reference `wwwd-img/web/name.webp` in the thumb button's `data-src` (and the card's main `data-lazy`), and `wwwd-img/thumbs/name.webp` in the thumb's `data-lazy`. Set `data-w`/`data-h` to the image's pixel size.
 
 Images load only when their card is current or adjacent, so card images use `data-lazy` instead of `src`.
 
