@@ -263,10 +263,10 @@
   .all-grid {
     list-style: none;
     display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(5, minmax(0, 1fr));
     gap: 64px 28px;
     container-type: inline-size;
-    --h: calc((100cqw - 84px) / 4); /* one column's width: every cell is this tall */
+    --h: calc((100cqw - 112px) / 5); /* one column's width: every cell is this tall */
   }
   .all-item button {
     all: unset;
@@ -290,7 +290,7 @@
     display: block;
     overflow: hidden;
     aspect-ratio: var(--r);
-    width: calc(var(--s) * min(100%, var(--h) * var(--r)));
+    width: calc(var(--k, 1) * var(--s) * min(100%, var(--h) * var(--r)));
   }
   @media (min-width: 1001px) {
     .all-item.wide { grid-column: span 2; }
@@ -320,7 +320,7 @@
   }
   .all-item .meta { margin: 0; }
   @media (max-width: 1000px) {
-    .all-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); --h: calc((100cqw - 56px) / 3); }
+    .all-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); --h: calc((100cqw - 84px) / 4); }
   }
 
   @media (max-width: 640px) {
@@ -330,7 +330,7 @@
     .face { gap: 2.2vh; padding: 7vh 5vw; }
     .counter { right: 20px; bottom: 16px; }
     .all { padding: 84px 20px 56px; }
-    .all-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 16px; --h: calc((100cqw - 16px) / 2); }
+    .all-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 16px; --h: calc((100cqw - 16px) / 2); --k: 0.82; }
     .all-img { margin-bottom: 12px; }
   }
   @media (prefers-reduced-motion: reduce) {
