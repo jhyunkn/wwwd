@@ -62,9 +62,6 @@
     overflow: hidden;
   }
   .slide.active { opacity: 1; pointer-events: auto; }
-  /* while dragging: cards track the finger 1:1, no easing */
-  .stage.dragging .slide { transition: none; }
-  .stage.noanim .slide { transition: none !important; }
 
   /* hero card: the text opening, bottom-aligned like the original hero */
   .hero-panel {
@@ -224,9 +221,10 @@
     max-width: 82vw;
   }
 
-  .zone { position: fixed; top: 0; bottom: 0; width: 50%; z-index: 5; cursor: pointer; }
-  .zone.prev { left: 0; }
-  .zone.next { right: 0; }
+  .zone { position: fixed; top: 0; bottom: 0; width: 50%; z-index: 5; }
+  .zone.prev { left: 0; cursor: w-resize; }
+  .zone.next { right: 0; cursor: e-resize; }
+  .hero-card .zone { cursor: default; }
 
   /* where you are in the deck; on the hero it hints that the deck exists */
   .counter {
@@ -242,6 +240,10 @@
     cursor: pointer;
   }
   .counter:hover, .counter:focus-visible { opacity: 1; }
+  .counter { display: flex; align-items: baseline; gap: 14px; }
+  .counter .pos { color: rgba(255,255,255,0.45); }
+  .counter .arr { font-size: 22px; line-height: 0; position: relative; top: 2px; transition: transform 0.2s ease; }
+  .counter:hover .arr, .counter:focus-visible .arr { transform: translateX(4px); }
   body.index-open .counter { display: none; }
   body.index-open .nav { background: linear-gradient(#000 55%, rgba(0,0,0,0)); padding-bottom: 36px; }
 
@@ -752,8 +754,15 @@
     if (idx > 0) { loadSlide(slides[step(1)]); loadSlide(slides[step(-1)]); }
     if (idx > 0) warmViews(slides[idx]);
     function pad(n) { return (n < 10 ? "0" : "") + n; }
-    counter.textContent = idx ? pad(idx) + " / " + pad(NPROJ) : NPROJ + " projects →";
-    counter.setAttribute("aria-label", idx ? "Next project" : "Index of all projects");
+    if (!idx) {
+      counter.innerHTML = NPROJ + " projects <span class=\"arr\">→</span>";
+      counter.setAttribute("aria-label", "Index of all projects");
+    } else {
+      var nextName = idx < NPROJ ? slides[idx + 1].querySelector(".card-text h3").textContent : "Index";
+      counter.innerHTML = "<span class=\"pos\">" + pad(idx) + " / " + pad(NPROJ) + "</span>"
+        + "<span class=\"nx\">Next &mdash; " + nextName + "</span><span class=\"arr\">→</span>";
+      counter.setAttribute("aria-label", "Next project: " + nextName);
+    }
     document.title = idx ? slides[idx].querySelector(".card-text h3").textContent + " — wwwd" : baseTitle;
     var hash = idx ? "#" + slugs[idx] : "";
     if (!fromHistory && location.hash !== hash) {
@@ -772,7 +781,11 @@
     show(step(dir));
   }
   show(idxFromHash(), true);
-  counter.addEventListener("click", function() { go(1); });
+  /* the last project's arrow leads back to the Index */
+  counter.addEventListener("click", function() {
+    if (idx === NPROJ) openIndex();
+    else go(1);
+  });
 
   /* ----- the index: every project at once, opened at #index ----- */
   var all = document.getElementById("all");
@@ -968,8 +981,6 @@
     }, 220);
   }
 
-  var dragged = false, settling = false;
-
   /* taps are handled in pointerup (see endDrag): iOS Safari can suppress the
      synthesized click when layout changed mid-gesture. this click handler
      exists only for keyboard / assistive-tech activation of thumbnails
@@ -980,12 +991,24 @@
     if (t) swapImage(t);
   });
 
-  /* wheel flips cards, one at a time; trackpad momentum keeps sending
-     events after a flip, so stay locked until that stream goes quiet */
+  /* within a project, scroll / click / swipe / arrow keys step through its
+     images; the "Next" button moves to the next project */
+  function view(dir) {
+    var ts = Array.prototype.slice.call(slides[idx].querySelectorAll(".thumb"));
+    var k = ts.indexOf(slides[idx].querySelector(".thumb.active")) + dir;
+    if (k < 0 || k >= ts.length) return;
+    swapImage(ts[k]);
+  }
+  function move(dir) {
+    if (idx === 0) go(dir);
+    else view(dir);
+  }
+
+  /* the wheel steps one image at a time; trackpad momentum keeps sending
+     events after a step, so stay locked until that stream goes quiet */
   var cool = false, coolTimer = null, flippedAt = 0;
   function unlockWheel() { cool = false; }
   stage.addEventListener("wheel", function(e) {
-    if (settling) return;
     var d = Math.abs(e.deltaY) >= Math.abs(e.deltaX) ? e.deltaY : e.deltaX;
     if (d === 0) return;
     e.preventDefault();
@@ -996,135 +1019,43 @@
     }
     cool = true;
     flippedAt = Date.now();
-    go(d > 0 ? 1 : -1);
+    move(d > 0 ? 1 : -1);
     coolTimer = setTimeout(unlockWheel, 700);
   }, { passive: false });
 
-  /* keyboard: arrows flip cards */
+  /* keyboard: arrows step through images */
   window.addEventListener("keydown", function(e) {
     if (indexOpen) return;
-    if (e.key === "ArrowRight") go(1);
-    else if (e.key === "ArrowLeft") go(-1);
+    if (e.key === "ArrowRight" || e.key === "ArrowDown") { e.preventDefault(); move(1); }
+    else if (e.key === "ArrowLeft" || e.key === "ArrowUp") { e.preventDefault(); move(-1); }
   });
 
-  /* drag with 1:1 tracking: the deck follows the finger, release to snap or settle */
-  var sx = null, dx0 = 0, dragging = false;
-
-  function neighborIdx(o) { /* o = -1 | 1 */
-    if (idx === 0) return o > 0 ? 1 : NPROJ;
-    var k = idx + o;
-    if (k < 1) return NPROJ; /* card 1, back: the deck wraps; the hero stays behind */
-    if (k > NPROJ) return 1;
-    return k;
-  }
-  function slideAt(o) {
-    if (o === 0) return slides[idx];
-    return slides[neighborIdx(o)];
-  }
-  function clearInline() {
-    slides.forEach(function(s) { s.style.transform = ""; s.style.opacity = ""; });
-  }
-  function layoutDrag(dx) {
-    if (idx === 0) return; /* the hero doesn't slide; a swipe opens the Index */
-    var w = stage.clientWidth;
-    var cur = slideAt(0), prv = slideAt(-1), nxt = slideAt(1);
-    slides.forEach(function(s) {
-      if (s !== cur && s !== prv && s !== nxt) { s.style.transform = ""; s.style.opacity = ""; }
-    });
-    cur.style.transform = "translateX(" + dx + "px)";
-    prv.style.transform = "translateX(" + (-w + dx) + "px)";
-    prv.style.opacity = "1";
-    nxt.style.transform = "translateX(" + (w + dx) + "px)";
-    nxt.style.opacity = "1";
-  }
-  function resetDeck() {
-    stage.classList.add("noanim");
-    clearInline();
-    markActive();
-    void stage.offsetWidth;
-    stage.classList.remove("noanim");
-  }
-
+  /* taps and swipes: a tap on a thumbnail shows it, a tap on either half
+     steps back or forward, a sideways swipe steps too (from the hero, a
+     swipe left opens the Index) */
+  var sx = null, dx0 = 0;
   stage.addEventListener("pointerdown", function(e) {
-    if (settling) return;
-    sx = e.clientX; dx0 = 0; dragging = true; dragged = false;
-    stage.classList.add("dragging");
-    layoutDrag(0);
+    sx = e.clientX; dx0 = 0;
   });
   stage.addEventListener("pointermove", function(e) {
-    if (!dragging || sx === null) return;
-    dx0 = e.clientX - sx;
-    if (!dragged && Math.abs(dx0) > 10) {
-      dragged = true;
-      /* keep receiving the gesture even if it leaves the window; taps stay uncaptured */
-      try { stage.setPointerCapture(e.pointerId); } catch (err) {}
-    }
-    layoutDrag(dx0);
+    if (sx !== null) dx0 = e.clientX - sx;
   });
-  function endDrag(e) {
-    if (!dragging) return;
-    dragging = false;
-    stage.classList.remove("dragging");
+  stage.addEventListener("pointerup", function(e) {
+    if (sx === null) return;
+    sx = null;
     if (Math.abs(dx0) < 10) {
-      /* a tap: iOS Safari can suppress the synthesized click when layout
-         changed mid-gesture, so act here on what's under the finger */
-      var tapEl = (e && typeof e.clientX === "number")
-        ? document.elementFromPoint(e.clientX, e.clientY) : null;
+      /* iOS Safari can suppress the synthesized click when layout changed
+         mid-gesture, so act here on what's under the finger */
+      var tapEl = document.elementFromPoint(e.clientX, e.clientY);
       var th = tapEl && tapEl.closest ? tapEl.closest(".thumb") : null;
       var z = !th && tapEl && tapEl.closest ? tapEl.closest(".zone") : null;
-      stage.classList.add("noanim");
-      clearInline();
-      void stage.offsetWidth;
-      stage.classList.remove("noanim");
-      sx = null;
-      if (th) { swapImage(th); return; }
-      if (z) go(z.classList.contains("next") ? 1 : -1);
+      if (th) swapImage(th);
+      else if (z) move(z.classList.contains("next") ? 1 : -1);
       return;
     }
-    if (idx === 0) {
-      clearInline();
-      if (dx0 <= -Math.min(120, stage.clientWidth * 0.15)) openIndex();
-      sx = null;
-      setTimeout(function() { dragged = false; }, 0);
-      return;
-    }
-    settling = true;
-    var w = stage.clientWidth;
-    var thr = Math.min(120, w * 0.15);
-    void stage.offsetWidth; /* reflow so the settle animates from the dragged positions */
-    if (Math.abs(dx0) >= thr) {
-      var dir = dx0 < 0 ? 1 : -1;
-      var ni = neighborIdx(dir);
-      var cur = slideAt(0), tgt = slides[ni], other = slideAt(-dir);
-      cur.style.transform = "translateX(" + (-dir * w) + "px)";
-      tgt.style.transform = "translateX(0px)";
-      other.style.opacity = "0";
-      setTimeout(function() {
-        idx = ni;
-        resetDeck();
-        afterChange(false);
-        settling = false;
-      }, 360);
-    } else {
-      slideAt(0).style.transform = "translateX(0px)";
-      slideAt(-1).style.opacity = "0";
-      slideAt(1).style.opacity = "0";
-      setTimeout(function() { resetDeck(); settling = false; }, 360);
-    }
-    sx = null;
-    setTimeout(function() { dragged = false; }, 0);
-  }
-  stage.addEventListener("pointerup", endDrag);
-  stage.addEventListener("pointercancel", function() {
-    if (!dragging) return;
-    dragging = false;
-    stage.classList.remove("dragging");
-    stage.classList.add("noanim");
-    clearInline();
-    void stage.offsetWidth;
-    stage.classList.remove("noanim");
-    sx = null; dx0 = 0;
+    if (Math.abs(dx0) >= Math.min(120, stage.clientWidth * 0.15)) move(dx0 < 0 ? 1 : -1);
   });
+  stage.addEventListener("pointercancel", function() { sx = null; dx0 = 0; });
 </script>
 </body>
 </html>
