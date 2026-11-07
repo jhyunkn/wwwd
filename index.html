@@ -260,14 +260,17 @@
   .all:not([hidden]) { animation: all-in 0.35s ease; }
   @keyframes all-in { from { opacity: 0; } }
   @media (prefers-reduced-motion: reduce) { .all:not([hidden]) { animation: none; } }
+  /* justified rows: every image in a row shares one height, widths follow
+     each image's shape, and each row fills the width, so the gaps are even
+     (widths set in the script) */
   .all-grid {
     list-style: none;
-    display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 64px 28px;
-    container-type: inline-size;
-    --h: calc((100cqw - 112px) / 5); /* one column's width: every cell is this tall */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 56px 28px;
   }
+  .all-item { flex: none; }
   .all-item button {
     all: unset;
     display: block;
@@ -275,25 +278,10 @@
     cursor: pointer;
   }
   .all-item button:focus-visible { outline: 1px solid rgba(255,255,255,0.85); outline-offset: 8px; }
-  /* every cell is one column tall, so titles line up across a row; the image
-     sits at its own shape and size on the cell's bottom-left corner, flush
-     with the text under it (sizes set in the script) */
   .all-img {
-    display: flex;
-    align-items: flex-end;
-    justify-content: flex-start;
-    height: var(--h);
-    margin-bottom: 16px;
-  }
-  /* --r: the image's shape, --s: its size; it fits inside the cell */
-  .all-frame {
     display: block;
     overflow: hidden;
-    aspect-ratio: var(--r);
-    width: calc(var(--k, 1) * var(--s) * min(100%, var(--h) * var(--r)));
-  }
-  @media (min-width: 1001px) {
-    .all-item.wide { grid-column: span 2; }
+    margin-bottom: 16px;
   }
   .all-img img {
     width: 100%;
@@ -320,7 +308,7 @@
   }
   .all-item .meta { margin: 0; }
   @media (max-width: 1000px) {
-    .all-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); --h: calc((100cqw - 84px) / 4); }
+
   }
 
   @media (max-width: 640px) {
@@ -330,7 +318,7 @@
     .face { gap: 2.2vh; padding: 7vh 5vw; }
     .counter { right: 20px; bottom: 16px; }
     .all { padding: 84px 20px 56px; }
-    .all-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 16px; --h: calc((100cqw - 16px) / 2); --k: 0.82; }
+    .all-grid { gap: 40px 16px; }
     .all-img { margin-bottom: 12px; }
   }
   @media (prefers-reduced-motion: reduce) {
@@ -403,7 +391,7 @@
   </div>
 
   <!-- card 3 -->
-  <div class="slide" data-index="wide" data-cover="wwwd-img/index/glass-s2.webp" data-cover-w="1400" data-cover-h="817">
+  <div class="slide" data-cover="wwwd-img/index/glass-s2.webp" data-cover-w="1400" data-cover-h="817">
     <div class="face">
       <div class="art" style="--w:262;--h:390"><img data-lazy="wwwd-img/web/glass.webp" alt="CNC-etched glass study for the Glass Pavilion"></div>
       <div class="card-text">
@@ -463,7 +451,7 @@
   </div>
 
   <!-- card 6 -->
-  <div class="slide" data-index="wide" data-cover="wwwd-img/index/eastriver-s1.webp" data-cover-w="1400" data-cover-h="933">
+  <div class="slide" data-cover="wwwd-img/index/eastriver-s1.webp" data-cover-w="1400" data-cover-h="933">
     <div class="face">
       <div class="art" style="--w:994;--h:663"><img data-lazy="wwwd-img/web/eastriver.webp" alt="Aerial plan of the East River Social Disciplinary Center archipelago"></div>
       <div class="card-text">
@@ -541,7 +529,7 @@
   </div>
 
   <!-- card 10 -->
-  <div class="slide" data-cover="wwwd-img/index/royalcrescent-s1.webp" data-cover-w="482" data-cover-h="94">
+  <div class="slide" data-cover="wwwd-img/index/royalcrescent.webp" data-cover-w="753" data-cover-h="248">
     <div class="face">
       <div class="art" style="--w:753;--h:248"><img data-lazy="wwwd-img/web/royalcrescent.webp" alt="Model of the Royal Crescent, Bath"></div>
       <div class="card-text">
@@ -559,7 +547,7 @@
   </div>
 
   <!-- card 11 -->
-  <div class="slide" data-index="wide" data-cover="wwwd-img/index/gallery-s1.webp" data-cover-w="1400" data-cover-h="717">
+  <div class="slide" data-cover="wwwd-img/index/gallery-s1.webp" data-cover-w="1400" data-cover-h="717">
     <div class="face">
       <div class="art" style="--w:1800;--h:922"><img data-lazy="wwwd-img/web/gallery.webp" alt="Gallery interior rendering, auction house project"></div>
       <div class="card-text">
@@ -618,7 +606,7 @@
   </div>
 
   <!-- card 14 -->
-  <div class="slide" data-index="wide" data-cover="wwwd-img/index/housebyriver-s4.webp" data-cover-w="1400" data-cover-h="1050">
+  <div class="slide" data-cover="wwwd-img/index/housebyriver-s4.webp" data-cover-w="1400" data-cover-h="1050">
     <div class="face">
       <div class="art" style="--w:1391;--h:1800"><img data-lazy="wwwd-img/web/housebyriver.webp" alt="House by River — section perspective showing private, semi-public and public space"></div>
       <div class="card-text">
@@ -792,18 +780,6 @@
   var allGrid = document.getElementById("allGrid");
   var indexLink = document.getElementById("indexLink");
   var indexOpen = false;
-  /* each image is cropped lightly to the nearest of a few shapes and drawn
-     at one of a few sizes, so neighbors differ; wide items stay large */
-  var SHAPES = [2/3, 4/5, 1, 4/3, 3/2, 2, 3];
-  var SIZES = [1, 0.78, 0.9, 0.72, 0.96, 0.84];
-  function sizeFrame(frame, ratio, k, wide) {
-    var shape = SHAPES.reduce(function(a, b) {
-      return Math.abs(Math.log(b / ratio)) < Math.abs(Math.log(a / ratio)) ? b : a;
-    });
-    var size = wide ? (k % 2 ? 0.9 : 1) : SIZES[k % SIZES.length];
-    frame.style.setProperty("--r", shape);
-    frame.style.setProperty("--s", size);
-  }
   slides.forEach(function(s, k) {
     if (k === 0) return;
     var cover = s.getAttribute("data-cover");
@@ -819,12 +795,9 @@
     im.width = s.getAttribute("data-cover-w");
     im.height = s.getAttribute("data-cover-h");
     im.src = cover;
-    var frame = document.createElement("span");
-    frame.className = "all-frame";
-    sizeFrame(frame, im.width / im.height, k, s.getAttribute("data-index") === "wide");
-    if (s.getAttribute("data-index") === "wide") li.classList.add("wide");
-    frame.appendChild(im);
-    box.appendChild(frame);
+    /* very tall or very wide images are cropped a little so rows stay balanced */
+    li.ratio = Math.min(3, Math.max(0.7, im.width / im.height));
+    box.appendChild(im);
     var num = document.createElement("span");
     num.className = "all-num";
     num.textContent = (k < 10 ? "0" : "") + k;
@@ -839,9 +812,49 @@
     li.appendChild(b);
     allGrid.appendChild(li);
   });
+  /* split the projects, in order, into as many rows as fit at about the
+     target height, balanced so no row is left half empty; then scale each
+     row so it spans the width exactly */
+  function layoutIndex() {
+    var W = allGrid.clientWidth;
+    if (!W) return;
+    var gap = parseFloat(getComputedStyle(allGrid).columnGap) || 0;
+    var target = W < 600 ? 96 : W < 1000 ? 140 : W / 8.5;
+    var items = Array.prototype.slice.call(allGrid.children);
+    var r = items.map(function(li) { return li.ratio; });
+    var n = r.length, total = r.reduce(function(a, b) { return a + b; }, 0);
+    var rows = Math.max(1, Math.min(n, Math.round(total * target / W)));
+    /* best[k][i]: least uneven way to put the first i items in k rows */
+    var pre = [0];
+    r.forEach(function(x, i) { pre.push(pre[i] + x); });
+    var avg = total / rows, best = [], cut = [];
+    for (var k = 0; k <= rows; k++) { best.push([]); cut.push([]); }
+    for (var i = 0; i <= n; i++) best[0][i] = i ? Infinity : 0;
+    for (k = 1; k <= rows; k++) {
+      for (i = 0; i <= n; i++) {
+        best[k][i] = Infinity;
+        for (var j = k - 1; j < i; j++) {
+          var d = pre[i] - pre[j] - avg, c = best[k - 1][j] + d * d;
+          if (c < best[k][i]) { best[k][i] = c; cut[k][i] = j; }
+        }
+      }
+    }
+    var end = n;
+    for (k = rows; k >= 1; k--) {
+      var start = cut[k][end], row = items.slice(start, end);
+      var h = (W - gap * (row.length - 1)) / (pre[end] - pre[start]);
+      row.forEach(function(li) {
+        li.style.width = Math.floor(li.ratio * h * 100) / 100 + "px";
+        li.querySelector(".all-img").style.height = h + "px";
+      });
+      end = start;
+    }
+  }
+  window.addEventListener("resize", function() { if (indexOpen) layoutIndex(); });
   function openIndex(fromHistory) {
     indexOpen = true;
     all.hidden = false;
+    layoutIndex();
     document.body.classList.add("index-open");
     stage.inert = true;
     document.title = "Index — wwwd";
