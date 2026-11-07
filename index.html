@@ -243,6 +243,7 @@
   }
   .counter:hover, .counter:focus-visible { opacity: 1; }
   body.index-open .counter { display: none; }
+  body.index-open .nav { background: linear-gradient(#000 55%, rgba(0,0,0,0)); padding-bottom: 36px; }
 
   /* the index: every project at once, each image whole, titles on one line per row */
   .all {
@@ -270,17 +271,25 @@
     cursor: pointer;
   }
   .all-item button:focus-visible { outline: 1px solid rgba(255,255,255,0.85); outline-offset: 8px; }
+  /* each cell is the same square; the image sits centered in it, cropped to
+     the nearest of four shapes so the grid reads as a set */
   .all-img {
-    height: clamp(150px, 16vw, 250px);
     display: flex;
-    align-items: flex-end;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 1 / 1;
     margin-bottom: 16px;
   }
+  .all-frame { display: block; overflow: hidden; }
+  .all-frame.portrait { height: 90%; aspect-ratio: 4 / 5; }
+  .all-frame.square   { width: 80%;  aspect-ratio: 1 / 1; }
+  .all-frame.land     { width: 100%; aspect-ratio: 3 / 2; }
+  .all-frame.wide     { width: 100%; aspect-ratio: 2 / 1; }
   .all-img img {
-    max-width: 100%;
-    max-height: 100%;
-    width: auto;
-    height: auto;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
     display: block;
     opacity: 0.8;
     transition: opacity 0.25s ease;
@@ -312,7 +321,7 @@
     .counter { right: 20px; bottom: 16px; }
     .all { padding: 84px 20px 56px; }
     .all-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 44px 16px; }
-    .all-img { height: 130px; margin-bottom: 12px; }
+    .all-img { margin-bottom: 12px; }
   }
   @media (prefers-reduced-motion: reduce) {
     .slide { transition: none; }
@@ -777,7 +786,11 @@
     im.width = lead.getAttribute("data-w");
     im.height = lead.getAttribute("data-h");
     im.src = "wwwd-img/cards/" + lead.getAttribute("data-src").split("/").pop();
-    box.appendChild(im);
+    var ratio = lead.getAttribute("data-w") / lead.getAttribute("data-h");
+    var frame = document.createElement("span");
+    frame.className = "all-frame " + (ratio < 0.9 ? "portrait" : ratio < 1.2 ? "square" : ratio < 1.8 ? "land" : "wide");
+    frame.appendChild(im);
+    box.appendChild(frame);
     var num = document.createElement("span");
     num.className = "all-num";
     num.textContent = (k < 10 ? "0" : "") + k;
