@@ -13,7 +13,7 @@ This project uses a `wwwd-` prefix for major CSS classes and design tokens to av
 - `wwwd-img/` — project images. The `.jpg` files are the untouched originals.
   - `wwwd-img/web/` — WebP copies the site actually serves (same images, smaller files).
   - `wwwd-img/thumbs/` — 160px WebP thumbnails for the view buttons.
-  - `wwwd-img/cards/` — 720px WebP of each project's lead image, for the Index.
+  - `wwwd-img/index/` — the image each project shows in the Index (up to 1000px; 1400px for wide ones), sometimes cropped from a sheet.
   - `wwwd-img/og.png` — the link-preview image (1200×630).
 - `objects/` — WWWD Objects sub-platform prototype (see `objects/README.md`).
 - `vercel.json` — cache headers for images and assets.
@@ -43,9 +43,9 @@ Each card has one details line right under its title:
 <div class="meta"><span class="place">Chankillo, Peru</span><span class="with">Dash Marshall</span></div>
 ```
 
-Fill in `place` and/or `with` (the collaborator; "with" is added automatically). Leave a span empty and it disappears. The Index (`/#index`) is built from the cards, so it updates on its own; it shows `wwwd-img/cards/<lead image>.webp` (720px), so a new card's lead image needs one there too.
+Fill in `place` and/or `with` (the collaborator; "with" is added automatically). Leave a span empty and it disappears. The Index (`/#index`) is built from the cards, so it updates on its own. Its image is chosen per project on the card: `<div class="slide" data-cover="wwwd-img/index/name.webp" data-cover-w="1000" data-cover-h="750">` — pick a full-bleed view (a photo, render or model) rather than a whole presentation sheet, or crop into the drawing.
 
-In the Index, each lead image is cropped lightly to the nearest of a few shapes and shown at one of a few sizes (`SHAPES` and `SIZES` in the script). To make a project span two columns on desktop, mark its card `<div class="slide" data-index="wide">`; keep the number of wide projects such that rows fill evenly (16 projects + 4 wide = 20 cells = 5 rows of 4), and place them so each lands with room in its row.
+In the Index, each lead image is cropped lightly to the nearest of a few shapes and shown at one of a few sizes (`SHAPES` and `SIZES` in the script). To make a project span two columns on desktop, mark its card `<div class="slide" data-index="wide">`; keep the number of wide projects such that rows fill evenly (16 projects + 4 wide = 20 cells = 5 rows of 4), and place them so each lands with room in its row. Wide projects should have a large landscape image.
 
 ## Project links
 
