@@ -141,7 +141,7 @@
   .hero-panel h1 .wwwd { transition: opacity 0.3s ease; }
   h1.typing .wwwd { opacity: 0.28; }
   .hero-card { cursor: pointer; }
-  .hero-card input { cursor: pointer; }
+  .hero-panel h1 .wwwd { cursor: text; }
   .zoom {
     font-family: "Space Mono", ui-monospace, monospace;
     font-size: 11px; letter-spacing: 0.04em;
@@ -1218,8 +1218,15 @@
     if (sx === null) return;
     sx = null;
     if (Math.abs(dx0) < 10) {
-      /* the hero is a door: a tap anywhere on it opens the Index */
-      if (idx === 0) { openIndex(); return; }
+      /* the hero is a door, except where you type: a tap on the wordmark,
+         the caret or a search result keeps working; any other tap on the
+         hero opens the Index */
+      if (idx === 0) {
+        var t = e.target;
+        var inType = t && t.closest ? (t.closest("input") || t.closest(".wwwd") || t.closest("#results")) : null;
+        if (!inType) openIndex();
+        return;
+      }
       /* a tap on the image itself enlarges it; taps elsewhere step views */
       var artImg = slides[idx].querySelector(".art img");
       if (artImg) {
