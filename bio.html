@@ -116,9 +116,9 @@
 </div>
 
 <script>
-  /* wwwd types itself out; then someone keeps rethinking it —
-     backspacing from the end to where the new reading diverges,
-     pausing, and typing forward again. never on a metronome. */
+  /* wwwd types itself out; then each reading starts over from the
+     beginning — the whole line is erased and typed fresh, never
+     edited from where the last one left off. never on a metronome. */
   var reduceMotion = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
   var expansions = [
     "what would we do?",
@@ -135,11 +135,6 @@
   var timers = [];
   function later(fn, ms) { timers.push(setTimeout(fn, ms)); }
   function clearTimers() { timers.forEach(clearTimeout); timers = []; }
-  function commonPrefix(a, b) {
-    var n = Math.min(a.length, b.length), i = 0;
-    while (i < n && a.charAt(i) === b.charAt(i)) i++;
-    return i;
-  }
   function typeChars(text, done) {
     var i = 0;
     (function tick() {
@@ -159,13 +154,12 @@
   }
   /* a person doesn't cycle on a metronome */
   function hold() { return 4200 + Math.random() * 1200; }
-  function playReading(idx, fullRetype) {
+  function playReading(idx) {
     var target = expansions[idx];
     if (reduceMotion) { typeLine.textContent = target; return; }
-    var start = fullRetype ? 0 : commonPrefix(typeLine.textContent, target);
-    backspaceTo(start, function() {
-      later(function() {   /* the breath before retyping */
-        typeChars(target.slice(start), function() {
+    backspaceTo(0, function() {
+      later(function() {   /* the breath before starting over */
+        typeChars(target, function() {
           later(advance, hold());
         });
       }, 320 + Math.random() * 200);
@@ -174,7 +168,7 @@
   function advance() {
     clearTimers();
     expIdx = (expIdx + 1) % expansions.length;
-    playReading(expIdx, false);
+    playReading(expIdx);
   }
   typeLine.addEventListener("click", advance);
   if (reduceMotion) {
@@ -184,7 +178,7 @@
     typeChars("wwwd", function() {
       later(function() {
         expIdx = 0;
-        playReading(0, true);   /* backspace all the way, retype completely */
+        playReading(0);
       }, 1000);
     });
   }

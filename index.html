@@ -69,6 +69,7 @@
   .hero-panel {
     width: 100%;
     height: 100%;
+    will-change: transform;
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
@@ -124,6 +125,11 @@
   #results button:hover, #results button:focus-visible { color: #fff; outline: none; }
   #results .none { color: rgba(255,255,255,0.35); padding: 5px 0; }
   #results .esc { color: rgba(255,255,255,0.3); padding: 5px 0; }
+  .hero-panel .line { animation: line-in 0.7s ease both; }
+  .hero-panel .line:nth-child(2) { animation-delay: 0.12s; }
+  .hero-panel .line:nth-child(3) { animation-delay: 0.24s; }
+  .hero-panel .line:nth-child(4) { animation-delay: 0.36s; }
+  @keyframes line-in { from { opacity: 0; transform: translateY(6px); } }
   .hint {
     font-family: "Space Mono", ui-monospace, monospace;
     font-size: 12px; letter-spacing: 0.02em;
@@ -134,6 +140,8 @@
   .hint.gone { opacity: 0; }
   .hero-panel h1 .wwwd { transition: opacity 0.3s ease; }
   h1.typing .wwwd { opacity: 0.28; }
+  .hero-card { cursor: pointer; }
+  .hero-card input { cursor: pointer; }
   .zoom {
     font-family: "Space Mono", ui-monospace, monospace;
     font-size: 11px; letter-spacing: 0.04em;
@@ -143,6 +151,7 @@
     z-index: 6;
   }
   .zoom:hover, .zoom:focus-visible { color: #fff; outline: none; }
+  .zoom:active { transform: scale(0.95); }
   .lightbox {
     position: fixed; inset: 0; z-index: 50;
     background: rgba(0,0,0,0.96);
@@ -167,6 +176,10 @@
     font-size: 26px; line-height: 1; color: rgba(255,255,255,0.75); cursor: pointer;
   }
   .lb-close:hover { color: #fff; }
+  .lightbox:not([hidden]) { animation: lb-in 0.3s ease both; }
+  @keyframes lb-in { from { opacity: 0; } }
+  .lb-stage img { animation: lb-img-in 0.35s ease both; }
+  @keyframes lb-img-in { from { opacity: 0; transform: scale(0.97); } }
   .morph {
     letter-spacing: -0.04em;
     max-width: 680px;
@@ -200,6 +213,8 @@
     flex-shrink: 0;
     cursor: zoom-in;
   }
+  .art img.swap-in { animation: art-in 0.3s ease both; }
+  @keyframes art-in { from { transform: scale(1.012); } }
   .art img {
     max-width: 100%;
     max-height: 100%;
@@ -257,7 +272,9 @@
     opacity: 0.38;
     transition: opacity 0.3s ease;
   }
-  .thumb img { width: 100%; height: 100%; object-fit: contain; display: block; }
+  .thumb img { width: 100%; height: 100%; object-fit: contain; display: block; transition: opacity 0.2s ease, transform 0.2s ease; }
+  .thumb.active img { transform: scale(1.05); }
+  .thumb:active { transform: scale(0.96); }
   .thumb:hover { opacity: 0.8; }
   .thumb.active { opacity: 1; outline: 1px solid rgba(255,255,255,0.85); outline-offset: 3px; }
   .imgcap {
@@ -287,7 +304,9 @@
     color: #fff;
     opacity: 0.75;
     cursor: pointer;
+    transition: transform 0.12s ease;
   }
+  .counter:active { transform: scale(0.96); }
   .counter:hover, .counter:focus-visible { opacity: 1; }
   .counter { display: flex; align-items: baseline; gap: 14px; }
   .counter .pos { color: rgba(255,255,255,0.45); }
@@ -344,6 +363,8 @@
   .all:not([hidden]) .all-item { animation: all-item-in 0.35s ease both; animation-delay: calc(var(--i, 0) * 40ms); }
   @keyframes all-item-in { from { opacity: 0; } }
   .all-item.current button { outline: 1px solid rgba(255,255,255,0.85); outline-offset: 8px; }
+  .all:not([hidden]) { animation: all-in 0.4s ease both; }
+  @keyframes all-in { from { opacity: 0; transform: translateY(14px); } }
   .all-num {
     display: block;
     font-family: "Space Mono", ui-monospace, monospace;
@@ -377,6 +398,7 @@
     .slide { transition: none; }
     .art img { transition: none; }
     .thumb { transition: none; }
+    .hero-panel .line, .lightbox, .lb-stage img, .art img.swap-in { animation: none; }
   }
 </style>
 </head>
@@ -1043,6 +1065,28 @@
     heroSearch.classList.toggle("typing", typing);
     hint.classList.toggle("gone", typing);
   });
+  /* the hero leans a few pixels toward the pointer — the page is alive */
+  var heroPanelEl = document.querySelector(".hero-panel");
+  var driftX = 0, driftY = 0, driftTX = 0, driftTY = 0, driftOn = false;
+  function driftTick() {
+    driftX += (driftTX - driftX) * 0.08;
+    driftY += (driftTY - driftY) * 0.08;
+    if (idx === 0 && !indexOpen) {
+      heroPanelEl.style.transform = "translate(" + driftX.toFixed(2) + "px," + driftY.toFixed(2) + "px)";
+      requestAnimationFrame(driftTick);
+    } else {
+      driftOn = false;
+      heroPanelEl.style.transform = "";
+    }
+  }
+  if (!reduceMotion && !coarsePointer && heroPanelEl) {
+    stage.addEventListener("pointermove", function(e) {
+      if (idx !== 0 || indexOpen) return;
+      driftTX = (e.clientX / window.innerWidth - 0.5) * 10;
+      driftTY = (e.clientY / window.innerHeight - 0.5) * 8;
+      if (!driftOn) { driftOn = true; requestAnimationFrame(driftTick); }
+    });
+  }
   q.addEventListener("keydown", function(e) {
     if (e.key === "Enter") {
       if (q.value.trim()) {
@@ -1088,6 +1132,9 @@
     setTimeout(function() {
       apply();
       artImg.style.opacity = "1";
+      artImg.classList.remove("swap-in");
+      void artImg.offsetWidth;
+      artImg.classList.add("swap-in");
     }, 220);
   }
 
@@ -1120,8 +1167,9 @@
     if (ts.length) swapImage(ts[ts.length - 1]);
   }
   function move(dir) {
-    if (idx === 0) go(dir);
-    else view(dir);
+    /* the hero is a door: any step out of it opens the Index */
+    if (idx === 0) { openIndex(); return; }
+    view(dir);
   }
 
   /* the wheel steps one image at a time; trackpad momentum keeps sending
@@ -1170,6 +1218,8 @@
     if (sx === null) return;
     sx = null;
     if (Math.abs(dx0) < 10) {
+      /* the hero is a door: a tap anywhere on it opens the Index */
+      if (idx === 0) { openIndex(); return; }
       /* a tap on the image itself enlarges it; taps elsewhere step views */
       var artImg = slides[idx].querySelector(".art img");
       if (artImg) {
