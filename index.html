@@ -139,6 +139,8 @@
     font-size: 11px; letter-spacing: 0.04em;
     color: rgba(255,255,255,0.45);
     background: none; border: 0; padding: 4px 0; cursor: pointer;
+    position: relative;
+    z-index: 6;
   }
   .zoom:hover, .zoom:focus-visible { color: #fff; outline: none; }
   .lightbox {
@@ -205,6 +207,8 @@
     height: auto;
     object-fit: contain;
     display: block;
+    position: relative;
+    z-index: 6;
     transition: opacity 0.22s ease;
   }
   .card-text { text-align: center; max-width: 660px; }
@@ -337,7 +341,7 @@
   }
   .all-item button:hover img, .all-item button:focus-visible img { opacity: 1; }
   .all-item button:active img { transform: scale(0.985); }
-  .all:not([hidden]) .all-item { animation: all-item-in 0.35s ease both; animation-delay: calc(var(--i, 0) * 30ms); }
+  .all:not([hidden]) .all-item { animation: all-item-in 0.35s ease both; animation-delay: calc(var(--i, 0) * 40ms); }
   @keyframes all-item-in { from { opacity: 0; } }
   .all-item.current button { outline: 1px solid rgba(255,255,255,0.85); outline-offset: 8px; }
   .all-num {
@@ -400,7 +404,7 @@
   </div>
 
   <!-- card 1 -->
-  <div class="slide" data-cover="wwwd-img/index/chankillo-s3.webp" data-cover-w="1000" data-cover-h="1000">
+  <div class="slide" data-cover="wwwd-img/web/chankillo-s1.webp" data-cover-w="1800" data-cover-h="1350">
     <div class="face">
       <div class="art" style="--w:1800;--h:1800"><img data-lazy="wwwd-img/web/chankillo.webp" alt="Aerial site plan of the Chankillo observatory project, Peru"></div>
       <div class="card-text">
@@ -421,7 +425,7 @@
   </div>
 
   <!-- card 2 -->
-  <div class="slide" data-cover="wwwd-img/index/portsmouth-s2.webp" data-cover-w="750" data-cover-h="1000">
+  <div class="slide" data-cover="wwwd-img/web/portsmouth-s1.webp" data-cover-w="1800" data-cover-h="1350">
     <div class="face">
       <div class="art" style="--w:1800;--h:1165"><img data-lazy="wwwd-img/web/portsmouth.webp" alt="Atlas of event and space collage, Portsmouth Square San Francisco"></div>
       <div class="card-text">
@@ -442,7 +446,7 @@
   </div>
 
   <!-- card 3 -->
-  <div class="slide" data-cover="wwwd-img/index/glass-s2.webp" data-cover-w="1400" data-cover-h="817">
+  <div class="slide" data-cover="wwwd-img/web/glass-s2.webp" data-cover-w="1728" data-cover-h="1008">
     <div class="face">
       <div class="art" style="--w:262;--h:390"><img data-lazy="wwwd-img/web/glass.webp" alt="CNC-etched glass study for the Glass Pavilion"></div>
       <div class="card-text">
@@ -463,7 +467,7 @@
   </div>
 
   <!-- card 4 -->
-  <div class="slide" data-cover="wwwd-img/index/jookbuin-s1.webp" data-cover-w="1000" data-cover-h="751">
+  <div class="slide" data-cover="wwwd-img/web/jookbuin-s1.webp" data-cover-w="1800" data-cover-h="1391">
     <div class="face">
       <div class="art" style="--w:1800;--h:1391"><img data-lazy="wwwd-img/web/jookbuin.webp" alt="Rest, Hug, Lean &mdash; three typologies of the re-woven bamboo wife"></div>
       <div class="card-text">
@@ -484,7 +488,7 @@
   </div>
 
   <!-- card 5 -->
-  <div class="slide" data-cover="wwwd-img/index/kitchen.webp" data-cover-w="481" data-cover-h="280">
+  <div class="slide" data-cover="wwwd-img/web/kitchen-s1.webp" data-cover-w="1603" data-cover-h="591">
     <div class="face">
       <div class="art" style="--w:481;--h:280"><img data-lazy="wwwd-img/web/kitchen.webp" alt="Collective cooking session, Kitchen within Boundaries research"></div>
       <div class="card-text">
@@ -505,7 +509,7 @@
   </div>
 
   <!-- card 6 -->
-  <div class="slide" data-cover="wwwd-img/index/eastriver-s1.webp" data-cover-w="1400" data-cover-h="933">
+  <div class="slide" data-cover="wwwd-img/web/eastriver-s1.webp" data-cover-w="1800" data-cover-h="1200">
     <div class="face">
       <div class="art" style="--w:994;--h:663"><img data-lazy="wwwd-img/web/eastriver.webp" alt="Aerial plan of the East River Social Disciplinary Center archipelago"></div>
       <div class="card-text">
@@ -526,7 +530,7 @@
   </div>
 
   <!-- card 7 -->
-  <div class="slide" data-cover="wwwd-img/web/aarondavis-s2.webp" data-cover-w="1391" data-cover-h="1800">
+  <div class="slide" data-cover="wwwd-img/web/aarondavis-s1.webp" data-cover-w="1391" data-cover-h="1800">
     <div class="face">
       <div class="art" style="--w:1391;--h:1800"><img data-lazy="wwwd-img/web/aarondavis.webp" alt="Presentation board — model photographs"></div>
       <div class="card-text">
@@ -546,7 +550,7 @@
   </div>
 
   <!-- card 8 -->
-  <div class="slide" data-cover="wwwd-img/web/brownsville.webp" data-cover-w="1391" data-cover-h="1800">
+  <div class="slide" data-cover="wwwd-img/web/brownsville-s1.webp" data-cover-w="1391" data-cover-h="1800">
     <div class="face">
       <div class="art" style="--w:1391;--h:1800"><img data-lazy="wwwd-img/web/brownsville.webp" alt="Brownsville neighborhood strategy map, Brooklyn"></div>
       <div class="card-text">
@@ -567,7 +571,7 @@
   </div>
 
   <!-- card 9 -->
-  <div class="slide" data-cover="wwwd-img/index/bench.webp" data-cover-w="701" data-cover-h="467">
+  <div class="slide" data-cover="wwwd-img/web/bench-s2.webp" data-cover-w="1800" data-cover-h="1165">
     <div class="face">
       <div class="art" style="--w:701;--h:467"><img data-lazy="wwwd-img/web/bench.webp" alt="Pyung Sang flat bench, bent plywood seating"></div>
       <div class="card-text">
@@ -587,7 +591,7 @@
   </div>
 
   <!-- card 10 -->
-  <div class="slide" data-cover="wwwd-img/index/royalcrescent-s1.webp" data-cover-w="252" data-cover-h="126">
+  <div class="slide" data-cover="wwwd-img/web/royalcrescent-s1.webp" data-cover-w="499" data-cover-h="196">
     <div class="face">
       <div class="art" style="--w:753;--h:248"><img data-lazy="wwwd-img/web/royalcrescent.webp" alt="Model of the Royal Crescent, Bath"></div>
       <div class="card-text">
@@ -606,7 +610,7 @@
   </div>
 
   <!-- card 11 -->
-  <div class="slide" data-cover="wwwd-img/index/gallery-s1.webp" data-cover-w="1400" data-cover-h="717">
+  <div class="slide" data-cover="wwwd-img/web/gallery-s1.webp" data-cover-w="1800" data-cover-h="922">
     <div class="face">
       <div class="art" style="--w:1800;--h:922"><img data-lazy="wwwd-img/web/gallery.webp" alt="Gallery interior rendering, auction house project"></div>
       <div class="card-text">
@@ -626,7 +630,7 @@
   </div>
 
   <!-- card 12 -->
-  <div class="slide" data-cover="wwwd-img/index/vacation.webp" data-cover-w="573" data-cover-h="404">
+  <div class="slide" data-cover="wwwd-img/web/vacation-s3.webp" data-cover-w="1800" data-cover-h="1165">
     <div class="face">
       <div class="art" style="--w:573;--h:404"><img data-lazy="wwwd-img/web/vacation.webp" alt="White model of the vacation home, aerial view"></div>
       <div class="card-text">
@@ -647,7 +651,7 @@
   </div>
 
   <!-- card 13 -->
-  <div class="slide" data-cover="wwwd-img/web/korilla.webp" data-cover-w="1391" data-cover-h="1800">
+  <div class="slide" data-cover="wwwd-img/web/korilla-s1.webp" data-cover-w="1391" data-cover-h="1800">
     <div class="face">
       <div class="art" style="--w:1391;--h:1800"><img data-lazy="wwwd-img/web/korilla.webp" alt="Korilla restaurant dining room"></div>
       <div class="card-text">
@@ -668,7 +672,7 @@
   </div>
 
   <!-- card 14 -->
-  <div class="slide" data-cover="wwwd-img/index/housebyriver-s4.webp" data-cover-w="1400" data-cover-h="1050">
+  <div class="slide" data-cover="wwwd-img/web/housebyriver-s1.webp" data-cover-w="1391" data-cover-h="1800">
     <div class="face">
       <div class="art" style="--w:1391;--h:1800"><img data-lazy="wwwd-img/web/housebyriver.webp" alt="House by River — section perspective showing private, semi-public and public space"></div>
       <div class="card-text">
@@ -689,7 +693,7 @@
   </div>
 
   <!-- card 15 -->
-  <div class="slide" data-cover="wwwd-img/web/translation.webp" data-cover-w="1391" data-cover-h="1800">
+  <div class="slide" data-cover="wwwd-img/web/translation-s1.webp" data-cover-w="1391" data-cover-h="1800">
     <div class="face">
       <div class="art" style="--w:1391;--h:1800"><img data-lazy="wwwd-img/web/translation.webp" alt="Translation — layered terrain model"></div>
       <div class="card-text">
@@ -710,7 +714,7 @@
   </div>
 
   <!-- card 16 -->
-  <div class="slide" data-cover="wwwd-img/index/ontheground-s1.webp" data-cover-w="966" data-cover-h="724">
+  <div class="slide" data-cover="wwwd-img/web/ontheground-s1.webp" data-cover-w="966" data-cover-h="724">
     <div class="face">
       <div class="art" style="--w:1210;--h:907"><img data-lazy="wwwd-img/web/ontheground.webp" alt="On the Ground — model aerial of the courtyard project"></div>
       <div class="card-text">
@@ -1205,7 +1209,7 @@
     lbFit.textContent = "Actual size";
   }
   function openLightbox() {
-    if (idx === 0) return;
+    if (idx === 0 || lbOpen) return;
     lbReturnFocus = document.activeElement;
     lbShow();
     lb.hidden = false;
@@ -1234,7 +1238,9 @@
   });
   stage.addEventListener("click", function(e) {
     var z = e.target && e.target.closest ? e.target.closest(".zoom") : null;
-    if (z) openLightbox();
+    if (z) { openLightbox(); return; }
+    var a = e.target && e.target.closest ? e.target.closest(".art img") : null;
+    if (a) openLightbox();
   });
 </script>
 
